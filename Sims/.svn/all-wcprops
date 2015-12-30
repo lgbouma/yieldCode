@@ -1,0 +1,197 @@
+K 25
+svn:wc:ra_dav:version-url
+V 27
+/svn/!svn/ver/66/trunk/Sims
+END
+n_eclip_blank.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/66/trunk/Sims/n_eclip_blank.pro
+END
+filt_observe.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/44/trunk/Sims/filt_observe.pro
+END
+bin_stars.pro
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/44/trunk/Sims/bin_stars.pro
+END
+calc_s_hz.pro
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/Sims/calc_s_hz.pro
+END
+plot_occurrence.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/2/trunk/Sims/plot_occurrence.pro
+END
+optimal_npix_hack.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/2/trunk/Sims/optimal_npix_hack.pro
+END
+planet_occurrence.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/2/trunk/Sims/planet_occurrence.pro
+END
+rad_planets.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/16/trunk/Sims/rad_planets.pro
+END
+dil_ffi.pro
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/44/trunk/Sims/dil_ffi.pro
+END
+mult_stars.pro
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/35/trunk/Sims/mult_stars.pro
+END
+number_of_stars_expz.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/2/trunk/Sims/number_of_stars_expz.pro
+END
+bin_planets.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/66/trunk/Sims/bin_planets.pro
+END
+allplanets.pro
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/2/trunk/Sims/allplanets.pro
+END
+._memo_mc.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/Sims/._memo_mc.pdf
+END
+observe.pro
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/2/trunk/Sims/observe.pro
+END
+int_planet_occurrence.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2/trunk/Sims/int_planet_occurrence.pro
+END
+plot_fressin.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/2/trunk/Sims/plot_fressin.pro
+END
+mult_planets.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/35/trunk/Sims/mult_planets.pro
+END
+new_planets.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/19/trunk/Sims/new_planets.pro
+END
+n_eclipses.pro
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/2/trunk/Sims/n_eclipses.pro
+END
+calc_noise_hack.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/2/trunk/Sims/calc_noise_hack.pro
+END
+rad_observe.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/23/trunk/Sims/rad_observe.pro
+END
+stars.pro
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/19/trunk/Sims/stars.pro
+END
+bin_observe.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/38/trunk/Sims/bin_observe.pro
+END
+allobserve.pro
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/2/trunk/Sims/allobserve.pro
+END
+assign_xyz.pro
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/2/trunk/Sims/assign_xyz.pro
+END
+koistars.pro
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/2/trunk/Sims/koistars.pro
+END
+mult_observe.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/35/trunk/Sims/mult_observe.pro
+END
+planets.pro
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/16/trunk/Sims/planets.pro
+END
+radius_limits.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/2/trunk/Sims/radius_limits.pro
+END
+calc_optimal_npix_hack.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/2/trunk/Sims/calc_optimal_npix_hack.pro
+END
+req_observe.pro
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/3/trunk/Sims/req_observe.pro
+END

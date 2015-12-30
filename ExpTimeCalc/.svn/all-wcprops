@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/131/trunk/ExpTimeCalc
+END
+halfnhalf.pro
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/2/trunk/ExpTimeCalc/halfnhalf.pro
+END
+frac_asbuilt_1p0.fits
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/8/trunk/ExpTimeCalc/frac_asbuilt_1p0.fits
+END
+calc_optimal_npix.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/2/trunk/ExpTimeCalc/calc_optimal_npix.pro
+END
+calc_opt_npix_offset.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/ExpTimeCalc/calc_opt_npix_offset.pro
+END
+frac24_105_3400k.fits
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/25/trunk/ExpTimeCalc/frac24_105_3400k.fits
+END
+calc_noise.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/41/trunk/ExpTimeCalc/calc_noise.pro
+END
+frac_dither_1p0.fits
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/8/trunk/ExpTimeCalc/frac_dither_1p0.fits
+END
+noise_calc.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/131/trunk/ExpTimeCalc/noise_calc.pro
+END
+frac24_105_4700k.fits
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/25/trunk/ExpTimeCalc/frac24_105_4700k.fits
+END
+frac_1p0.fits
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/8/trunk/ExpTimeCalc/frac_1p0.fits
+END
+frac_1p2.fits
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/8/trunk/ExpTimeCalc/frac_1p2.fits
+END
+optimal_npix.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/2/trunk/ExpTimeCalc/optimal_npix.pro
+END
+lorentz_psf.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2/trunk/ExpTimeCalc/lorentz_psf.pro
+END
+frac24_1p0.fits
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/4/trunk/ExpTimeCalc/frac24_1p0.fits
+END
+bkgnd_param.fits
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/29/trunk/ExpTimeCalc/bkgnd_param.fits
+END
+plot_noise.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/2/trunk/ExpTimeCalc/plot_noise.pro
+END
+frac26_4600k.fits
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/11/trunk/ExpTimeCalc/frac26_4600k.fits
+END
+stack_prf.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/42/trunk/ExpTimeCalc/stack_prf.pro
+END
+calc_noise_filt.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/42/trunk/ExpTimeCalc/calc_noise_filt.pro
+END

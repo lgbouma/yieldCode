@@ -1,0 +1,34 @@
+function ps_sel, tmag, teff, mass, rad, ph_p, $ 
+  minrad=minrad, per=per, rn_pix=rn_pix, geom_area=geom_area, npnt=npnt
+  nstars = n_elements(tmag)
+  ;print, "What am i doing in ps?"
+  if (keyword_set(minrad)) then minrad=minrad else minrad=2.25
+  if (keyword_set(per)) then per=per else per=20.0
+  if (keyword_set(npnt)) then npnt=npnt else npnt=1.0
+  sz_ph_p = size(ph_p)
+  nfilt = sz_ph_p[1]
+  ph_filt = dblarr(nfilt, nstars)
+  ph_star = dblarr(nstars)
+  if (keyword_set(geom_area)) then geom_area=geom_area else geom_area = 69. ;74.6
+  if (keyword_set(rn_pix)) then rn_pix=rn_pix else rn_pix=10. ;74.6
+  recipteff = 4000./teff
+  for j=0, nfilt-1 do begin
+    ph_filt[j,*] = ph_p[j,0] + ph_p[j,1]*recipteff + $
+         ph_p[j,2]*recipteff^2. + ph_p[j,3]*recipteff^3.
+  endfor
+  ph_filt[where(ph_filt lt 0.0)] = 0.0
+  ph_star = 1.0*10.^(-0.4*(tmag-10.))*total(ph_filt, 1)
+  AU_IN_RSUN = 215.093990942
+  REARTH_IN_RSUN = 0.0091705248
+  a = mass^(1./3.) * (float(per)/365.25)^(2./3.)   ; in AU
+  dur = rad * float(per) / (!DPI*a*AU_IN_RSUN)
+  exptime = 2.*float(npnt)*float(floor(27./float(per)))*dur*24.*3600
+  dep = (REARTH_IN_RSUN * float(minrad) / rad)^2.0
+  sig = dep/7.3
+  rn = rn_pix*sqrt(4.0*exptime/2.0)
+  minphot = 1.5*(1.+sqrt(1.+4.*sig^2.*rn^2.))/(2.*sig^2.)
+  sel = where(ph_star gt (minphot/(exptime*geom_area)) and teff gt 1500 and teff lt 15000)
+ 
+  print, 'Selecting ', n_elements(sel),' postage stamps out of ', nstars, ' stars.'
+  return, sel
+END

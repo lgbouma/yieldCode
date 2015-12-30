@@ -1,0 +1,437 @@
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/165/trunk/Eclipses
+END
+magstruct__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/122/trunk/Eclipses/magstruct__define.pro
+END
+kepler.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/101/trunk/Eclipses/kepler.pro
+END
+ps_sel.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/164/trunk/Eclipses/ps_sel.pro
+END
+stack_prf_eclip.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/108/trunk/Eclipses/stack_prf_eclip.pro
+END
+add_hebs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/147/trunk/Eclipses/add_hebs.pro
+END
+dilute_eclipse.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/67/trunk/Eclipses/dilute_eclipse.pro
+END
+dilute_binary.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/119/trunk/Eclipses/dilute_binary.pro
+END
+tile_wrapper.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/150/trunk/Eclipses/tile_wrapper.pro
+END
+dilute_beb.pro
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/119/trunk/Eclipses/dilute_beb.pro
+END
+ascii2fits.pro
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/137/trunk/Eclipses/ascii2fits.pro
+END
+teff2phot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/81/trunk/Eclipses/teff2phot.pro
+END
+dil_ffi_eclip.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/67/trunk/Eclipses/dil_ffi_eclip.pro
+END
+dartstruct__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/85/trunk/Eclipses/dartstruct__define.pro
+END
+compstruct__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/102/trunk/Eclipses/compstruct__define.pro
+END
+ph_filt_t.fits
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/62/trunk/Eclipses/ph_filt_t.fits
+END
+runrecons.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/102/trunk/Eclipses/runrecons.pro
+END
+add_ebs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/147/trunk/Eclipses/add_ebs.pro
+END
+tband.csv
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/124/trunk/Eclipses/tband.csv
+END
+npnt.fits
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/118/trunk/Eclipses/npnt.fits
+END
+coordstruct__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/59/trunk/Eclipses/coordstruct__define.pro
+END
+dilute_eclipse_img.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/119/trunk/Eclipses/dilute_eclipse_img.pro
+END
+starstruct__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/130/trunk/Eclipses/starstruct__define.pro
+END
+tile_combine.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/60/trunk/Eclipses/tile_combine.pro
+END
+hp30raw.fits
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/130/trunk/Eclipses/hp30raw.fits
+END
+r10pc.fits
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/49/trunk/Eclipses/r10pc.fits
+END
+r100pc.sav
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/52/trunk/Eclipses/r100pc.sav
+END
+dartmouth.sav
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/87/trunk/Eclipses/dartmouth.sav
+END
+ph_Ic_filt.fits
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/84/trunk/Eclipses/ph_Ic_filt.fits
+END
+phot_ratio.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/73/trunk/Eclipses/phot_ratio.pro
+END
+keplereq.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/101/trunk/Eclipses/keplereq.pro
+END
+eclip_survey.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/113/trunk/Eclipses/eclip_survey.pro
+END
+eclipstruct__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/128/trunk/Eclipses/eclipstruct__define.pro
+END
+noise_check.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/111/trunk/Eclipses/noise_check.pro
+END
+r100pc.fits
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/56/trunk/Eclipses/r100pc.fits
+END
+phot_ratio_planet.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/128/trunk/Eclipses/phot_ratio_planet.pro
+END
+cgsetdifference.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/123/trunk/Eclipses/cgsetdifference.pro
+END
+unpack.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/116/trunk/Eclipses/unpack.pro
+END
+add_bebs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/147/trunk/Eclipses/add_bebs.pro
+END
+tic_teff.fits
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/84/trunk/Eclipses/tic_teff.fits
+END
+cgsetintersection.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/123/trunk/Eclipses/cgsetintersection.pro
+END
+fnums.fits
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/149/trunk/Eclipses/fnums.fits
+END
+sav2fits.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/130/trunk/Eclipses/sav2fits.pro
+END
+starcat.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/147/trunk/Eclipses/starcat.pro
+END
+fits2sav.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/144/trunk/Eclipses/fits2sav.pro
+END
+newlfr.fits
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/143/trunk/Eclipses/newlfr.fits
+END
+dartmouth_combine.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/129/trunk/Eclipses/dartmouth_combine.pro
+END
+test_planets.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/115/trunk/Eclipses/test_planets.pro
+END
+setdifference.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/127/trunk/Eclipses/setdifference.pro
+END
+maglim.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/147/trunk/Eclipses/maglim.pro
+END
+coord_ps.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/58/trunk/Eclipses/coord_ps.pro
+END
+calc_noise_eclip.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/113/trunk/Eclipses/calc_noise_eclip.pro
+END
+ph_T_filt.fits
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/84/trunk/Eclipses/ph_T_filt.fits
+END
+dartmouth_interpolate.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/105/trunk/Eclipses/dartmouth_interpolate.pro
+END
+add_planets.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/162/trunk/Eclipses/add_planets.pro
+END
+add_btps.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/148/trunk/Eclipses/add_btps.pro
+END
+eclip_observe.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/147/trunk/Eclipses/eclip_observe.pro
+END
+make_eclipse.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/157/trunk/Eclipses/make_eclipse.pro
+END
+hp30cor.fits
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/144/trunk/Eclipses/hp30cor.fits
+END
+main.pro
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/161/trunk/Eclipses/main.pro
+END
+calc_noise_cen.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/146/trunk/Eclipses/calc_noise_cen.pro
+END
+starvar.fits
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/147/trunk/Eclipses/starvar.fits
+END
+lfr.fits
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/100/trunk/Eclipses/lfr.fits
+END
+recons.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/130/trunk/Eclipses/recons.pro
+END
+hp30dart.fits
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/138/trunk/Eclipses/hp30dart.fits
+END
+fits2sav_wrapper.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/140/trunk/Eclipses/fits2sav_wrapper.pro
+END
+zodi_flux.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/64/trunk/Eclipses/zodi_flux.pro
+END
+count_stars.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/137/trunk/Eclipses/count_stars.pro
+END
+dartmouth_grid.sav
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/129/trunk/Eclipses/dartmouth_grid.sav
+END
+bigrad24_105_f3p33.fits
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/62/trunk/Eclipses/bigrad24_105_f3p33.fits
+END
+crnoise.fits
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/79/trunk/Eclipses/crnoise.fits
+END
+n_eclip.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/104/trunk/Eclipses/n_eclip.pro
+END
+bigfrac24_105_f3p33.fits
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/62/trunk/Eclipses/bigfrac24_105_f3p33.fits
+END

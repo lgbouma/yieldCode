@@ -1,0 +1,20 @@
+         Field of view [deg]:    &  24.0   \\
+          Number of Segments:    &  13.0   \\
+     Geometric Area [cm$^2$]:    &  82.3   \\
+   PSF Scaling from Baseline:    &   1.0   \\
+             Read Noise [e-]:    &  10.0   \\
+                 Minimum SNR:    &   7.0   \\
+        Saturation Magnitude:    &   7.3   \\
+  Minimum number of transits:    &        2   \\
+             Number of stars:    &   483489   \\
+            Number of trials:    &       10   \\
+          Stars Never Observed   &          Stars Always Observed   \\
+  6.6$\%$   0.5$\%$ 
+                                            $\leq 2R_{\oplus}$ HZ hosts: &   149$\pm$   18   \\
+                   $\leq 2R_{\oplus}$ HZ hosts above 75$^{\circ}$ Lat.:  &    38$\pm$    9   \\
+                                         $\leq 2R_{\oplus}$  HZ planets: &      5.7     $\pm$    1.04        \\
+                 $\leq 2R_{\oplus}$  HZ planets above 75$^{\circ}$ Lat.: &      2.0     $\pm$    0.60        \\
+                     Mean T$_{\rm eff}$ of all $\leq 2R_{\oplus}$ hosts: &   4758.0     $\pm$  819.00        \\
+                      Mean T$_{\rm eff}$ of $\leq 2R_{\oplus}$ HZ hosts: &   3479.0     $\pm$  325.00        \\
+            Stars &  2401$\pm$   41   &  18851$\pm$   112   &   67348$\pm$    226  \\ 
+          Planets &     15.0$\pm$    0.69   &    158.7$\pm$    2.25   &    486.4$\pm$    6.80   &     34.6$\pm$    2.43   &      9.2$\pm$    1.38   &      5.7$\pm$    1.04   &      2.0$\pm$    0.60   \\

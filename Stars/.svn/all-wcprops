@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/svn/!svn/ver/56/trunk/Stars
+END
+compare_vlfs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/2/trunk/Stars/compare_vlfs.pro
+END
+compare_zheng.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/2/trunk/Stars/compare_zheng.pro
+END
+plot_radius.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/2/trunk/Stars/plot_radius.pro
+END
+calc_shz.pro
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/Stars/calc_shz.pro
+END
+plot_vmi.pro
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/Stars/plot_vmi.pro
+END
+jlf_model.pro
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/2/trunk/Stars/jlf_model.pro
+END
+summary.pro
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/56/trunk/Stars/summary.pro
+END
+number_of_stars_expz.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2/trunk/Stars/number_of_stars_expz.pro
+END
+compare_vband.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/56/trunk/Stars/compare_vband.pro
+END
+star_properties_vijk.sav
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/35/trunk/Stars/star_properties_vijk.sav
+END
+plot_mass.pro
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/2/trunk/Stars/plot_mass.pro
+END
+mass_given_radius.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2/trunk/Stars/mass_given_radius.pro
+END
+radius_given_mass.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2/trunk/Stars/radius_given_mass.pro
+END
+plot_dartmouth_mr.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2/trunk/Stars/plot_dartmouth_mr.pro
+END
+count_stars.pro
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/2/trunk/Stars/count_stars.pro
+END
+compare_jlfs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/2/trunk/Stars/compare_jlfs.pro
+END
+plot_dartmouth.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/2/trunk/Stars/plot_dartmouth.pro
+END
+delfosse_mass_given_mj.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2/trunk/Stars/delfosse_mass_given_mj.pro
+END
+plot_dartmouth_teff.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/2/trunk/Stars/plot_dartmouth_teff.pro
+END
+plot_imj.pro
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/Stars/plot_imj.pro
+END
+star_properties.sav
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/4/trunk/Stars/star_properties.sav
+END
