@@ -1,6 +1,15 @@
 PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
-	eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file
+	eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
+	prototypeMode=prototypeMode
+
   numfil = n_elements(fnums)
+  ; Get random tile numbers for rapid prototyping (look at 1/100th of the tiles)
+  randomNumbers = RandomU(seed, numfil)
+  randomIndices = Sort(Round(randomNumbers * (numfil-1)))
+  randomIndices = randomIndices[0:Round(numfil/100)]
+  if (prototypeMode EQ 1) then fnums=fnums[randomIndices] else fnums=fnums
+  numfil = n_elements(fnums)
+
   ; Input files
   ph_file = 'ph_T_filt.fits' ; photon fluxes for T=10 vs Teff
   cr_file = 'crnoise.fits' ; photon fluxes for T=10 vs Teff
@@ -21,7 +30,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   sys_limit=60. ;60. in ppm/hr
   ffi_len=30. ; in minutes
   ps_len=2. ; in minutes
-  duty_cycle=100.+fltarr(numfil) ; Time blanked around apogee
+  duty_cycle=100.+fltarr(numfil) ; Time blanked around apogee (in minutes)
   min_depth=1D-6 ; minimum transit depth to retain from eclipses
   max_depth=1.0; maximum transit depth to retain from EBs
   if (keyword_set(n_trial)) then n_trial=n_trial else n_trial = 10 ; number of trials in this run
