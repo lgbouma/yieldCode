@@ -2,6 +2,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
 	prototypeMode=prototypeMode
 
+  TIC ; Grab initial system time
+
   numfil = n_elements(fnums)
   ; Get random tile numbers for rapid prototyping (look at 1/100th of the tiles)
   randomNumbers = RandomU(seed, numfil)
@@ -81,9 +83,12 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   ang2pix_ring, 16, theta, phi, ipring
 
   totdet = 0L
-  tempBigStarNumber = 0.5e7
+  tempBigStarNumber = 0.5e7	; WARNING: no good for FFIs
   star_out = dblarr(tempBigStarNumber+1E6*n_trial,nparam)
+
   for ii=0, numfil-1 do begin
+    tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
+    fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
     ; Gather the .sav files
     print, 'Restoring files for tile ', fnums[ii]
     fname = fpath+'hp'+string(fnums[ii], format='(I04)')+'.sav'
@@ -99,12 +104,14 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     restore, fname
     deeps = star ;[where(star.mag.tsys gt 21)]
     numdeeps[ii] = n_elements(deeps)
-    ;Debugging
+    ; Debugging
     print, 'File #', ii, ' numtargets', numtargets[ii], ' numbkgnd', $ 
 	    numbkgnd[ii], ' numdeeps', numdeeps[ii]
     delvarx, star
+    TOC, fopenClock &
     
     ; Choose which stars are postage stamps vs ffis
+    psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
     targets.ffi = 1
     pri = where(targets.pri eq 1)
     selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
@@ -114,26 +121,30 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       secffi = targets[pri[selpri]].companion.ind
       targets[secffi].ffi=0
       numps[ii] = numps[ii]+n_elements(selpri)
-    end
+    endif
     sing = where((targets.pri eq 0) and (targets.sec eq 0))
     selsing = ps_sel(targets[sing].mag.t, targets[sing].teff, targets[sing].m, targets[sing].r, ph_fits, $
 			rn_pix=15., npnt=npnt_fits[ii])
     if (selsing[0] ne -1) then begin 
       targets[sing[selsing]].ffi=0
       numps[ii] = numps[ii]+n_elements(selsing)
-    end
+    endif
+    TOC, psSelClock & 
  
-    ;if (ps_only) then targets = targets[where(targets.ffi ne 1)]
-   
     ecliplen_tot = 0L
-    ;Main loop: over healpix tiles
+
+    ;Loop over each trial to generate eclipses
     for jj=0,n_trial-1 do begin
-      ; re-radomize the inclination
+      ; Re-radomize the inclination
       targets.cosi = -1 + 2.0*randomu(seed, n_elements(targets))
+
       ; Add eclipses
+      makeEclipseClock = TIC('makeEclipse-' + STRTRIM(ii, 2) + '-' + STRTRIM(jj, 2))
       ecliplen =  make_eclipse(targets, bkgnds, eclip_trial, frac_fits, $
 	 ph_fits, dartstruct, tic_fits, eclass, tband, pla_err=pla_err, $
 	 min_depth=min_depth, max_depth=max_depth, ps_only=ps_only)
+      TOC, makeEclipseClock &
+
       if (ecliplen gt 0) then begin
         eclip_trial.trial = jj + 1
         ; Add coordinates to the eclipses
@@ -161,21 +172,31 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
         ecliplen_tot = ecliplen_tot + ecliplen
       endif
     endfor
+
     if (ecliplen_tot gt 0) then begin
       if (detmag eq 0) then begin
         ; Survey: figure out npointings and field angles
+	eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
         eclip_survey, seg, fov, eclip, offset=skirt
+	TOC, eclipSurveyClock &
       
         ; Observe      
+	eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
         eclip_observe, eclip, targets, bkgnds, deeps, $
           frac_fits, ph_fits, cr_fits, var_fits, $
           aspix=aspix, effarea=effarea, sys_limit=sys_limit, $ ;infil=sp_name,outfile=spo_name
           readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
           duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
           subexptime=subexptime, dwell_time=orbit_period, downlink=downlink
+	TOC, eclipObserveClock &
+
         det = where(eclip.det1 or eclip.det2 or eclip.det)
-      endif else det = where((targets[eclip.hostid].mag.ic lt detmag) or (targets[eclip.hostid].mag.k lt detmag) or $
-                             (targets[eclip.hostid].mag.v lt detmag) or (eclip.icsys lt detmag) or (eclip.kpsys lt detmag))
+      endif else det = where((targets[eclip.hostid].mag.ic lt detmag) or $ 
+	      (targets[eclip.hostid].mag.k lt detmag) or $
+              (targets[eclip.hostid].mag.v lt detmag) or $
+	      (eclip.icsys lt detmag) or (eclip.kpsys lt detmag))
+
+      endClock = TIC('endClock-' + STRTRIM(ii, 2))
       if (det[0] ne -1) then begin
         detid = eclip[det].hostid
         ndet = n_elements(det)
@@ -211,8 +232,11 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       ;stard = star[det]
       ;if (keyword_set(sav)) then save, filen=spo_name, stard
       endif
+      TOC, endClock &
+      TOC, tileClock &
     endif
   endfor
+  TOC &
   print, 'Reached end at totdet = ', totdet
   if (totdet gt 0) then mwrfits, star_out[0:(totdet-1),*], outname
   print, total(numps), ' postage stamps assigned'
