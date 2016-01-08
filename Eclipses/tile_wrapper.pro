@@ -76,14 +76,14 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   dartstruct = ss
   tic_fits = mrdfits(tic_file)
   ; Make random spherical coords
-  u = randomu(seed, 1D7)
-  v = randomu(seed, 1D7)
+  tempBigStarNumber = 0.5e7	; WARNING: no good for FFIs. Size set by available local memory.
+  u = randomu(seed, tempBigStarNumber)
+  v = randomu(seed, tempBigStarNumber)
   phi = 2.*!dpi*u
   theta = acos(2.*v-1.)
   ang2pix_ring, 16, theta, phi, ipring
 
   totdet = 0L
-  tempBigStarNumber = 0.5e7	; WARNING: no good for FFIs
   star_out = dblarr(tempBigStarNumber+1E6*n_trial,nparam)
 
   for ii=0, numfil-1 do begin

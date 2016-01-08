@@ -6,7 +6,7 @@ PRO main
                 0, $ ; HEBs
                 0  ] ; BTPs
   tile_wrapper, '/home/luke/Dropbox/tessSimulation/trilegal/', fnums, $
-	'temp1.fits', $; output file name. Nb: fits files add extensions (they dont overwrite)
+	'nominLocal.fits', $; output file name. Nb: fits files add extensions (they dont overwrite)
   	n_trial=10, $	; number of trials (10 good for reasonable statistics)
 	eclass=eclass, $; from above
 	ps_only=1, $	; 1=only run postage stamps, 0=run ffis as well
@@ -15,5 +15,5 @@ PRO main
         pla_err=0, $    ; 0=run with nominal occurrence rates, +1 for upper bounds, -1 for lower
         ;prf_file='psfs/dfrac_t75_f3p31_3.fits' ; ideal PRF file
 	prf_file='psfs/dfrac_asbuilt_75c_0f.fits', $ ; built PRF from Deb Woods
-	prototypeMode=1	; 1=run fast prototypes, 0=run full simulations.
+	prototypeMode=0	; 1=run fast prototypes, 0=run full simulations.
 END
