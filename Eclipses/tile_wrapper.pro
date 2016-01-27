@@ -4,7 +4,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 
   TIC ; Grab initial system time
 
-  numfil = n_elements(fnums)
+  numfil = n_elements(fnums) ; fnums is file containing healpix numbers (~3000 of them).
   ; Get random tile numbers for rapid prototyping (look at 1/100th of the tiles)
   randomNumbers = RandomU(seed, numfil)
   randomIndices = Sort(Round(randomNumbers * (numfil-1)))
@@ -58,7 +58,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   nparam = 65 ; output table width
 
   ; Here we go!
-  numtargets = lonarr(numfil)
+  numtargets = lonarr(numfil) ; numfil is n_elements(fnums), or ~3000 for standard all-sky.
   numbkgnd = lonarr(numfil)
   numdeeps = lonarr(numfil)
   numps = lonarr(numfil)
@@ -86,7 +86,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   totdet = 0L
   star_out = dblarr(tempBigStarNumber+1E6*n_trial,nparam)
 
-  for ii=0, numfil-1 do begin
+  for ii=0, numfil-1 do begin ; for each healpix tile
     tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
     fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
     ; Gather the .sav files
@@ -113,7 +113,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     ; Choose which stars are postage stamps vs ffis
     psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
     targets.ffi = 1
-    pri = where(targets.pri eq 1)
+    pri = where(targets.pri eq 1) ; presumably(?) selecting primary stars
     selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
 			rn_pix=15., npnt=npnt_fits[ii])
     if (selpri[0] ne -1) then begin 
@@ -129,6 +129,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       targets[sing[selsing]].ffi=0
       numps[ii] = numps[ii]+n_elements(selsing)
     endif
+    print, 'fileNum', ii, ' tileNum', fnums[ii], ' numPstgStmp', numps[ii] 
     TOC, psSelClock & 
  
     ecliplen_tot = 0L
