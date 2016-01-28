@@ -1,5 +1,17 @@
-PRO eclip_survey, n_segs, fov, star, offset=offset
-
+pro eclip_survey, n_segs, fov, star, offset=offset
+;+
+; NAME: eclip_survey
+; PURPOSE: figure out the number of pointings and field angles each star
+; 	on a given tile receives.
+; INPUTS: 
+;	n_segs: number of observing segments (13) per hemisphere
+;	fov: field of view for each camera (23deg)
+;	star: star object with planets and eclipses assigned. 
+;	offset: off the ecliptic (nominal: passed "skirt" of 6deg)
+; OUTPUTS: 
+;	star object, with npointings and field angles added (needed
+;	for subsequent "observing")
+;-
   if (keyword_set(offset)) then offset=offset else offset=0.0
   print, 'Surveying ', n_elements(star), ' stars.'
   ;fov = 23.0
@@ -57,9 +69,9 @@ PRO eclip_survey, n_segs, fov, star, offset=offset
            star[chipind].coord.fov_r = r/float(new_npointings[chipind]) + $
 		float(prev_npointings[chipind])*star[chipind].coord.fov_r/float(new_npointings[chipind])
            old_onchip = onchip
-           ;print, 'Hemi=',hemi,' Seg=',seg,' Cam=',cam, $
-                ;' ELon=',elon_segs[seg],' ELat=',float(hemi)*elat_cams[cam], $
-                ;' Nstars=',n_elements(onchip)
+           print, 'Hemi=',hemi,' Seg=',seg,' Cam=',cam, $
+                ' ELon=',elon_segs[seg],' ELat=',float(hemi)*elat_cams[cam], $
+                ' Nstars=',n_elements(onchip)
         end
       endfor
     endfor
