@@ -77,6 +77,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   tic_fits = mrdfits(tic_file)
   ; Make random spherical coords
   tempBigStarNumber = 0.5e7	; WARNING: no good for FFIs. Size set by available local memory.
+  print, 'Using ', tempBigStarNumber, 'as tempBigStarNumber to make coordinate list (WARNING).'
   u = randomu(seed, tempBigStarNumber)
   v = randomu(seed, tempBigStarNumber)
   phi = 2.*!dpi*u
@@ -108,7 +109,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     print, 'File #', ii, ' numtargets', numtargets[ii], ' numbkgnd', $ 
 	    numbkgnd[ii], ' numdeeps', numdeeps[ii]
     delvarx, star
-    TOC, fopenClock &
+    TOC, fopenClock
     
     ; Choose which stars are postage stamps vs ffis
     psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
@@ -130,7 +131,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       numps[ii] = numps[ii]+n_elements(selsing)
     endif
     print, 'fileNum', ii, ' tileNum', fnums[ii], ' numPstgStmp', numps[ii] 
-    TOC, psSelClock & 
+    TOC, psSelClock  
  
     ecliplen_tot = 0L
 
@@ -144,7 +145,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       ecliplen =  make_eclipse(targets, bkgnds, eclip_trial, frac_fits, $
 	 ph_fits, dartstruct, tic_fits, eclass, tband, pla_err=pla_err, $
 	 min_depth=min_depth, max_depth=max_depth, ps_only=ps_only)
-      TOC, makeEclipseClock &
+      TOC, makeEclipseClock 
 
       if (ecliplen gt 0) then begin
         eclip_trial.trial = jj + 1
@@ -152,9 +153,11 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
         thispix = where(ipring eq fnums[ii])
         ncoord = n_elements(thispix)
         coordind = lindgen(ecliplen) mod ncoord
-        if (ecliplen gt ncoord) then $
-          print, "Needed ", ecliplen, " coords but got ", ncoord, " on tile ", ii
-        ;print, "Filling in tile ", ii
+
+	assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/01/29
+	print, 'nFile', ii, 'nTrial', jj, ' nTile', fnums[ii], $
+		' Ecliplen', ecliplen, ' ncoords', ncoords
+
         glon = phi[thispix[coordind]]*180./!dpi
         glat = (theta[thispix[coordind]]-!dpi/2.)*180./!dpi
         ; Transform from galactic healpix to ecliptic observations
@@ -179,7 +182,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
         ; Survey: figure out npointings and field angles
 	eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
         eclip_survey, seg, fov, eclip, offset=skirt
-	TOC, eclipSurveyClock &
+	TOC, eclipSurveyClock 
       
         ; Observe      
 	eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
@@ -189,7 +192,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
           readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
           duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
           subexptime=subexptime, dwell_time=orbit_period, downlink=downlink
-	TOC, eclipObserveClock &
+	TOC, eclipObserveClock 
 
         det = where(eclip.det1 or eclip.det2 or eclip.det)
       endif else det = where((targets[eclip.hostid].mag.ic lt detmag) or $ 
@@ -233,11 +236,11 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       ;stard = star[det]
       ;if (keyword_set(sav)) then save, filen=spo_name, stard
       endif
-      TOC, endClock &
-      TOC, tileClock &
+      TOC, endClock 
+      TOC, tileClock 
     endif
-  endfor
-  TOC &
+  endfor ; end tile loop
+  TOC 
   print, 'Reached end at totdet = ', totdet
   if (totdet gt 0) then mwrfits, star_out[0:(totdet-1),*], outname
   print, total(numps), ' postage stamps assigned'

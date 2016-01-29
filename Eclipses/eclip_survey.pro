@@ -1,8 +1,8 @@
 pro eclip_survey, n_segs, fov, star, offset=offset
 ;+
 ; NAME: eclip_survey
-; PURPOSE: figure out the number of pointings and field angles each star
-; 	on a given tile receives.
+; PURPOSE: figure out the number of pointings and field angles each star (eclipse?)
+; 	on a given tile gets.
 ; INPUTS: 
 ;	n_segs: number of observing segments (13) per hemisphere
 ;	fov: field of view for each camera (23deg)
@@ -14,8 +14,6 @@ pro eclip_survey, n_segs, fov, star, offset=offset
 ;-
   if (keyword_set(offset)) then offset=offset else offset=0.0
   print, 'Surveying ', n_elements(star), ' stars.'
-  ;fov = 23.0
-  ;n_segs = 13
   n_cams = 4
   ccd_pix = 4096.
   gap_pix = 2.0/0.015
