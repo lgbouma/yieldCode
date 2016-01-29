@@ -1,7 +1,7 @@
 pro eclip_survey, n_segs, fov, star, offset=offset
 ;+
 ; NAME: eclip_survey
-; PURPOSE: figure out the number of pointings and field angles each star (eclipse?)
+; PURPOSE: figure out the number of pointings and field angles each ECLIPSE (not star)
 ; 	on a given tile gets.
 ; INPUTS: 
 ;	n_segs: number of observing segments (13) per hemisphere
@@ -12,6 +12,14 @@ pro eclip_survey, n_segs, fov, star, offset=offset
 ; OUTPUTS: 
 ;	star object, with npointings and field angles added (needed
 ;	for subsequent "observing")
+;
+; COMMENTS:
+; 	frankly, a much better (and generalizable) format for this procedure would be:
+;		1. start with a list of camera pointings and a list of stars 
+;		(and their coordinates).
+;		2. figure out the number of pointings each star gets
+; 	 
+;
 ;-
   if (keyword_set(offset)) then offset=offset else offset=0.0
   ; LB 16/01/29: originally, this was labelled stars. It's not a "star". You're passing an

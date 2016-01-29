@@ -2,7 +2,7 @@ PRO simple_survey, n_segs, fov, infile, outfile, offset=offset
 
   restore, infile
   if (keyword_set(offset)) then offset=offset else offset=0.0
-  print, 'Surveying ', n_elements(star), ' stars.'
+
   ;fov = 23.0
   ;n_segs = 13
   n_cams = 4

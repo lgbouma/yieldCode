@@ -24,7 +24,9 @@ pro survey
 ; of resol_allsky deg, centered on that point.
 ; The solid angle is obviously variable (less near the poles)
 
-  resol_allsky = 0.25             ; degrees per pixel of the all sky map
+;  resol_allsky = 0.25             ; degrees per pixel of the all sky
+;  map
+  resol_allsky = 1.00             ; degrees per pixel of the all sky map
   resol_camera = resol_allsky/10. ; degrees per pixel of the camera images
 
 ;;;; now get busy

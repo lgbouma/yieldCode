@@ -1,0 +1,9 @@
+==========
+2016-01-29.
+Luke Bouma (actual code written by Josh Winn)
+==========
+
+What's in this folder?
+Josh's quote "kludgy code" for plotting the yarmulke plots. This is the legacy
+code that wound up getting legacy'd into "eclip_survey.pro", the procedure 
+used to count the number of pointings each observed star gets. 

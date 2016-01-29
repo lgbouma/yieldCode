@@ -1,3 +1,12 @@
+;+
+;NAME: make_eclipse
+;PURPOSE: Assign planets and generate "eclip" objects (data struct with
+; 	all eclipse information).
+;INPUTS:
+;OUTPUTS:
+;
+;
+;-
 function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefftic, $
   eclass, tband, min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, pla_err=pla_err
   ecliplen = 0L
