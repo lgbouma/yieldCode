@@ -77,7 +77,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   tic_fits = mrdfits(tic_file)
   ; Make random spherical coords
   tempBigStarNumber = 0.5e7	; WARNING: no good for FFIs. Size set by available local memory.
-  print, 'Using ', tempBigStarNumber, 'as tempBigStarNumber to make coordinate list (WARNING).'
+  print, 'Using ', fix(tempBigStarNumber), ' as tempBigStarNumber to make coordinate list (WARNING).'
   u = randomu(seed, tempBigStarNumber)
   v = randomu(seed, tempBigStarNumber)
   phi = 2.*!dpi*u
@@ -155,8 +155,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
         coordind = lindgen(ecliplen) mod ncoord
 
 	assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/01/29
-	print, 'nFile', ii, 'nTrial', jj, ' nTile', fnums[ii], $
-		' Ecliplen', ecliplen, ' ncoords', ncoords
+	print, 'nFile', ii, ' nTrial', jj, ' nTile', fnums[ii], $
+		' Ecliplen', ecliplen, ' ncoords', ncoord
 
         glon = phi[thispix[coordind]]*180./!dpi
         glat = (theta[thispix[coordind]]-!dpi/2.)*180./!dpi
