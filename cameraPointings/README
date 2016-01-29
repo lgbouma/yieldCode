@@ -1,0 +1,10 @@
+==========
+FOLDER PURPOSE:
+==========
+
+Given a list of camera pointings (in ecliptic coords), and a catalog of 
+stars to be observed (postage stamps, and eventually FFIs - the catalog is
+of their camera number, pointing number, and ecliptic coordinates of the
+camera boresight), find the number of pointings each star in this catalog 
+gets.
+

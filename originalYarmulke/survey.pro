@@ -69,7 +69,7 @@ pro survey
                                 ; now convert the pixel coordinates of the camera image into lat and
                                 ; lon on the sky using some IDLASTRO tools
 
-           make_astr, astr, $
+           make_astr, astr, $ 			; Build an astrometry structure from input parameter values
                       crpix=[n_pix_x/2,n_pix_y/2],$       ; indices of the reference pixel (center of image)
                       crval=[lon_center,lat_center], $    ; lon and lat of the reference pixel (center of camera pointing)
                       delta=[resol_camera,resol_camera],$ ; degrees per pixel at reference pixel location

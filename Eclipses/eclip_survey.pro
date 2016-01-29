@@ -27,11 +27,11 @@ pro eclip_survey, n_segs, fov, star, offset=offset
   print, 'Surveying ', n_elements(star), ' eclipses.'
   n_cams = 4
   ccd_pix = 4096.
-  gap_pix = 2.0/0.015
-  pix_scale = fov*3600./float(ccd_pix+gap_pix)
-  pix_scale_deg = fov/float(ccd_pix+gap_pix)
-  ccd_ctr = [1.0,1.0]*float(ccd_pix+gap_pix)/2.0
-  delt = [1.0,1.0]*pix_scale_deg
+  gap_pix = 2.0/0.015	; which is \approx 133
+  pix_scale = fov*3600./float(ccd_pix+gap_pix)  ; pixel scale in arcseconds (about 20 arcsec / pixel)
+  pix_scale_deg = fov/float(ccd_pix+gap_pix)    ; pixel scale in degrees (arcsec*3600)
+  ccd_ctr = [1.0,1.0]*float(ccd_pix+gap_pix)/2.0 ; center of CCD image in arcseconds 
+  delt = [1.0,1.0]*pix_scale_deg		
 
   elat_cams = (indgen(n_cams)+0.5)*(fov) + offset
   elon_cams = intarr(n_cams)
