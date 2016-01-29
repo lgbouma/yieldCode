@@ -6,14 +6,17 @@ pro eclip_survey, n_segs, fov, star, offset=offset
 ; INPUTS: 
 ;	n_segs: number of observing segments (13) per hemisphere
 ;	fov: field of view for each camera (23deg)
-;	star: star object with planets and eclipses assigned. 
+;	star: ECLIPSE object with planets and eclipses assigned. 
+;	In the standard run, this sub-routine is passed *eclip*
 ;	offset: off the ecliptic (nominal: passed "skirt" of 6deg)
 ; OUTPUTS: 
 ;	star object, with npointings and field angles added (needed
 ;	for subsequent "observing")
 ;-
   if (keyword_set(offset)) then offset=offset else offset=0.0
-  print, 'Surveying ', n_elements(star), ' stars.'
+  ; LB 16/01/29: originally, this was labelled stars. It's not a "star". You're passing an
+  ; eclip object. (??)
+  print, 'Surveying ', n_elements(star), ' eclipses.'
   n_cams = 4
   ccd_pix = 4096.
   gap_pix = 2.0/0.015

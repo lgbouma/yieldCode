@@ -76,8 +76,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   dartstruct = ss
   tic_fits = mrdfits(tic_file)
   ; Make random spherical coords
-  tempBigStarNumber = 0.5e7	; WARNING: no good for FFIs. Size set by available local memory.
-  print, 'Using ', fix(tempBigStarNumber), ' as tempBigStarNumber to make coordinate list (WARNING).'
+  tempBigStarNumber = 5e6	; WARNING: no good for FFIs. Size set by available local memory.
+  print, 'Using ', tempBigStarNumber, ' as tempBigStarNumber to make coordinate list (WARNING).'
   u = randomu(seed, tempBigStarNumber)
   v = randomu(seed, tempBigStarNumber)
   phi = 2.*!dpi*u
@@ -114,7 +114,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     ; Choose which stars are postage stamps vs ffis
     psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
     targets.ffi = 1
-    pri = where(targets.pri eq 1) ; presumably(?) selecting primary stars
+    pri = where(targets.pri eq 1) ; LB: presumably(?) indices for selecting primary stars
     selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
 			rn_pix=15., npnt=npnt_fits[ii])
     if (selpri[0] ne -1) then begin 
@@ -130,9 +130,27 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       targets[sing[selsing]].ffi=0
       numps[ii] = numps[ii]+n_elements(selsing)
     endif
-    print, 'fileNum', ii, ' tileNum', fnums[ii], ' numPstgStmp', numps[ii] 
     TOC, psSelClock  
- 
+
+    ;Print coordinates for postage stamps (TEMP)
+    thisTile = where(ipring eq fnums[ii])
+    nCoord = n_elements(thisTile)
+    coordInd = lindgen(numps[ii])
+    assert, (nCoord gt numps[ii]), 'Must have more available coords than postage stamps'
+    print, 'fileNum', ii, ' tileNum', fnums[ii], ' numPstgStmp', numps[ii] 
+	
+    glon = phi[thisTile[coordInd]]*180./!dpi
+    glat = (theta[thisTile[coordInd]]-!dpi/2.)*180./!dpi
+
+    euler, glon, glat, elon, elat, select=6
+    
+    for jj=0,numps[ii]-1 do begin    
+    	print, 'xyz tileNum', fnums[ii], ' psNum', coordInd[jj], ' elon', elon[jj], ' elat', elat[jj]
+    endfor
+
+    delvarx, thisTile, nCoord, coordInd, elon, elat, glon, glat
+    ;END TEMP
+
     ecliplen_tot = 0L
 
     ;Loop over each trial to generate eclipses
