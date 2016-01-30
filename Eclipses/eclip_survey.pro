@@ -4,8 +4,8 @@ pro eclip_survey, n_segs, fov, star, offset=offset
 ; PURPOSE: figure out the number of pointings and field angles each ECLIPSE (not star)
 ; 	on a given tile gets.
 ; INPUTS: 
-;	n_segs: number of observing segments (13) per hemisphere
-;	fov: field of view for each camera (23deg)
+;	n_segs: integer number of observing segments (13) per hemisphere.
+;	fov: field of view for each camera (24deg).
 ;	star: ECLIPSE object with planets and eclipses assigned. 
 ;	In the standard run, this sub-routine is passed *eclip*
 ;	offset: off the ecliptic (nominal: passed "skirt" of 6deg)
@@ -23,7 +23,7 @@ pro eclip_survey, n_segs, fov, star, offset=offset
 ;-
   if (keyword_set(offset)) then offset=offset else offset=0.0
   ; LB 16/01/29: originally, this was labelled stars. It's not a "star". You're passing an
-  ; eclip object. (??)
+  ; eclip object. This has the coordinates of a star. But for counting purposes, it's NOT.
   print, 'Surveying ', n_elements(star), ' eclipses.'
   n_cams = 4
   ccd_pix = 4096.
@@ -33,19 +33,27 @@ pro eclip_survey, n_segs, fov, star, offset=offset
   ccd_ctr = [1.0,1.0]*float(ccd_pix+gap_pix)/2.0 ; center of CCD image in arcseconds 
   delt = [1.0,1.0]*pix_scale_deg		
 
-  elat_cams = (indgen(n_cams)+0.5)*(fov) + offset
-  elon_cams = intarr(n_cams)
-  elon_segs = 360.0*(findgen(n_segs))/float(n_segs)
+  elat_cams = (indgen(n_cams)+0.5)*(fov) + offset ; nominal: [18., 42., 66., 90.]
+  elon_cams = intarr(n_cams) 			  ; nominal: [0., 0., 0., 0.]
+  elon_segs = 360.0*(findgen(n_segs))/float(n_segs) ; nom:   [0. 27.7, 55.4, ... 332.3]
 
   old_onchip = intarr(n_elements(star))
- 
+
   for hemi=-1,1,2 do begin
     for cam=0,n_cams-1 do begin
       for seg=0,n_segs-1 do begin
-         make_astr, astr, crpix=ccd_ctr, $
-                        crval=[elon_segs[seg],float(hemi)*elat_cams[cam]], $
-                        delta=delt
-         ad2xy, star.coord.elon, star.coord.elat, astr, x, y
+
+         make_astr, astr, $ 	 ; build astrometry structure from input parameter values
+		crpix=ccd_ctr, $ ; indices of reference pixel (center of image)
+		crval=[elon_segs[seg],float(hemi)*elat_cams[cam]], $ ; lon & lat of reference pixel 
+		delta=delt, $	 ; degrees per pixel at reference pixel location
+		ctype=['RA---TAN','DEC--TAN'] ; coordinate type: RA and DEC same as ecliptic coords here
+	
+         ad2xy, star.coord.elon, star.coord.elat, $
+		astr, x, y ; compute x and y from native coordts and FITS astrometry structure
+			   ; These x and y coordinates are x and y (units arcseconds) of the CCD image.
+
+	 ;Array of boolean vals that tells you whether eclipse object passed is on chip
          onchip =   ( $ ; Upper left
                        ((x gt 0.0) and $
                         (x lt (ccd_pix-gap_pix)/2.-1.) and $
@@ -66,6 +74,7 @@ pro eclip_survey, n_segs, fov, star, offset=offset
                         (x lt (ccd_pix-gap_pix)/2.-1.) and $
                         (y gt (ccd_pix+gap_pix)/2.-1.) and $
                         (y lt (ccd_pix+gap_pix)-1.)))
+	
          if (total(onchip gt 0)) then begin
            prev_npointings = star.npointings
            ; only count consecutive observations:

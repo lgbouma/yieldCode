@@ -46,7 +46,7 @@ assert (nCoords == nPointings * nCams)
 k = 0
 for i in range(len(pointingCoords)):
     for j in range(nCams):
-        print k//nCams, pointingCoords[i,j,0], pointingCoords[i,j,1]
+        print k//nCams, j, pointingCoords[i,j,0], pointingCoords[i,j,1]
         k += 1
 
 # Now, being too lazy to learn proper file I/O with python, run in terminal with python,
