@@ -4,7 +4,6 @@ PRO eclipstruct__define
 	    coord: {coordstruct}, $
 	    class: 0, $ ;1 planet around field star, 2=planet around binary, 3=heb, 4=beb/eb
 	    trial: 0, $
-	    tileNum: 0, $ ; tile number of primary
 	    npointings: 0, $
 	    r1: 0.0, $ ; radius of primary
 	    r2: 0.0, $ ; radius of secondary
@@ -64,6 +63,7 @@ PRO eclipstruct__define
 	    sat: 0, $        ; saturation flag
 	    dil: 0.0, $        ; dilution ratio
 	    var: 0.0, $        ; host star variability
-	    hostid: 0L $
+	    hostid: 0L, $
+	    tileNum: 0 $ ; tile number of primary
 	    }
 end

@@ -1,10 +1,11 @@
 ;PURPOSE: given input .dat file of tileNumber - psNumber - eclLong - eclLat,
-;generate and save a star structure with those attributes ('psStruct.sav'), 
+;generate and save a star structure with those attributes,
 ;to be used in starSurvey.pro
 
 PRO genPSstarStruct
 	FMT = 'I,I,F,F'
-	READCOL, 'psCoords.dat', F=FMT, tileNum, psNum, eLong, eLat
+	;READCOL, 'psCoords.dat', F=FMT, tileNum, psNum, eLong, eLat
+	READCOL, 'tileCoords.dat', F=FMT, tileNum, psNum, eLong, eLat
 
 	nStars = N_ELEMENTS(elat)
 	cat = REPLICATE({pointingstruct}, nStars)
@@ -15,5 +16,6 @@ PRO genPSstarStruct
 	cat.tileNum = tileNum
 	cat.psNum = psNum
 
-	SAVE, cat, FILENAME='psStruct.sav'
+	;SAVE, cat, FILENAME='psStruct.sav' ; 16/01/30: original use was to calc how many pointings PSs got
+	SAVE, cat, FILENAME='tileStruct.sav' ; 16/01/31: how many pointings do nominal tile coords get?
 END

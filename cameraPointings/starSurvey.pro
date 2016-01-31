@@ -11,7 +11,8 @@ pro starSurvey, camPointingFile, catFile
 ;	- ecliptic latitude (-90 to 90 deg)
 ; 	- ecliptic longitude (0 to 360)
 ;	catFile: .sav file, containing object of type pointingStruct, 
-;	output from genPSstarStruct.pro. 
+;	output from genPSstarStruct.pro. It's a catalog of PS stars,
+;	with tileNum, PSnum, elong, and elat for the star.
 ; OUTPUTS: 
 ;	Catalog, with star.npointings calculated. 
 ; COMMENTS:
@@ -98,10 +99,17 @@ pro starSurvey, camPointingFile, catFile
 				  ' nStarsOnChip=', N_ELEMENTS(onchip)
 		end
 	endfor
-	SAVE, cat, FILENAME='psWithPointings.sav'
+	
+	;SAVE, cat, FILENAME='psWithPointings.sav'
+	;SAVE, cat, FILENAME='tilesWithNominalPointings.sav'
+	tStr = ' tiles'
+	psStr = ' postage stamps'
+	tilePrint = 1
+	if tilePrint then str=tStr else str=psStr
+	
 	PRINT, STRING(10B), '==========', STRING(10B), $
-		'Total # assigned postage stamps', N_ELEMENTS(cat.nPointings), $
-		'Total # postage stamps with 0 pointings', N_ELEMENTS(WHERE(cat.nPointings eq 0)), $
-		'Total # postage postage with >0 pointings', N_ELEMENTS(WHERE(cat.nPointings gt 0)), $
+		'Total # assigned' + str, N_ELEMENTS(cat.nPointings), $
+		'Total #' + str + ' with 0 pointings', N_ELEMENTS(WHERE(cat.nPointings eq 0)), $
+		'Total #' + str + ' with >0 pointings', N_ELEMENTS(WHERE(cat.nPointings gt 0)), $
 	    STRING(10B), '=========='
 end

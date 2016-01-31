@@ -4,13 +4,13 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 
   TIC ; Grab initial system time
 
-  numfil = n_elements(fnums) ; fnums is file containing healpix numbers (~3000 of them).
+  numfil = N_ELEMENTS(fnums) ; fnums is file containing healpix numbers (~3000 of them).
   ; Get random tile numbers for rapid prototyping (look at 1/100th of the tiles)
-  randomNumbers = RandomU(seed, numfil)
-  randomIndices = Sort(Round(randomNumbers * (numfil-1)))
-  randomIndices = randomIndices[0:Round(numfil/100)]
-  if (prototypeMode EQ 1) then fnums=fnums[randomIndices] else fnums=fnums
-  numfil = n_elements(fnums)
+  randomNumbers = RANDOMU(seed, numfil)
+  randomIndices = SORT(ROUND(randomNumbers * (numfil-1)))
+  randomIndices = randomIndices[0:ROUND(numfil/100)]
+  if (prototypeMode eq 1) then fnums=fnums[randomIndices] else fnums=fnums
+  numfil = N_ELEMENTS(fnums)
 
   ; Input files
   ph_file = 'ph_T_filt.fits' ; photon fluxes for T=10 vs Teff
@@ -18,8 +18,10 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   tic_file = 'tic_teff.fits'
   dart_file = 'dartmouth_grid.sav'
   var_file = 'starvar.fits'
-  npnt_file = 'npnt.fits'
   tband_file = 'tband.csv'
+  ; pointingStruct with tile numbers, their avg coordts, and nPointings
+  fTilesWithPointings = '../cameraPointings/tilesWithNominalPointings.sav'
+
   ; User-adjustable settings (yes, that's you!)
   fov = 24. ; degrees
   seg = 13  ; number of segments per hemisphere
@@ -36,7 +38,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   min_depth=1D-6 ; minimum transit depth to retain from eclipses
   max_depth=1.0; maximum transit depth to retain from EBs
   if (keyword_set(n_trial)) then n_trial=n_trial else n_trial = 10 ; number of trials in this run
-  if (keyword_set(prf_file)) then frac_file=prf_file else frac_file = 'psfs/dfrac_t75_f3p31.fits' ; prf file 
+  if (keyword_set(prf_file)) then frac_file=prf_file $
+	  else frac_file = 'psfs/dfrac_t75_f3p31.fits' ; prf file 
   if (keyword_set(ps_only)) then ps_only = 1 else ps_only = 0 ; Only run postage stamps?
   if (keyword_set(detmag)) then detmag=detmag else detmag = 0 ; Only run postage stamps?
   saturation=150000. ; e-
@@ -47,10 +50,10 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   aspix = fov*3600/(CCD_PIX+GAP_PIX) ;20.43 ; arcseconds per pixel
   if (keyword_set(eclass)) then eclass = eclass else $
   eclass = [	1, $ ; Planets
-	    	0, $ ; EBs
-		0, $ ; BEBs
-		0, $ ; HEBs
-		0  ] ; BTPs
+				0, $ ; EBs
+				0, $ ; BEBs
+				0, $ ; HEBs
+				0  ] ; BTPs
 
   ; Don't phuck with physics, though
   REARTH_IN_RSUN = 0.0091705248
@@ -67,14 +70,15 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 ;  rad_fits = mrdfits(rad_file)/60. ; put into pixels
   ph_fits = mrdfits(ph_file)
   var_fits = mrdfits(var_file)
-  npnt_fits = mrdfits(npnt_file)
   readcol, 'tband.csv', lam, t
   tband = [[lam],[t]]
   cr_fits = fltarr(100,64)
 ;  cr_fits = mrdfits(cr_file)
   restore, dart_file
+  RESTORE, fTilesWithPointings
   dartstruct = ss
   tic_fits = mrdfits(tic_file)
+
   ; Make random spherical coords
   tempBigStarNumber = 5e6	; WARNING: no good for FFIs. Size set by available local memory.
   print, 'Using ', tempBigStarNumber, ' as tempBigStarNumber to make coordinate list (WARNING).'
@@ -90,12 +94,20 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   for ii=0, numfil-1 do begin ; for each healpix tile
     tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
     fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
-    ; Gather the .sav files
+
+	; If in postage stamp only mode and tile gets no pointings, skip tile.
+	if cat[ii].npointings eq 0 then begin
+		print, 'Skipping tileNum', fnums[ii], ' because it gets no pointings.'
+		continue
+	endif
+	assert, cat[ii].npointings ne 0, 'Did not skip tile that is not observed.'
+
+    ; Gather the .sav files. These are starstructs. 
     print, 'Restoring files for tile ', fnums[ii]
     fname = fpath+'hp'+string(fnums[ii], format='(I04)')+'.sav'
     print, fname
     restore, fname
-    targets = star
+    targets = star ;"bright catalog", 2.11e7 total stars. 
     numtargets[ii] = n_elements(targets)
     fname = fpath+'bk'+string(fnums[ii], format='(I04)')+'.sav'
     restore, fname
@@ -106,7 +118,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     deeps = star ;[where(star.mag.tsys gt 21)]
     numdeeps[ii] = n_elements(deeps)
     ; Debugging
-    print, 'File #', ii, ' numtargets', numtargets[ii], ' numbkgnd', $ 
+    print, 'File #', ii, 'tile #', fnums[ii], ' numtargets', numtargets[ii], ' numbkgnd', $ 
 	    numbkgnd[ii], ' numdeeps', numdeeps[ii]
     delvarx, star
     TOC, fopenClock
@@ -114,18 +126,19 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     ; Choose which stars are postage stamps vs ffis
     psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
     targets.ffi = 1
-    pri = where(targets.pri eq 1) ; LB: presumably(?) indices for selecting primary stars
+    pri = where(targets.pri eq 1) ; targets.pri true if target is primary star in their system
     selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
-			rn_pix=15., npnt=npnt_fits[ii])
+			rn_pix=15., npnt=cat[ii].npointings)
     if (selpri[0] ne -1) then begin 
       targets[pri[selpri]].ffi=0
       secffi = targets[pri[selpri]].companion.ind
       targets[secffi].ffi=0
       numps[ii] = numps[ii]+n_elements(selpri)
     endif
-    sing = where((targets.pri eq 0) and (targets.sec eq 0))
-    selsing = ps_sel(targets[sing].mag.t, targets[sing].teff, targets[sing].m, targets[sing].r, ph_fits, $
-			rn_pix=15., npnt=npnt_fits[ii])
+    sing = where((targets.pri eq 0) and (targets.sec eq 0)) ; targets.sec true are secondary of binary.
+	;LB 16: unclear why this isn't targets.sec eq 1...
+    selsing = ps_sel(targets[sing].mag.t, targets[sing].teff, targets[sing].m, $
+		targets[sing].r, ph_fits, rn_pix=15., npnt=cat[ii].npointings)
     if (selsing[0] ne -1) then begin 
       targets[sing[selsing]].ffi=0
       numps[ii] = numps[ii]+n_elements(selsing)
@@ -142,20 +155,20 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       ; Add eclipses
       makeEclipseClock = TIC('makeEclipse-' + STRTRIM(ii, 2) + '-' + STRTRIM(jj, 2))
       ecliplen =  make_eclipse(targets, bkgnds, eclip_trial, frac_fits, $
-	 ph_fits, dartstruct, tic_fits, eclass, tband, pla_err=pla_err, $
-	 min_depth=min_depth, max_depth=max_depth, ps_only=ps_only)
+	  			  ph_fits, dartstruct, tic_fits, eclass, tband, pla_err=pla_err, $
+	 	          min_depth=min_depth, max_depth=max_depth, ps_only=ps_only)
       TOC, makeEclipseClock 
 
       if (ecliplen gt 0) then begin
-        eclip_trial.trial = jj + 1
+      	eclip_trial.trial = jj + 1
         ; Add coordinates to the eclipses
         thispix = where(ipring eq fnums[ii])
         ncoord = n_elements(thispix)
         coordind = lindgen(ecliplen) mod ncoord
 
-	assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/01/29
-	print, 'nFile', ii, ' nTrial', jj, ' nTile', fnums[ii], $
-		' Ecliplen', ecliplen, ' ncoords', ncoord
+		assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/01/29
+		print, 'nFile', ii, ' nTrial', jj, ' nTile', fnums[ii], $
+			' Ecliplen', ecliplen, ' ncoords', ncoord
 
         glon = phi[thispix[coordind]]*180./!dpi
         glat = (theta[thispix[coordind]]-!dpi/2.)*180./!dpi
