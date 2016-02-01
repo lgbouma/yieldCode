@@ -5,14 +5,16 @@ pro starSurvey, camPointingFile, catFile
 ; 	stars (e.g., postage stamps), calculate how many pointings
 ; 	each star gets.
 ; INPUTS: 
-;	camPointingFile: text file formatted in columns as
+;	camPointingFile: text file (e.g., "nominalCamPointings.dat")
+;	formatted in columns as:
 ;	- pointing number (nominal run goes from 0 to 23)
 ;	- camera number (0, 1, 2, 3)
 ;	- ecliptic latitude (-90 to 90 deg)
 ; 	- ecliptic longitude (0 to 360)
-;	catFile: .sav file, containing object of type pointingStruct, 
-;	output from genPSstarStruct.pro. It's a catalog of PS stars,
-;	with tileNum, PSnum, elong, and elat for the star.
+;	catFile: .sav file, (e.g., "psStruct.sav") containing object of 
+;	type pointingStruct, output from genPSstarStruct.pro. It's a 
+;	catalog of PS stars, with tileNum, PSnum, elong, and elat for the star. 
+;	CAUTION: it does NOT have any non-zero pointing numbers yet.
 ; OUTPUTS: 
 ;	Catalog, with star.npointings calculated. 
 ; COMMENTS:
@@ -49,8 +51,6 @@ pro starSurvey, camPointingFile, catFile
 	pixScaleDeg = fov/FLOAT(ccdPix+gapPix)     ; pixel scale in degrees (arcsec*3600)
 	ccdCtr = [1.0,1.0]*FLOAT(ccdPix+gapPix)/2.0 ; center of CCD image in arcseconds 
 	delt = [1.0,1.0]*pixScaleDeg		
-
-	oldOnChip = INTARR(nPS)	; zeros array with size = # postage stamps
 	
 	for i=0, nCamPointings-1 do begin ; loop over camera pointings
 		make_astr, astr, $ 		 ; build astrometry structure from input params
@@ -60,9 +60,9 @@ pro starSurvey, camPointingFile, catFile
 			ctype=['RA---TAN', 'DEC--TAN']	; coordt type, RA & DEC is fine.
 
 		ad2xy, cat.coord.elon, cat.coord.elat, astr, x, y	
-		; these x and y coordts are x and y (units of arcsec) of CCD image
+		; x and y (units of arcsec) of stars in CCD image for this camera orientation
 
-		; Is the star on CCD chip?
+		; Is the star (known x,y coords) on CCD chip?
 		onChip =   ($   ; Upper left
 				   ((x gt 0.0) and $
 					(x lt (ccdPix-gapPix)/2.-1.) and $
@@ -84,23 +84,17 @@ pro starSurvey, camPointingFile, catFile
 					(y gt (ccdPix+gapPix)/2.-1.) and $
 					(y lt (ccdPix+gapPix)-1.)))
 				
-		if (TOTAL(onChip gt 0)) then begin
-		   nPointingsPrev = cat.nPointings
-		   ; only count consecutive observations:
-		   ; so it's a new observation OR the previous sector got it
-		   incr = onChip and ((not nPointingsPrev) or oldOnChip) 
-		   nPointingsNew = nPointingsPrev + incr
-		   chipInd = WHERE(incr gt 0)
-		   r = SQRT((x[chipInd]-ccdCtr[0])^2. + (y[chipInd]-ccdCtr[1])^2.) 
-		   cat[chipInd].nPointings = nPointingsNew[chipInd]
-		   oldOnChip = onChip
-		   PRINT, 'nCamPointing', i, ' pointingNum', pointingNum[i], $
-			      ' camNum', camNum[i], ' eLongCam', eLongCams[i], ' eLatCam', eLatCams[i], $
-				  ' nStarsOnChip=', N_ELEMENTS(onchip)
-		end
+		assert, TOTAL(onChip) gt 0, 'Your pointings are off b/c some do not see *anything*'
+
+		cat.nPointings += onChip
+
+	    PRINT, 'nCamPointing', i, ' pointingNum', pointingNum[i], $
+			  ' camNum', camNum[i], ' eLongCam', eLongCams[i], ' eLatCam', eLatCams[i], $
+			  ' nStarsOnChip=', N_ELEMENTS(onchip)
+
 	endfor
 	
-	;SAVE, cat, FILENAME='psWithPointings.sav'
+	SAVE, cat, FILENAME='psWithPointings.sav'
 	;SAVE, cat, FILENAME='tilesWithNominalPointings.sav'
 	tStr = ' tiles'
 	psStr = ' postage stamps'
