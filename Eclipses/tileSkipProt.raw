@@ -1,0 +1,2702 @@
+; IDL Version 8.3 (linux x86_64 m64)
+; Journal File for luke@crispy
+; Working directory: /home/luke/Dropbox/tessSimulation/tesscode/Eclipses
+; Date: Sun Jan 31 17:46:40 2016
+ 
+main
+;MRDFITS: Image array (2908)  Type=Int*2
+;MRDFITS: Image array (10,20,4,144,9)  Type=Real*8
+;MRDFITS: Image array (9,4)  Type=Real*4
+;MRDFITS: Image array (100,4)  Type=Real*8
+;MRDFITS: Image array (31,2)  Type=Real*8
+;Using   5.00000e+06 as tempBigStarNumber to make coordinate list (WARNING).
+;Restoring files for tile     2736
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2736.sav
+;File #       0tile #    2736 numtargets        9585 numbkgnd         454 numdeeps          96
+;% Time elapsed fileOpen-0: 8.1789911 seconds.
+;Selecting           15 postage stamps out of         2500 stars.
+;Selecting           18 postage stamps out of         4585 stars.
+;% Time elapsed psSel-0: 0.86024690 seconds.
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            2 cool ones
+;Created            1 transiting planets out of           77 around         9585 stars.
+;% Time elapsed makeEclipse-0-0: 0.10079718 seconds.
+;nFile       0 nTrial       0 nTile    2736 Ecliplen           1 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            5 cool ones
+;needed            7 but got            5 cool ones
+;Created            3 transiting planets out of           73 around         9585 stars.
+;% Time elapsed makeEclipse-0-1: 0.0062818527 seconds.
+;nFile       0 nTrial       1 nTile    2736 Ecliplen           3 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            3 cool ones
+;Created            2 transiting planets out of           78 around         9585 stars.
+;% Time elapsed makeEclipse-0-2: 0.0061099529 seconds.
+;nFile       0 nTrial       2 nTile    2736 Ecliplen           2 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            8 cool ones
+;needed            5 but got            3 cool ones
+;needed            7 but got            7 cool ones
+;Created            2 transiting planets out of           79 around         9585 stars.
+;% Time elapsed makeEclipse-0-3: 0.0059962273 seconds.
+;nFile       0 nTrial       3 nTile    2736 Ecliplen           2 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            8 cool ones
+;needed            5 but got            4 cool ones
+;Created            2 transiting planets out of           80 around         9585 stars.
+;% Time elapsed makeEclipse-0-4: 0.0062379837 seconds.
+;nFile       0 nTrial       4 nTile    2736 Ecliplen           2 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            5 cool ones
+;Created            4 transiting planets out of           78 around         9585 stars.
+;% Time elapsed makeEclipse-0-5: 0.0062859058 seconds.
+;nFile       0 nTrial       5 nTile    2736 Ecliplen           4 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            8 cool ones
+;Created            2 transiting planets out of           81 around         9585 stars.
+;% Time elapsed makeEclipse-0-6: 0.0060811043 seconds.
+;nFile       0 nTrial       6 nTile    2736 Ecliplen           2 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            4 cool ones
+;Created            5 transiting planets out of           79 around         9585 stars.
+;% Time elapsed makeEclipse-0-7: 0.0064649582 seconds.
+;nFile       0 nTrial       7 nTile    2736 Ecliplen           5 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            5 cool ones
+;Created            1 transiting planets out of           80 around         9585 stars.
+;% Time elapsed makeEclipse-0-8: 0.0060579777 seconds.
+;nFile       0 nTrial       8 nTile    2736 Ecliplen           1 ncoords        1597
+;Adding eclipses to         9585 stars.
+;making       126.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            4 cool ones
+;Created        0 transiting planets out of           79 around         9585 stars.
+;% Time elapsed makeEclipse-0-9: 0.0057170391 seconds.
+;Surveying           22 eclipses.
+;Hemi=       1 Seg=       5 Cam=       0 ELon=      138.462 ELat=      18.0000 Nstars=          22
+;% Time elapsed eclipSurvey-0: 0.077179909 seconds.
+;Observing           22 eclipses around         9585 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           18 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            6 transits
+;Stacking and sorting PRFs
+;Diluting            4 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            6 with            3 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            6 with            1 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            6 with            1 stars
+;Detected            6 eclipses.
+;% Time elapsed eclipObserve-0: 0.78215909 seconds.
+;% Time elapsed endClock-0: 0.012290955 seconds.
+;% Time elapsed tileNumber-0-    2736: 10.868000 seconds.
+;Restoring files for tile     2797
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2797.sav
+;File #       1tile #    2797 numtargets       10436 numbkgnd         672 numdeeps         156
+;% Time elapsed fileOpen-1: 0.095574141 seconds.
+;Selecting            9 postage stamps out of         2754 stars.
+;Selecting           28 postage stamps out of         4928 stars.
+;% Time elapsed psSel-1: 0.015346050 seconds.
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            5 cool ones
+;Created            1 transiting planets out of           92 around        10436 stars.
+;% Time elapsed makeEclipse-1-0: 0.0053880215 seconds.
+;nFile       1 nTrial       0 nTile    2797 Ecliplen           1 ncoords        1640
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            5 cool ones
+;Created        0 transiting planets out of           93 around        10436 stars.
+;% Time elapsed makeEclipse-1-1: 0.0054128170 seconds.
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            4 cool ones
+;Created            4 transiting planets out of           91 around        10436 stars.
+;% Time elapsed makeEclipse-1-2: 0.0056200027 seconds.
+;nFile       1 nTrial       2 nTile    2797 Ecliplen           4 ncoords        1640
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            7 cool ones
+;Created        0 transiting planets out of           94 around        10436 stars.
+;% Time elapsed makeEclipse-1-3: 0.0053589344 seconds.
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            5 cool ones
+;Created            3 transiting planets out of           93 around        10436 stars.
+;% Time elapsed makeEclipse-1-4: 0.0062270164 seconds.
+;nFile       1 nTrial       4 nTile    2797 Ecliplen           3 ncoords        1640
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            7 cool ones
+;Created            1 transiting planets out of           94 around        10436 stars.
+;% Time elapsed makeEclipse-1-5: 0.0061299801 seconds.
+;nFile       1 nTrial       5 nTile    2797 Ecliplen           1 ncoords        1640
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            4 cool ones
+;Created        0 transiting planets out of           91 around        10436 stars.
+;% Time elapsed makeEclipse-1-6: 0.0052919388 seconds.
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            7 cool ones
+;needed            9 but got            9 cool ones
+;Created            1 transiting planets out of           94 around        10436 stars.
+;% Time elapsed makeEclipse-1-7: 0.0057051182 seconds.
+;nFile       1 nTrial       7 nTile    2797 Ecliplen           1 ncoords        1640
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got            7 cool ones
+;needed            7 but got            5 cool ones
+;Created            3 transiting planets out of           90 around        10436 stars.
+;% Time elapsed makeEclipse-1-8: 0.0058660507 seconds.
+;nFile       1 nTrial       8 nTile    2797 Ecliplen           3 ncoords        1640
+;Adding eclipses to        10436 stars.
+;making       148.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            6 cool ones
+;Created            3 transiting planets out of           93 around        10436 stars.
+;% Time elapsed makeEclipse-1-9: 0.0055589676 seconds.
+;nFile       1 nTrial       9 nTile    2797 Ecliplen           3 ncoords        1640
+;Surveying           16 eclipses.
+;Hemi=      -1 Seg=       7 Cam=       0 ELon=      193.846 ELat=     -18.0000 Nstars=          16
+;% Time elapsed eclipSurvey-1: 0.011106014 seconds.
+;Observing           16 eclipses around        10436 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;% Time elapsed eclipObserve-1: 0.00024890900 seconds.
+;% Time elapsed endClock-1: 5.9604645e-06 seconds.
+;% Time elapsed tileNumber-1-    2797: 0.22969604 seconds.
+;Restoring files for tile      472
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0472.sav
+;File #       2tile #     472 numtargets       16099 numbkgnd        1244 numdeeps         288
+;% Time elapsed fileOpen-2: 0.14513206 seconds.
+;Selecting           15 postage stamps out of         3617 stars.
+;Selecting           47 postage stamps out of         8865 stars.
+;% Time elapsed psSel-2: 0.024791956 seconds.
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            6 cool ones
+;needed            7 but got            6 cool ones
+;Created            3 transiting planets out of          111 around        16099 stars.
+;% Time elapsed makeEclipse-2-0: 0.0083398819 seconds.
+;nFile       2 nTrial       0 nTile     472 Ecliplen           3 ncoords        1623
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            7 cool ones
+;needed            7 but got            6 cool ones
+;Created            1 transiting planets out of          112 around        16099 stars.
+;% Time elapsed makeEclipse-2-1: 0.0079069138 seconds.
+;nFile       2 nTrial       1 nTile     472 Ecliplen           1 ncoords        1623
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            6 cool ones
+;Created            3 transiting planets out of          113 around        16099 stars.
+;% Time elapsed makeEclipse-2-2: 0.0082309246 seconds.
+;nFile       2 nTrial       2 nTile     472 Ecliplen           3 ncoords        1623
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            6 cool ones
+;Created            1 transiting planets out of          114 around        16099 stars.
+;% Time elapsed makeEclipse-2-3: 0.0079319477 seconds.
+;nFile       2 nTrial       3 nTile     472 Ecliplen           1 ncoords        1623
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            7 cool ones
+;needed            7 but got            6 cool ones
+;Created            1 transiting planets out of          112 around        16099 stars.
+;% Time elapsed makeEclipse-2-4: 0.0083851814 seconds.
+;nFile       2 nTrial       4 nTile     472 Ecliplen           1 ncoords        1623
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            7 cool ones
+;Created            2 transiting planets out of          115 around        16099 stars.
+;% Time elapsed makeEclipse-2-5: 0.0075840950 seconds.
+;nFile       2 nTrial       5 nTile     472 Ecliplen           2 ncoords        1623
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            7 cool ones
+;Created            2 transiting planets out of          114 around        16099 stars.
+;% Time elapsed makeEclipse-2-6: 0.0078492165 seconds.
+;nFile       2 nTrial       6 nTile     472 Ecliplen           2 ncoords        1623
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            4 cool ones
+;Created            4 transiting planets out of          111 around        16099 stars.
+;% Time elapsed makeEclipse-2-7: 0.0080168247 seconds.
+;nFile       2 nTrial       7 nTile     472 Ecliplen           4 ncoords        1623
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            4 cool ones
+;Created        0 transiting planets out of          111 around        16099 stars.
+;% Time elapsed makeEclipse-2-8: 0.0075759888 seconds.
+;Adding eclipses to        16099 stars.
+;making       176.000 planets.
+;needed           12 but got            6 cool ones
+;needed            7 but got            7 cool ones
+;Created            3 transiting planets out of          112 around        16099 stars.
+;% Time elapsed makeEclipse-2-9: 0.0078859329 seconds.
+;nFile       2 nTrial       9 nTile     472 Ecliplen           3 ncoords        1623
+;Surveying           20 eclipses.
+;Hemi=      -1 Seg=      11 Cam=       2 ELon=      304.615 ELat=     -66.0000 Nstars=          20
+;Hemi=      -1 Seg=      12 Cam=       2 ELon=      332.308 ELat=     -66.0000 Nstars=          20
+;% Time elapsed eclipSurvey-2: 0.011040926 seconds.
+;Observing           20 eclipses around        16099 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           18 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            7 transits
+;Stacking and sorting PRFs
+;Diluting            3 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            7 with            6 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            7 with           12 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            7 with            1 stars
+;Detected            7 eclipses.
+;% Time elapsed eclipObserve-2: 0.42262411 seconds.
+;% Time elapsed endClock-2: 9.3936920e-05 seconds.
+;% Time elapsed tileNumber-2-     472: 0.74915385 seconds.
+;Restoring files for tile      104
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0104.sav
+;File #       3tile #     104 numtargets        9135 numbkgnd         444 numdeeps          94
+;% Time elapsed fileOpen-3: 0.075227976 seconds.
+;Selecting           18 postage stamps out of         2339 stars.
+;Selecting           26 postage stamps out of         4457 stars.
+;% Time elapsed psSel-3: 0.014063835 seconds.
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            5 cool ones
+;needed            6 but got            5 cool ones
+;Created            1 transiting planets out of           79 around         9135 stars.
+;% Time elapsed makeEclipse-3-0: 0.0061321259 seconds.
+;nFile       3 nTrial       0 nTile     104 Ecliplen           1 ncoords        1623
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            3 cool ones
+;needed            6 but got            5 cool ones
+;Created        0 transiting planets out of           79 around         9135 stars.
+;% Time elapsed makeEclipse-3-1: 0.0069828033 seconds.
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            4 cool ones
+;needed            6 but got            6 cool ones
+;Created        0 transiting planets out of           81 around         9135 stars.
+;% Time elapsed makeEclipse-3-2: 0.0065491199 seconds.
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            6 cool ones
+;Created            1 transiting planets out of           81 around         9135 stars.
+;% Time elapsed makeEclipse-3-3: 0.0069639683 seconds.
+;nFile       3 nTrial       3 nTile     104 Ecliplen           1 ncoords        1623
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            4 cool ones
+;needed            6 but got            4 cool ones
+;Created        0 transiting planets out of           79 around         9135 stars.
+;% Time elapsed makeEclipse-3-4: 0.0059080124 seconds.
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            1 cool ones
+;Created            1 transiting planets out of           78 around         9135 stars.
+;% Time elapsed makeEclipse-3-5: 0.0060048103 seconds.
+;nFile       3 nTrial       5 nTile     104 Ecliplen           1 ncoords        1623
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            5 cool ones
+;needed            4 but got            4 cool ones
+;Created            2 transiting planets out of           80 around         9135 stars.
+;% Time elapsed makeEclipse-3-6: 0.0062718391 seconds.
+;nFile       3 nTrial       6 nTile     104 Ecliplen           2 ncoords        1623
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            4 cool ones
+;needed            6 but got            5 cool ones
+;Created            5 transiting planets out of           78 around         9135 stars.
+;% Time elapsed makeEclipse-3-7: 0.0065951347 seconds.
+;nFile       3 nTrial       7 nTile     104 Ecliplen           5 ncoords        1623
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            4 cool ones
+;needed            6 but got            6 cool ones
+;Created        0 transiting planets out of           81 around         9135 stars.
+;% Time elapsed makeEclipse-3-8: 0.0063610077 seconds.
+;Adding eclipses to         9135 stars.
+;making       124.000 planets.
+;needed            7 but got            5 cool ones
+;needed            4 but got            3 cool ones
+;Created            1 transiting planets out of           79 around         9135 stars.
+;% Time elapsed makeEclipse-3-9: 0.0065448284 seconds.
+;nFile       3 nTrial       9 nTile     104 Ecliplen           1 ncoords        1623
+;Surveying           11 eclipses.
+;Hemi=      -1 Seg=       0 Cam=       1 ELon=      0.00000 ELat=     -42.0000 Nstars=          11
+;Hemi=      -1 Seg=       1 Cam=       1 ELon=      27.6923 ELat=     -42.0000 Nstars=          11
+;% Time elapsed eclipSurvey-3: 0.010738850 seconds.
+;Observing           11 eclipses around         9135 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           11 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            4 transits
+;Stacking and sorting PRFs
+;Diluting            2 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            4 with            1 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            4 with            5 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            4 with            4 stars
+;Detected            4 eclipses.
+;% Time elapsed eclipObserve-3: 0.019233942 seconds.
+;% Time elapsed endClock-3: 8.4161758e-05 seconds.
+;% Time elapsed tileNumber-3-     104: 0.22768307 seconds.
+;Restoring files for tile     2312
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2312.sav
+;File #       4tile #    2312 numtargets       19895 numbkgnd        1123 numdeeps         181
+;% Time elapsed fileOpen-4: 0.16768599 seconds.
+;Selecting           16 postage stamps out of         5518 stars.
+;Selecting           38 postage stamps out of         8859 stars.
+;% Time elapsed psSel-4: 0.029260874 seconds.
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           10 cool ones
+;Created            1 transiting planets out of          121 around        19895 stars.
+;% Time elapsed makeEclipse-4-0: 0.010799885 seconds.
+;nFile       4 nTrial       0 nTile    2312 Ecliplen           1 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           12 cool ones
+;needed            8 but got            5 cool ones
+;Created            2 transiting planets out of          120 around        19895 stars.
+;% Time elapsed makeEclipse-4-1: 0.011495113 seconds.
+;nFile       4 nTrial       1 nTile    2312 Ecliplen           2 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           12 cool ones
+;needed            8 but got            5 cool ones
+;Created            3 transiting planets out of          120 around        19895 stars.
+;% Time elapsed makeEclipse-4-2: 0.012317896 seconds.
+;nFile       4 nTrial       2 nTile    2312 Ecliplen           3 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           10 cool ones
+;needed           11 but got           10 cool ones
+;Created            5 transiting planets out of          120 around        19895 stars.
+;% Time elapsed makeEclipse-4-3: 0.011824846 seconds.
+;nFile       4 nTrial       3 nTile    2312 Ecliplen           5 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           10 cool ones
+;needed            8 but got            8 cool ones
+;Created            1 transiting planets out of          121 around        19895 stars.
+;% Time elapsed makeEclipse-4-4: 0.011137009 seconds.
+;nFile       4 nTrial       4 nTile    2312 Ecliplen           1 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           11 cool ones
+;Created            1 transiting planets out of          122 around        19895 stars.
+;% Time elapsed makeEclipse-4-5: 0.011564016 seconds.
+;nFile       4 nTrial       5 nTile    2312 Ecliplen           1 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           12 cool ones
+;needed           11 but got           11 cool ones
+;Created            2 transiting planets out of          123 around        19895 stars.
+;% Time elapsed makeEclipse-4-6: 0.011528969 seconds.
+;nFile       4 nTrial       6 nTile    2312 Ecliplen           2 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           12 cool ones
+;needed            8 but got            4 cool ones
+;Created            2 transiting planets out of          119 around        19895 stars.
+;% Time elapsed makeEclipse-4-7: 0.011727095 seconds.
+;nFile       4 nTrial       7 nTile    2312 Ecliplen           2 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           12 cool ones
+;needed            8 but got            7 cool ones
+;needed           11 but got           10 cool ones
+;Created            3 transiting planets out of          121 around        19895 stars.
+;% Time elapsed makeEclipse-4-8: 0.011462927 seconds.
+;nFile       4 nTrial       8 nTile    2312 Ecliplen           3 ncoords        1682
+;Adding eclipses to        19895 stars.
+;making       192.000 planets.
+;needed           14 but got           11 cool ones
+;needed            8 but got            5 cool ones
+;Created            3 transiting planets out of          119 around        19895 stars.
+;% Time elapsed makeEclipse-4-9: 0.011441946 seconds.
+;nFile       4 nTrial       9 nTile    2312 Ecliplen           3 ncoords        1682
+;Surveying           23 eclipses.
+;Hemi=      -1 Seg=       5 Cam=       0 ELon=      138.462 ELat=     -18.0000 Nstars=          23
+;% Time elapsed eclipSurvey-4: 0.011002064 seconds.
+;Observing           23 eclipses around        19895 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           20 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            6 transits
+;Stacking and sorting PRFs
+;Diluting            2 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            6 with            7 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            6 with            9 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            6 with            1 stars
+;Detected            6 eclipses.
+;% Time elapsed eclipObserve-4: 0.043483973 seconds.
+;% Time elapsed endClock-4: 9.1075897e-05 seconds.
+;% Time elapsed tileNumber-4-    2312: 0.44324803 seconds.
+;Restoring files for tile     2185
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2185.sav
+;File #       5tile #    2185 numtargets       23894 numbkgnd        1636 numdeeps         265
+;% Time elapsed fileOpen-5: 0.13842797 seconds.
+;Selecting            8 postage stamps out of         4956 stars.
+;Selecting           28 postage stamps out of        13982 stars.
+;% Time elapsed psSel-5: 0.039711952 seconds.
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            7 cool ones
+;needed            6 but got            6 cool ones
+;needed            8 but got            7 cool ones
+;Created            6 transiting planets out of           82 around        23894 stars.
+;% Time elapsed makeEclipse-5-0: 0.0097129345 seconds.
+;nFile       5 nTrial       0 nTile    2185 Ecliplen           6 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            7 cool ones
+;needed            6 but got            4 cool ones
+;Created            4 transiting planets out of           81 around        23894 stars.
+;% Time elapsed makeEclipse-5-1: 0.0097110271 seconds.
+;nFile       5 nTrial       1 nTile    2185 Ecliplen           4 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            7 cool ones
+;needed            6 but got            6 cool ones
+;needed            8 but got            8 cool ones
+;Created            1 transiting planets out of           83 around        23894 stars.
+;% Time elapsed makeEclipse-5-2: 0.0093741417 seconds.
+;nFile       5 nTrial       2 nTile    2185 Ecliplen           1 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            7 cool ones
+;needed            6 but got            5 cool ones
+;Created            3 transiting planets out of           82 around        23894 stars.
+;% Time elapsed makeEclipse-5-3: 0.0095679760 seconds.
+;nFile       5 nTrial       3 nTile    2185 Ecliplen           3 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            7 cool ones
+;needed            6 but got            5 cool ones
+;Created            1 transiting planets out of           82 around        23894 stars.
+;% Time elapsed makeEclipse-5-4: 0.0097301006 seconds.
+;nFile       5 nTrial       4 nTile    2185 Ecliplen           1 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            8 cool ones
+;needed            6 but got            5 cool ones
+;Created            1 transiting planets out of           83 around        23894 stars.
+;% Time elapsed makeEclipse-5-5: 0.011775017 seconds.
+;nFile       5 nTrial       5 nTile    2185 Ecliplen           1 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            8 cool ones
+;needed            6 but got            4 cool ones
+;Created            6 transiting planets out of           82 around        23894 stars.
+;% Time elapsed makeEclipse-5-6: 0.0095250607 seconds.
+;nFile       5 nTrial       6 nTile    2185 Ecliplen           6 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            7 cool ones
+;needed            6 but got            5 cool ones
+;Created            1 transiting planets out of           82 around        23894 stars.
+;% Time elapsed makeEclipse-5-7: 0.0094199181 seconds.
+;nFile       5 nTrial       7 nTile    2185 Ecliplen           1 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            6 cool ones
+;needed            6 but got            2 cool ones
+;Created            1 transiting planets out of           78 around        23894 stars.
+;% Time elapsed makeEclipse-5-8: 0.0089731216 seconds.
+;nFile       5 nTrial       8 nTile    2185 Ecliplen           1 ncoords        1620
+;Adding eclipses to        23894 stars.
+;making       128.000 planets.
+;needed           10 but got            8 cool ones
+;needed            6 but got            4 cool ones
+;Created            1 transiting planets out of           82 around        23894 stars.
+;% Time elapsed makeEclipse-5-9: 0.0093581676 seconds.
+;nFile       5 nTrial       9 nTile    2185 Ecliplen           1 ncoords        1620
+;Surveying           25 eclipses.
+;Hemi=      -1 Seg=       5 Cam=       0 ELon=      138.462 ELat=     -18.0000 Nstars=          25
+;% Time elapsed eclipSurvey-5: 0.011287928 seconds.
+;Observing           25 eclipses around        23894 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           10 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            6 transits
+;Stacking and sorting PRFs
+;Diluting            3 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            6 with            5 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            6 with           17 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            6 with            5 stars
+;Detected            6 eclipses.
+;% Time elapsed eclipObserve-5: 0.049345970 seconds.
+;% Time elapsed endClock-5: 9.7036362e-05 seconds.
+;% Time elapsed tileNumber-5-    2185: 0.42111206 seconds.
+;Restoring files for tile       72
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0072.sav
+;File #       6tile #      72 numtargets        7676 numbkgnd         385 numdeeps          85
+;% Time elapsed fileOpen-6: 0.066760778 seconds.
+;Selecting           10 postage stamps out of         1488 stars.
+;Selecting           39 postage stamps out of         4700 stars.
+;% Time elapsed psSel-6: 0.012130022 seconds.
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            8 cool ones
+;Created        0 transiting planets out of           98 around         7676 stars.
+;% Time elapsed makeEclipse-6-0: 0.0040438175 seconds.
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            5 cool ones
+;Created            5 transiting planets out of           97 around         7676 stars.
+;% Time elapsed makeEclipse-6-1: 0.0046739578 seconds.
+;nFile       6 nTrial       1 nTile      72 Ecliplen           5 ncoords        1583
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            5 cool ones
+;Created        0 transiting planets out of           97 around         7676 stars.
+;% Time elapsed makeEclipse-6-2: 0.0040597916 seconds.
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            8 cool ones
+;Created           10 transiting planets out of           98 around         7676 stars.
+;% Time elapsed makeEclipse-6-3: 0.0050430298 seconds.
+;nFile       6 nTrial       3 nTile      72 Ecliplen          10 ncoords        1583
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            6 cool ones
+;Created            2 transiting planets out of           98 around         7676 stars.
+;% Time elapsed makeEclipse-6-4: 0.0043690205 seconds.
+;nFile       6 nTrial       4 nTile      72 Ecliplen           2 ncoords        1583
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            4 cool ones
+;Created            3 transiting planets out of           95 around         7676 stars.
+;% Time elapsed makeEclipse-6-5: 0.0044310093 seconds.
+;nFile       6 nTrial       5 nTile      72 Ecliplen           3 ncoords        1583
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            6 cool ones
+;needed            9 but got            9 cool ones
+;Created            2 transiting planets out of           98 around         7676 stars.
+;% Time elapsed makeEclipse-6-6: 0.0044019222 seconds.
+;nFile       6 nTrial       6 nTile      72 Ecliplen           2 ncoords        1583
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            6 cool ones
+;needed            7 but got            4 cool ones
+;Created            2 transiting planets out of           93 around         7676 stars.
+;% Time elapsed makeEclipse-6-7: 0.0044198036 seconds.
+;nFile       6 nTrial       7 nTile      72 Ecliplen           2 ncoords        1583
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            7 cool ones
+;needed            7 but got            6 cool ones
+;Created        0 transiting planets out of           96 around         7676 stars.
+;% Time elapsed makeEclipse-6-8: 0.0040919781 seconds.
+;Adding eclipses to         7676 stars.
+;making       157.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            4 cool ones
+;Created            3 transiting planets out of           95 around         7676 stars.
+;% Time elapsed makeEclipse-6-9: 0.0044379234 seconds.
+;nFile       6 nTrial       9 nTile      72 Ecliplen           3 ncoords        1583
+;Surveying           27 eclipses.
+;Hemi=      -1 Seg=       1 Cam=       0 ELon=      27.6923 ELat=     -18.0000 Nstars=          27
+;Hemi=      -1 Seg=       1 Cam=       1 ELon=      27.6923 ELat=     -42.0000 Nstars=          27
+;% Time elapsed eclipSurvey-6: 0.011383057 seconds.
+;Observing           27 eclipses around         7676 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           20 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            9 transits
+;Stacking and sorting PRFs
+;Diluting            2 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            9 with            1 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            9 with            4 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            9 with            1 stars
+;Detected            9 eclipses.
+;% Time elapsed eclipObserve-6: 0.031738997 seconds.
+;% Time elapsed endClock-6: 9.0837479e-05 seconds.
+;% Time elapsed tileNumber-6-      72: 0.21198297 seconds.
+;Restoring files for tile     1777
+;/home/luke/Dropbox/tessSimulation/trilegal/hp1777.sav
+;File #       7tile #    1777 numtargets      106631 numbkgnd       10494 numdeeps        2233
+;% Time elapsed fileOpen-7: 0.63025808 seconds.
+;Selecting           20 postage stamps out of        34292 stars.
+;Selecting           37 postage stamps out of        38047 stars.
+;% Time elapsed psSel-7: 0.16850615 seconds.
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           16 cool ones
+;needed           11 but got            7 cool ones
+;Created            2 transiting planets out of          146 around       106631 stars.
+;% Time elapsed makeEclipse-7-0: 0.093978167 seconds.
+;nFile       7 nTrial       0 nTile    1777 Ecliplen           2 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           15 cool ones
+;needed           11 but got           10 cool ones
+;Created            2 transiting planets out of          148 around       106631 stars.
+;% Time elapsed makeEclipse-7-1: 0.11338711 seconds.
+;nFile       7 nTrial       1 nTile    1777 Ecliplen           2 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           15 cool ones
+;needed           11 but got            7 cool ones
+;needed           15 but got           15 cool ones
+;Created            2 transiting planets out of          145 around       106631 stars.
+;% Time elapsed makeEclipse-7-2: 0.11587095 seconds.
+;nFile       7 nTrial       2 nTile    1777 Ecliplen           2 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           15 cool ones
+;needed           11 but got            8 cool ones
+;Created            2 transiting planets out of          146 around       106631 stars.
+;% Time elapsed makeEclipse-7-3: 0.10211897 seconds.
+;nFile       7 nTrial       3 nTile    1777 Ecliplen           2 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           14 cool ones
+;needed           11 but got           10 cool ones
+;Created            5 transiting planets out of          147 around       106631 stars.
+;% Time elapsed makeEclipse-7-4: 0.11829996 seconds.
+;nFile       7 nTrial       4 nTile    1777 Ecliplen           5 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           13 cool ones
+;needed           11 but got            8 cool ones
+;Created            6 transiting planets out of          144 around       106631 stars.
+;% Time elapsed makeEclipse-7-5: 0.11241293 seconds.
+;nFile       7 nTrial       5 nTile    1777 Ecliplen           6 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           15 cool ones
+;needed           11 but got            7 cool ones
+;Created            4 transiting planets out of          145 around       106631 stars.
+;% Time elapsed makeEclipse-7-6: 0.10961986 seconds.
+;nFile       7 nTrial       6 nTile    1777 Ecliplen           4 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           15 cool ones
+;needed           11 but got           10 cool ones
+;Created            4 transiting planets out of          148 around       106631 stars.
+;% Time elapsed makeEclipse-7-7: 0.11401296 seconds.
+;nFile       7 nTrial       7 nTile    1777 Ecliplen           4 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           14 cool ones
+;needed           11 but got           11 cool ones
+;Created            2 transiting planets out of          148 around       106631 stars.
+;% Time elapsed makeEclipse-7-8: 0.099874020 seconds.
+;nFile       7 nTrial       8 nTile    1777 Ecliplen           2 ncoords        1653
+;Adding eclipses to       106631 stars.
+;making       236.000 planets.
+;needed           19 but got           15 cool ones
+;needed           11 but got           11 cool ones
+;Created            1 transiting planets out of          149 around       106631 stars.
+;% Time elapsed makeEclipse-7-9: 0.11892796 seconds.
+;nFile       7 nTrial       9 nTile    1777 Ecliplen           1 ncoords        1653
+;Surveying           30 eclipses.
+;Hemi=       1 Seg=       0 Cam=       2 ELon=      0.00000 ELat=      66.0000 Nstars=          30
+;Hemi=       1 Seg=       1 Cam=       2 ELon=      27.6923 ELat=      66.0000 Nstars=          30
+;Hemi=       1 Seg=      12 Cam=       2 ELon=      332.308 ELat=      66.0000 Nstars=          30
+;% Time elapsed eclipSurvey-7: 0.011885881 seconds.
+;Observing           30 eclipses around       106631 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           28 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing           16 transits
+;Stacking and sorting PRFs
+;Diluting           11 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of           16 with           56 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of           16 with          108 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of           16 with           21 stars
+;Detected           15 eclipses.
+;% Time elapsed eclipObserve-7: 0.44547200 seconds.
+;% Time elapsed endClock-7: 0.043946028 seconds.
+;% Time elapsed tileNumber-7-    1777: 2.5824349 seconds.
+;Restoring files for tile     2311
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2311.sav
+;File #       8tile #    2311 numtargets       19835 numbkgnd         915 numdeeps         170
+;% Time elapsed fileOpen-8: 0.59624791 seconds.
+;Selecting           14 postage stamps out of         5503 stars.
+;Selecting           24 postage stamps out of         8829 stars.
+;% Time elapsed psSel-8: 0.028667927 seconds.
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           13 cool ones
+;needed            9 but got            8 cool ones
+;Created            6 transiting planets out of          116 around        19835 stars.
+;% Time elapsed makeEclipse-8-0: 0.0080430508 seconds.
+;nFile       8 nTrial       0 nTile    2311 Ecliplen           6 ncoords        1601
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           13 cool ones
+;Created        0 transiting planets out of          117 around        19835 stars.
+;% Time elapsed makeEclipse-8-1: 0.0074360371 seconds.
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           12 cool ones
+;needed            9 but got            9 cool ones
+;Created            4 transiting planets out of          116 around        19835 stars.
+;% Time elapsed makeEclipse-8-2: 0.0078399181 seconds.
+;nFile       8 nTrial       2 nTile    2311 Ecliplen           4 ncoords        1601
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           12 cool ones
+;needed            9 but got            9 cool ones
+;needed           12 but got           12 cool ones
+;Created            3 transiting planets out of          116 around        19835 stars.
+;% Time elapsed makeEclipse-8-3: 0.0079760551 seconds.
+;nFile       8 nTrial       3 nTile    2311 Ecliplen           3 ncoords        1601
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           11 cool ones
+;needed            9 but got            7 cool ones
+;Created            2 transiting planets out of          113 around        19835 stars.
+;% Time elapsed makeEclipse-8-4: 0.0076498985 seconds.
+;nFile       8 nTrial       4 nTile    2311 Ecliplen           2 ncoords        1601
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           13 cool ones
+;needed            9 but got            8 cool ones
+;Created            3 transiting planets out of          116 around        19835 stars.
+;% Time elapsed makeEclipse-8-5: 0.0079760551 seconds.
+;nFile       8 nTrial       5 nTile    2311 Ecliplen           3 ncoords        1601
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got            9 cool ones
+;Created        0 transiting planets out of          113 around        19835 stars.
+;% Time elapsed makeEclipse-8-6: 0.0073349476 seconds.
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           11 cool ones
+;needed            9 but got            7 cool ones
+;Created            2 transiting planets out of          113 around        19835 stars.
+;% Time elapsed makeEclipse-8-7: 0.0075559616 seconds.
+;nFile       8 nTrial       7 nTile    2311 Ecliplen           2 ncoords        1601
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           11 cool ones
+;Created        0 transiting planets out of          115 around        19835 stars.
+;% Time elapsed makeEclipse-8-8: 0.0072560310 seconds.
+;Adding eclipses to        19835 stars.
+;making       188.000 planets.
+;needed           16 but got           10 cool ones
+;Created            8 transiting planets out of          114 around        19835 stars.
+;% Time elapsed makeEclipse-8-9: 0.0083761215 seconds.
+;nFile       8 nTrial       9 nTile    2311 Ecliplen           8 ncoords        1601
+;Surveying           28 eclipses.
+;Hemi=      -1 Seg=       5 Cam=       0 ELon=      138.462 ELat=     -18.0000 Nstars=          28
+;% Time elapsed eclipSurvey-8: 0.011389017 seconds.
+;Observing           28 eclipses around        19835 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           24 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            8 transits
+;Stacking and sorting PRFs
+;Diluting            7 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            8 with            4 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            8 with           13 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            8 with            6 stars
+;Detected            8 eclipses.
+;% Time elapsed eclipObserve-8: 0.053982019 seconds.
+;% Time elapsed endClock-8: 9.2983246e-05 seconds.
+;% Time elapsed tileNumber-8-    2311: 0.82140303 seconds.
+;Restoring files for tile     1025
+;/home/luke/Dropbox/tessSimulation/trilegal/hp1025.sav
+;File #       9tile #    1025 numtargets       38760 numbkgnd        2231 numdeeps         304
+;% Time elapsed fileOpen-9: 0.18524814 seconds.
+;Selecting           20 postage stamps out of        11459 stars.
+;Selecting           26 postage stamps out of        15842 stars.
+;% Time elapsed psSel-9: 0.057482958 seconds.
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            6 cool ones
+;Created        0 transiting planets out of          108 around        38760 stars.
+;% Time elapsed makeEclipse-9-0: 0.015509129 seconds.
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            6 cool ones
+;Created            1 transiting planets out of          108 around        38760 stars.
+;% Time elapsed makeEclipse-9-1: 0.015569925 seconds.
+;nFile       9 nTrial       1 nTile    1025 Ecliplen           1 ncoords        1642
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            6 cool ones
+;Created            2 transiting planets out of          108 around        38760 stars.
+;% Time elapsed makeEclipse-9-2: 0.016479969 seconds.
+;nFile       9 nTrial       2 nTile    1025 Ecliplen           2 ncoords        1642
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            7 cool ones
+;Created            2 transiting planets out of          109 around        38760 stars.
+;% Time elapsed makeEclipse-9-3: 0.017446995 seconds.
+;nFile       9 nTrial       3 nTile    1025 Ecliplen           2 ncoords        1642
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got            9 cool ones
+;Created            1 transiting planets out of          108 around        38760 stars.
+;% Time elapsed makeEclipse-9-4: 0.015296936 seconds.
+;nFile       9 nTrial       4 nTile    1025 Ecliplen           1 ncoords        1642
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            5 cool ones
+;Created            2 transiting planets out of          105 around        38760 stars.
+;% Time elapsed makeEclipse-9-5: 0.015873909 seconds.
+;nFile       9 nTrial       5 nTile    1025 Ecliplen           2 ncoords        1642
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            4 cool ones
+;Created            2 transiting planets out of          106 around        38760 stars.
+;% Time elapsed makeEclipse-9-6: 0.016105175 seconds.
+;nFile       9 nTrial       6 nTile    1025 Ecliplen           2 ncoords        1642
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            6 cool ones
+;Created            3 transiting planets out of          106 around        38760 stars.
+;% Time elapsed makeEclipse-9-7: 0.016606092 seconds.
+;nFile       9 nTrial       7 nTile    1025 Ecliplen           3 ncoords        1642
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            4 cool ones
+;Created            3 transiting planets out of          105 around        38760 stars.
+;% Time elapsed makeEclipse-9-8: 0.018661976 seconds.
+;nFile       9 nTrial       8 nTile    1025 Ecliplen           3 ncoords        1642
+;Adding eclipses to        38760 stars.
+;making       169.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            3 cool ones
+;Created            1 transiting planets out of          104 around        38760 stars.
+;% Time elapsed makeEclipse-9-9: 0.015631914 seconds.
+;nFile       9 nTrial       9 nTile    1025 Ecliplen           1 ncoords        1642
+;Surveying           17 eclipses.
+;Hemi=      -1 Seg=       3 Cam=       0 ELon=      83.0769 ELat=     -18.0000 Nstars=          17
+;% Time elapsed eclipSurvey-9: 0.010949135 seconds.
+;Observing           17 eclipses around        38760 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           15 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            4 transits
+;Stacking and sorting PRFs
+;Diluting            1 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            4 with            7 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            4 with           30 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            4 with            8 stars
+;Detected            4 eclipses.
+;% Time elapsed eclipObserve-9: 0.055263042 seconds.
+;% Time elapsed endClock-9: 9.2029572e-05 seconds.
+;% Time elapsed tileNumber-9-    1025: 0.56267405 seconds.
+;Restoring files for tile       59
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0059.sav
+;File #      10tile #      59 numtargets        8819 numbkgnd         530 numdeeps         131
+;% Time elapsed fileOpen-10: 0.053960085 seconds.
+;Selecting           18 postage stamps out of         2251 stars.
+;Selecting           26 postage stamps out of         4317 stars.
+;% Time elapsed psSel-10: 0.013149977 seconds.
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            9 cool ones
+;needed            9 but got            9 cool ones
+;Created            1 transiting planets out of          101 around         8819 stars.
+;% Time elapsed makeEclipse-10-0: 0.0046541691 seconds.
+;nFile      10 nTrial       0 nTile      59 Ecliplen           1 ncoords        1684
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            7 cool ones
+;Created            2 transiting planets out of           99 around         8819 stars.
+;% Time elapsed makeEclipse-10-1: 0.0075910091 seconds.
+;nFile      10 nTrial       1 nTile      59 Ecliplen           2 ncoords        1684
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            7 cool ones
+;needed            6 but got            4 cool ones
+;Created        0 transiting planets out of           97 around         8819 stars.
+;% Time elapsed makeEclipse-10-2: 0.0046818256 seconds.
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;Created            2 transiting planets out of          100 around         8819 stars.
+;% Time elapsed makeEclipse-10-3: 0.0047271252 seconds.
+;nFile      10 nTrial       3 nTile      59 Ecliplen           2 ncoords        1684
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            2 cool ones
+;Created        0 transiting planets out of           97 around         8819 stars.
+;% Time elapsed makeEclipse-10-4: 0.0046851635 seconds.
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            7 cool ones
+;needed            6 but got            5 cool ones
+;Created        0 transiting planets out of           98 around         8819 stars.
+;% Time elapsed makeEclipse-10-5: 0.0047090054 seconds.
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            7 cool ones
+;needed            6 but got            5 cool ones
+;needed            9 but got            9 cool ones
+;Created        0 transiting planets out of           98 around         8819 stars.
+;% Time elapsed makeEclipse-10-6: 0.0046868324 seconds.
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            8 cool ones
+;Created            1 transiting planets out of          100 around         8819 stars.
+;% Time elapsed makeEclipse-10-7: 0.0047800541 seconds.
+;nFile      10 nTrial       7 nTile      59 Ecliplen           1 ncoords        1684
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            9 cool ones
+;Created            3 transiting planets out of          101 around         8819 stars.
+;% Time elapsed makeEclipse-10-8: 0.0049819946 seconds.
+;nFile      10 nTrial       8 nTile      59 Ecliplen           3 ncoords        1684
+;Adding eclipses to         8819 stars.
+;making       155.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            6 cool ones
+;Created            1 transiting planets out of          100 around         8819 stars.
+;% Time elapsed makeEclipse-10-9: 0.0050239563 seconds.
+;nFile      10 nTrial       9 nTile      59 Ecliplen           1 ncoords        1684
+;Surveying           10 eclipses.
+;Hemi=      -1 Seg=      12 Cam=       1 ELon=      332.308 ELat=     -42.0000 Nstars=          10
+;% Time elapsed eclipSurvey-10: 0.010540009 seconds.
+;Observing           10 eclipses around         8819 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing            8 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            4 transits
+;Stacking and sorting PRFs
+;Diluting            1 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            4 with            2 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            4 with            6 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            4 with            1 stars
+;Detected            4 eclipses.
+;% Time elapsed eclipObserve-10: 0.019078016 seconds.
+;% Time elapsed endClock-10: 8.8930130e-05 seconds.
+;% Time elapsed tileNumber-10-      59: 0.19722390 seconds.
+;Restoring files for tile      625
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0625.sav
+;File #      11tile #     625 numtargets       19995 numbkgnd        1039 numdeeps         250
+;% Time elapsed fileOpen-11: 0.098448992 seconds.
+;Selecting           18 postage stamps out of         5563 stars.
+;Selecting           38 postage stamps out of         8869 stars.
+;% Time elapsed psSel-11: 0.028923988 seconds.
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            3 cool ones
+;needed            9 but got            7 cool ones
+;Created            4 transiting planets out of          106 around        19995 stars.
+;% Time elapsed makeEclipse-11-0: 0.0088598728 seconds.
+;nFile      11 nTrial       0 nTile     625 Ecliplen           4 ncoords        1638
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            4 cool ones
+;Created        0 transiting planets out of          110 around        19995 stars.
+;% Time elapsed makeEclipse-11-1: 0.0082888603 seconds.
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            6 cool ones
+;needed            9 but got            9 cool ones
+;Created            1 transiting planets out of          112 around        19995 stars.
+;% Time elapsed makeEclipse-11-2: 0.0085449219 seconds.
+;nFile      11 nTrial       2 nTile     625 Ecliplen           1 ncoords        1638
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            2 cool ones
+;needed            9 but got            8 cool ones
+;Created            3 transiting planets out of          106 around        19995 stars.
+;% Time elapsed makeEclipse-11-3: 0.0088379383 seconds.
+;nFile      11 nTrial       3 nTile     625 Ecliplen           3 ncoords        1638
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            9 cool ones
+;Created        0 transiting planets out of          112 around        19995 stars.
+;% Time elapsed makeEclipse-11-4: 0.0084750652 seconds.
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            4 cool ones
+;Created        0 transiting planets out of          109 around        19995 stars.
+;% Time elapsed makeEclipse-11-5: 0.0090730190 seconds.
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            6 cool ones
+;Created            2 transiting planets out of          112 around        19995 stars.
+;% Time elapsed makeEclipse-11-6: 0.0083851814 seconds.
+;nFile      11 nTrial       6 nTile     625 Ecliplen           2 ncoords        1638
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;Created            2 transiting planets out of          111 around        19995 stars.
+;% Time elapsed makeEclipse-11-7: 0.0088100433 seconds.
+;nFile      11 nTrial       7 nTile     625 Ecliplen           2 ncoords        1638
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            8 cool ones
+;Created        0 transiting planets out of          111 around        19995 stars.
+;% Time elapsed makeEclipse-11-8: 0.0083968639 seconds.
+;Adding eclipses to        19995 stars.
+;making       170.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;Created            9 transiting planets out of          111 around        19995 stars.
+;% Time elapsed makeEclipse-11-9: 0.0093359947 seconds.
+;nFile      11 nTrial       9 nTile     625 Ecliplen           9 ncoords        1638
+;Surveying           21 eclipses.
+;Hemi=       1 Seg=       0 Cam=       0 ELon=      0.00000 ELat=      18.0000 Nstars=          21
+;% Time elapsed eclipSurvey-11: 0.011162996 seconds.
+;Observing           21 eclipses around        19995 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           10 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            3 transits
+;Stacking and sorting PRFs
+;Diluting            1 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            3 with            7 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            3 with           10 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            3 with            2 stars
+;Detected            3 eclipses.
+;% Time elapsed eclipObserve-11: 0.023722172 seconds.
+;% Time elapsed endClock-11: 7.7009201e-05 seconds.
+;% Time elapsed tileNumber-11-     625: 0.29824305 seconds.
+;Restoring files for tile     1393
+;/home/luke/Dropbox/tessSimulation/trilegal/hp1393.sav
+;File #      12tile #    1393 numtargets      263104 numbkgnd       30980 numdeeps        7294
+;% Time elapsed fileOpen-12: 1.7323291 seconds.
+;Selecting           18 postage stamps out of        85842 stars.
+;Selecting           34 postage stamps out of        91420 stars.
+;% Time elapsed psSel-12: 0.42646503 seconds.
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           10 cool ones
+;Created            1 transiting planets out of          128 around       263104 stars.
+;% Time elapsed makeEclipse-12-0: 0.15835118 seconds.
+;nFile      12 nTrial       0 nTile    1393 Ecliplen           1 ncoords        1615
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           12 cool ones
+;needed            9 but got            9 cool ones
+;Created            3 transiting planets out of          130 around       263104 stars.
+;% Time elapsed makeEclipse-12-1: 0.17559481 seconds.
+;nFile      12 nTrial       1 nTile    1393 Ecliplen           3 ncoords        1615
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           11 cool ones
+;needed            9 but got            9 cool ones
+;Created            4 transiting planets out of          129 around       263104 stars.
+;% Time elapsed makeEclipse-12-2: 0.16074991 seconds.
+;nFile      12 nTrial       2 nTile    1393 Ecliplen           4 ncoords        1615
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           12 cool ones
+;Created        0 transiting planets out of          130 around       263104 stars.
+;% Time elapsed makeEclipse-12-3: 0.15218496 seconds.
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           12 cool ones
+;Created            6 transiting planets out of          130 around       263104 stars.
+;% Time elapsed makeEclipse-12-4: 0.20219994 seconds.
+;nFile      12 nTrial       4 nTile    1393 Ecliplen           6 ncoords        1615
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           12 cool ones
+;Created            2 transiting planets out of          130 around       263104 stars.
+;% Time elapsed makeEclipse-12-5: 0.20816517 seconds.
+;nFile      12 nTrial       5 nTile    1393 Ecliplen           2 ncoords        1615
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           12 cool ones
+;needed            9 but got            7 cool ones
+;Created            2 transiting planets out of          128 around       263104 stars.
+;% Time elapsed makeEclipse-12-6: 0.19267511 seconds.
+;nFile      12 nTrial       6 nTile    1393 Ecliplen           2 ncoords        1615
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           11 cool ones
+;Created            2 transiting planets out of          129 around       263104 stars.
+;% Time elapsed makeEclipse-12-7: 0.21424913 seconds.
+;nFile      12 nTrial       7 nTile    1393 Ecliplen           2 ncoords        1615
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           11 cool ones
+;Created            3 transiting planets out of          129 around       263104 stars.
+;% Time elapsed makeEclipse-12-8: 0.19803786 seconds.
+;nFile      12 nTrial       8 nTile    1393 Ecliplen           3 ncoords        1615
+;Adding eclipses to       263104 stars.
+;making       205.000 planets.
+;needed           16 but got           12 cool ones
+;Created            4 transiting planets out of          130 around       263104 stars.
+;% Time elapsed makeEclipse-12-9: 0.21486807 seconds.
+;nFile      12 nTrial       9 nTile    1393 Ecliplen           4 ncoords        1615
+;Surveying           27 eclipses.
+;Hemi=       1 Seg=       0 Cam=       2 ELon=      0.00000 ELat=      66.0000 Nstars=          27
+;% Time elapsed eclipSurvey-12: 0.011570930 seconds.
+;Observing           27 eclipses around       263104 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           21 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            3 transits
+;Stacking and sorting PRFs
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            3 with          217 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            3 with          290 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            3 with           55 stars
+;Detected            2 eclipses.
+;% Time elapsed eclipObserve-12: 0.19622397 seconds.
+;% Time elapsed endClock-12: 8.2015991e-05 seconds.
+;% Time elapsed tileNumber-12-    1393: 4.5989411 seconds.
+;Restoring files for tile      202
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0202.sav
+;File #      13tile #     202 numtargets        9357 numbkgnd         401 numdeeps          72
+;% Time elapsed fileOpen-13: 0.10511088 seconds.
+;Selecting           11 postage stamps out of         2458 stars.
+;Selecting           16 postage stamps out of         4441 stars.
+;% Time elapsed psSel-13: 0.013730049 seconds.
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            7 cool ones
+;Created            1 transiting planets out of           67 around         9357 stars.
+;% Time elapsed makeEclipse-13-0: 0.0045440197 seconds.
+;nFile      13 nTrial       0 nTile     202 Ecliplen           1 ncoords        1678
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            7 cool ones
+;needed            5 but got            5 cool ones
+;Created        0 transiting planets out of           67 around         9357 stars.
+;% Time elapsed makeEclipse-13-1: 0.0042638779 seconds.
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            7 cool ones
+;needed            5 but got            4 cool ones
+;Created        0 transiting planets out of           66 around         9357 stars.
+;% Time elapsed makeEclipse-13-2: 0.0042891502 seconds.
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            6 cool ones
+;Created            3 transiting planets out of           66 around         9357 stars.
+;% Time elapsed makeEclipse-13-3: 0.0045959949 seconds.
+;nFile      13 nTrial       3 nTile     202 Ecliplen           3 ncoords        1678
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            7 cool ones
+;Created        0 transiting planets out of           67 around         9357 stars.
+;% Time elapsed makeEclipse-13-4: 0.0041990280 seconds.
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            7 cool ones
+;needed            5 but got            5 cool ones
+;Created            2 transiting planets out of           67 around         9357 stars.
+;% Time elapsed makeEclipse-13-5: 0.0045371056 seconds.
+;nFile      13 nTrial       5 nTile     202 Ecliplen           2 ncoords        1678
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            6 cool ones
+;needed            5 but got            4 cool ones
+;Created        0 transiting planets out of           65 around         9357 stars.
+;% Time elapsed makeEclipse-13-6: 0.0043759346 seconds.
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            6 cool ones
+;needed            5 but got            3 cool ones
+;Created        0 transiting planets out of           64 around         9357 stars.
+;% Time elapsed makeEclipse-13-7: 0.0042910576 seconds.
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            6 cool ones
+;needed            5 but got            3 cool ones
+;Created            2 transiting planets out of           64 around         9357 stars.
+;% Time elapsed makeEclipse-13-8: 0.0046069622 seconds.
+;nFile      13 nTrial       8 nTile     202 Ecliplen           2 ncoords        1678
+;Adding eclipses to         9357 stars.
+;making       101.000 planets.
+;needed            8 but got            5 cool ones
+;needed            5 but got            2 cool ones
+;Created        0 transiting planets out of           62 around         9357 stars.
+;% Time elapsed makeEclipse-13-9: 0.0043680668 seconds.
+;Surveying            8 eclipses.
+;Hemi=      -1 Seg=       1 Cam=       1 ELon=      27.6923 ELat=     -42.0000 Nstars=           8
+;% Time elapsed eclipSurvey-13: 0.010376215 seconds.
+;Observing            8 eclipses around         9357 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing            8 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;% Time elapsed eclipObserve-13: 0.0022361279 seconds.
+;% Time elapsed endClock-13: 5.0067902e-06 seconds.
+;% Time elapsed tileNumber-13-     202: 0.20886302 seconds.
+;Restoring files for tile      970
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0970.sav
+;File #      14tile #     970 numtargets       36229 numbkgnd        2272 numdeeps         350
+;% Time elapsed fileOpen-14: 0.75765991 seconds.
+;Selecting           15 postage stamps out of        10531 stars.
+;Selecting           23 postage stamps out of        15167 stars.
+;% Time elapsed psSel-14: 0.055557013 seconds.
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            3 cool ones
+;Created            1 transiting planets out of           69 around        36229 stars.
+;% Time elapsed makeEclipse-14-0: 0.013899088 seconds.
+;nFile      14 nTrial       0 nTile     970 Ecliplen           1 ncoords        1640
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            5 cool ones
+;needed            5 but got            5 cool ones
+;Created        0 transiting planets out of           69 around        36229 stars.
+;% Time elapsed makeEclipse-14-1: 0.013315916 seconds.
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            3 cool ones
+;needed            5 but got            5 cool ones
+;Created            2 transiting planets out of           69 around        36229 stars.
+;% Time elapsed makeEclipse-14-2: 0.013415098 seconds.
+;nFile      14 nTrial       2 nTile     970 Ecliplen           2 ncoords        1640
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            3 cool ones
+;Created            1 transiting planets out of           69 around        36229 stars.
+;% Time elapsed makeEclipse-14-3: 0.015395880 seconds.
+;nFile      14 nTrial       3 nTile     970 Ecliplen           1 ncoords        1640
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            4 cool ones
+;Created            2 transiting planets out of           70 around        36229 stars.
+;% Time elapsed makeEclipse-14-4: 0.014561892 seconds.
+;nFile      14 nTrial       4 nTile     970 Ecliplen           2 ncoords        1640
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            2 cool ones
+;Created            2 transiting planets out of           68 around        36229 stars.
+;% Time elapsed makeEclipse-14-5: 0.013936043 seconds.
+;nFile      14 nTrial       5 nTile     970 Ecliplen           2 ncoords        1640
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            4 cool ones
+;Created            2 transiting planets out of           70 around        36229 stars.
+;% Time elapsed makeEclipse-14-6: 0.013458014 seconds.
+;nFile      14 nTrial       6 nTile     970 Ecliplen           2 ncoords        1640
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            5 cool ones
+;needed            4 but got            3 cool ones
+;Created            3 transiting planets out of           68 around        36229 stars.
+;% Time elapsed makeEclipse-14-7: 0.013631105 seconds.
+;nFile      14 nTrial       7 nTile     970 Ecliplen           3 ncoords        1640
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            4 cool ones
+;Created        0 transiting planets out of           70 around        36229 stars.
+;% Time elapsed makeEclipse-14-8: 0.015298128 seconds.
+;Adding eclipses to        36229 stars.
+;making       109.000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            4 cool ones
+;Created        0 transiting planets out of           70 around        36229 stars.
+;% Time elapsed makeEclipse-14-9: 0.014813900 seconds.
+;Surveying           13 eclipses.
+;Hemi=      -1 Seg=       3 Cam=       1 ELon=      83.0769 ELat=     -42.0000 Nstars=          13
+;Hemi=      -1 Seg=       3 Cam=       2 ELon=      83.0769 ELat=     -66.0000 Nstars=          13
+;Hemi=      -1 Seg=       4 Cam=       2 ELon=      110.769 ELat=     -66.0000 Nstars=          13
+;% Time elapsed eclipSurvey-14: 0.011348009 seconds.
+;Observing           13 eclipses around        36229 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           13 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            3 transits
+;Stacking and sorting PRFs
+;Diluting            2 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            3 with           12 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            3 with           22 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            3 with            3 stars
+;Detected            3 eclipses.
+;% Time elapsed eclipObserve-14: 0.038932085 seconds.
+;% Time elapsed endClock-14: 8.2969666e-05 seconds.
+;% Time elapsed tileNumber-14-     970: 1.0842819 seconds.
+;Restoring files for tile     2564
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2564.sav
+;File #      15tile #    2564 numtargets       12597 numbkgnd         637 numdeeps          96
+;% Time elapsed fileOpen-15: 0.071743011 seconds.
+;Selecting           10 postage stamps out of         3370 stars.
+;Selecting            8 postage stamps out of         5857 stars.
+;% Time elapsed psSel-15: 0.019743919 seconds.
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            3 cool ones
+;needed            2 but got            2 cool ones
+;Created            1 transiting planets out of           42 around        12597 stars.
+;% Time elapsed makeEclipse-15-0: 0.0059001446 seconds.
+;nFile      15 nTrial       0 nTile    2564 Ecliplen           1 ncoords        1642
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            2 cool ones
+;needed            2 but got            2 cool ones
+;Created            3 transiting planets out of           41 around        12597 stars.
+;% Time elapsed makeEclipse-15-1: 0.0059430599 seconds.
+;nFile      15 nTrial       1 nTile    2564 Ecliplen           3 ncoords        1642
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            2 cool ones
+;needed            3 but got            3 cool ones
+;Created        0 transiting planets out of           41 around        12597 stars.
+;% Time elapsed makeEclipse-15-2: 0.0054090023 seconds.
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            3 cool ones
+;Created            2 transiting planets out of           42 around        12597 stars.
+;% Time elapsed makeEclipse-15-3: 0.0060081482 seconds.
+;nFile      15 nTrial       3 nTile    2564 Ecliplen           2 ncoords        1642
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            3 cool ones
+;Created        0 transiting planets out of           42 around        12597 stars.
+;% Time elapsed makeEclipse-15-4: 0.0052258968 seconds.
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            3 cool ones
+;Created        0 transiting planets out of           42 around        12597 stars.
+;% Time elapsed makeEclipse-15-5: 0.0052099228 seconds.
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            2 cool ones
+;Created            1 transiting planets out of           41 around        12597 stars.
+;% Time elapsed makeEclipse-15-6: 0.0054450035 seconds.
+;nFile      15 nTrial       6 nTile    2564 Ecliplen           1 ncoords        1642
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            3 cool ones
+;Created            4 transiting planets out of           42 around        12597 stars.
+;% Time elapsed makeEclipse-15-7: 0.0052430630 seconds.
+;nFile      15 nTrial       7 nTile    2564 Ecliplen           4 ncoords        1642
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            2 cool ones
+;Created            2 transiting planets out of           41 around        12597 stars.
+;% Time elapsed makeEclipse-15-8: 0.0052409172 seconds.
+;nFile      15 nTrial       8 nTile    2564 Ecliplen           2 ncoords        1642
+;Adding eclipses to        12597 stars.
+;making       60.0000 planets.
+;needed            4 but got            3 cool ones
+;Created            2 transiting planets out of           42 around        12597 stars.
+;% Time elapsed makeEclipse-15-9: 0.0053489208 seconds.
+;nFile      15 nTrial       9 nTile    2564 Ecliplen           2 ncoords        1642
+;Surveying           15 eclipses.
+;Hemi=       1 Seg=       5 Cam=       0 ELon=      138.462 ELat=      18.0000 Nstars=          15
+;% Time elapsed eclipSurvey-15: 0.010608912 seconds.
+;Observing           15 eclipses around        12597 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing            8 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;% Time elapsed eclipObserve-15: 0.0021419525 seconds.
+;% Time elapsed endClock-15: 5.0067902e-06 seconds.
+;% Time elapsed tileNumber-15-    2564: 0.20572400 seconds.
+;Restoring files for tile      131
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0131.sav
+;File #      16tile #     131 numtargets        8697 numbkgnd         443 numdeeps          67
+;% Time elapsed fileOpen-16: 0.046921968 seconds.
+;Selecting            8 postage stamps out of         2174 stars.
+;Selecting           27 postage stamps out of         4349 stars.
+;% Time elapsed psSel-16: 0.012825966 seconds.
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            3 cool ones
+;needed            3 but got            2 cool ones
+;Created            1 transiting planets out of           50 around         8697 stars.
+;% Time elapsed makeEclipse-16-0: 0.0041069984 seconds.
+;nFile      16 nTrial       0 nTile     131 Ecliplen           1 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            2 cool ones
+;Created            2 transiting planets out of           50 around         8697 stars.
+;% Time elapsed makeEclipse-16-1: 0.0043518543 seconds.
+;nFile      16 nTrial       1 nTile     131 Ecliplen           2 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            3 cool ones
+;Created            7 transiting planets out of           51 around         8697 stars.
+;% Time elapsed makeEclipse-16-2: 0.0048291683 seconds.
+;nFile      16 nTrial       2 nTile     131 Ecliplen           7 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            3 cool ones
+;Created            2 transiting planets out of           51 around         8697 stars.
+;% Time elapsed makeEclipse-16-3: 0.0042798519 seconds.
+;nFile      16 nTrial       3 nTile     131 Ecliplen           2 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            3 cool ones
+;Created            3 transiting planets out of           51 around         8697 stars.
+;% Time elapsed makeEclipse-16-4: 0.0046150684 seconds.
+;nFile      16 nTrial       4 nTile     131 Ecliplen           3 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            2 cool ones
+;needed            2 but got            2 cool ones
+;Created            1 transiting planets out of           50 around         8697 stars.
+;% Time elapsed makeEclipse-16-5: 0.0042750835 seconds.
+;nFile      16 nTrial       5 nTile     131 Ecliplen           1 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            2 cool ones
+;Created            2 transiting planets out of           50 around         8697 stars.
+;% Time elapsed makeEclipse-16-6: 0.0042340755 seconds.
+;nFile      16 nTrial       6 nTile     131 Ecliplen           2 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            3 cool ones
+;needed            2 but got            1 cool ones
+;Created            1 transiting planets out of           50 around         8697 stars.
+;% Time elapsed makeEclipse-16-7: 0.0042231083 seconds.
+;nFile      16 nTrial       7 nTile     131 Ecliplen           1 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            2 cool ones
+;Created            2 transiting planets out of           50 around         8697 stars.
+;% Time elapsed makeEclipse-16-8: 0.0044460297 seconds.
+;nFile      16 nTrial       8 nTile     131 Ecliplen           2 ncoords        1605
+;Adding eclipses to         8697 stars.
+;making       76.0000 planets.
+;needed            4 but got            3 cool ones
+;needed            2 but got            2 cool ones
+;Created            1 transiting planets out of           51 around         8697 stars.
+;% Time elapsed makeEclipse-16-9: 0.0042710304 seconds.
+;nFile      16 nTrial       9 nTile     131 Ecliplen           1 ncoords        1605
+;Surveying           22 eclipses.
+;Hemi=      -1 Seg=       1 Cam=       1 ELon=      27.6923 ELat=     -42.0000 Nstars=          22
+;% Time elapsed eclipSurvey-16: 0.010945082 seconds.
+;Observing           22 eclipses around         8697 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           17 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            1 transits
+;Stacking and sorting PRFs
+;Diluting            1 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            1 with            2 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            1 with            7 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            1 with            2 stars
+;Detected            1 eclipses.
+;% Time elapsed eclipObserve-16: 0.0086998940 seconds.
+;% Time elapsed endClock-16: 5.8889389e-05 seconds.
+;% Time elapsed tileNumber-16-     131: 0.18241906 seconds.
+;Restoring files for tile      450
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0450.sav
+;File #      17tile #     450 numtargets       12831 numbkgnd         490 numdeeps         103
+;% Time elapsed fileOpen-17: 0.076271057 seconds.
+;Selecting            8 postage stamps out of         3313 stars.
+;Selecting           30 postage stamps out of         6205 stars.
+;% Time elapsed psSel-17: 0.018887997 seconds.
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            9 cool ones
+;Created            1 transiting planets out of           86 around        12831 stars.
+;% Time elapsed makeEclipse-17-0: 0.0055220127 seconds.
+;nFile      17 nTrial       0 nTile     450 Ecliplen           1 ncoords        1635
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            7 cool ones
+;needed            6 but got            4 cool ones
+;Created        0 transiting planets out of           82 around        12831 stars.
+;% Time elapsed makeEclipse-17-1: 0.0052030087 seconds.
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            5 cool ones
+;needed            8 but got            8 cool ones
+;Created            3 transiting planets out of           82 around        12831 stars.
+;% Time elapsed makeEclipse-17-2: 0.0058300495 seconds.
+;nFile      17 nTrial       2 nTile     450 Ecliplen           3 ncoords        1635
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;Created            3 transiting planets out of           85 around        12831 stars.
+;% Time elapsed makeEclipse-17-3: 0.0058848858 seconds.
+;nFile      17 nTrial       3 nTile     450 Ecliplen           3 ncoords        1635
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            4 cool ones
+;Created        0 transiting planets out of           84 around        12831 stars.
+;% Time elapsed makeEclipse-17-4: 0.0054178238 seconds.
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            1 cool ones
+;Created            4 transiting planets out of           81 around        12831 stars.
+;% Time elapsed makeEclipse-17-5: 0.0055301189 seconds.
+;nFile      17 nTrial       5 nTile     450 Ecliplen           4 ncoords        1635
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            4 cool ones
+;Created            1 transiting planets out of           84 around        12831 stars.
+;% Time elapsed makeEclipse-17-6: 0.0056030750 seconds.
+;nFile      17 nTrial       6 nTile     450 Ecliplen           1 ncoords        1635
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            2 cool ones
+;Created            3 transiting planets out of           82 around        12831 stars.
+;% Time elapsed makeEclipse-17-7: 0.0056869984 seconds.
+;nFile      17 nTrial       7 nTile     450 Ecliplen           3 ncoords        1635
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            6 cool ones
+;Created            2 transiting planets out of           86 around        12831 stars.
+;% Time elapsed makeEclipse-17-8: 0.0057079792 seconds.
+;nFile      17 nTrial       8 nTile     450 Ecliplen           2 ncoords        1635
+;Adding eclipses to        12831 stars.
+;making       137.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            6 cool ones
+;needed            8 but got            7 cool ones
+;Created            2 transiting planets out of           84 around        12831 stars.
+;% Time elapsed makeEclipse-17-9: 0.0062978268 seconds.
+;nFile      17 nTrial       9 nTile     450 Ecliplen           2 ncoords        1635
+;Surveying           19 eclipses.
+;Hemi=      -1 Seg=       2 Cam=       0 ELon=      55.3846 ELat=     -18.0000 Nstars=          19
+;% Time elapsed eclipSurvey-17: 0.011863947 seconds.
+;Observing           19 eclipses around        12831 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing            4 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            1 transits
+;Stacking and sorting PRFs
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            1 with            4 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            1 with            5 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            1 with            4 stars
+;Detected            1 eclipses.
+;% Time elapsed eclipObserve-17: 0.0087599754 seconds.
+;% Time elapsed endClock-17: 5.8889389e-05 seconds.
+;% Time elapsed tileNumber-17-     450: 0.22274280 seconds.
+;Restoring files for tile     2291
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2291.sav
+;File #      18tile #    2291 numtargets       19921 numbkgnd        1298 numdeeps         211
+;% Time elapsed fileOpen-18: 0.10768700 seconds.
+;Selecting            9 postage stamps out of         4017 stars.
+;Selecting           18 postage stamps out of        11886 stars.
+;% Time elapsed psSel-18: 0.034691095 seconds.
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            8 cool ones
+;Created            7 transiting planets out of           76 around        19921 stars.
+;% Time elapsed makeEclipse-18-0: 0.0069339275 seconds.
+;nFile      18 nTrial       0 nTile    2291 Ecliplen           7 ncoords        1639
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            4 cool ones
+;Created            3 transiting planets out of           75 around        19921 stars.
+;% Time elapsed makeEclipse-18-1: 0.0071430206 seconds.
+;nFile      18 nTrial       1 nTile    2291 Ecliplen           3 ncoords        1639
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            3 cool ones
+;Created            1 transiting planets out of           73 around        19921 stars.
+;% Time elapsed makeEclipse-18-2: 0.0071408749 seconds.
+;nFile      18 nTrial       2 nTile    2291 Ecliplen           1 ncoords        1639
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            9 cool ones
+;Created            3 transiting planets out of           77 around        19921 stars.
+;% Time elapsed makeEclipse-18-3: 0.0073680878 seconds.
+;nFile      18 nTrial       3 nTile    2291 Ecliplen           3 ncoords        1639
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            6 cool ones
+;Created        0 transiting planets out of           77 around        19921 stars.
+;% Time elapsed makeEclipse-18-4: 0.0060989857 seconds.
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            3 cool ones
+;Created        0 transiting planets out of           74 around        19921 stars.
+;% Time elapsed makeEclipse-18-5: 0.0061161518 seconds.
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            3 cool ones
+;Created        0 transiting planets out of           73 around        19921 stars.
+;% Time elapsed makeEclipse-18-6: 0.0061719418 seconds.
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;Created        0 transiting planets out of           76 around        19921 stars.
+;% Time elapsed makeEclipse-18-7: 0.0061559677 seconds.
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;needed            8 but got            8 cool ones
+;Created        0 transiting planets out of           76 around        19921 stars.
+;% Time elapsed makeEclipse-18-8: 0.0062689781 seconds.
+;Adding eclipses to        19921 stars.
+;making       129.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            3 cool ones
+;Created            2 transiting planets out of           73 around        19921 stars.
+;% Time elapsed makeEclipse-18-9: 0.0063219070 seconds.
+;nFile      18 nTrial       9 nTile    2291 Ecliplen           2 ncoords        1639
+;Surveying           16 eclipses.
+;Hemi=       1 Seg=       0 Cam=       3 ELon=      0.00000 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       1 Cam=       3 ELon=      27.6923 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       2 Cam=       3 ELon=      55.3846 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       3 Cam=       3 ELon=      83.0769 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       4 Cam=       3 ELon=      110.769 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       5 Cam=       3 ELon=      138.462 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       6 Cam=       3 ELon=      166.154 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       7 Cam=       3 ELon=      193.846 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       8 Cam=       3 ELon=      221.538 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=       9 Cam=       3 ELon=      249.231 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=      10 Cam=       3 ELon=      276.923 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=      11 Cam=       3 ELon=      304.615 ELat=      90.0000 Nstars=          16
+;Hemi=       1 Seg=      12 Cam=       3 ELon=      332.308 ELat=      90.0000 Nstars=          16
+;% Time elapsed eclipSurvey-18: 0.011426926 seconds.
+;Observing           16 eclipses around        19921 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           16 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing           12 transits
+;Stacking and sorting PRFs
+;Diluting            7 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of           12 with            4 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of           12 with            6 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of           12 with            2 stars
+;Detected           12 eclipses.
+;% Time elapsed eclipObserve-18: 0.078046799 seconds.
+;% Time elapsed endClock-18: 0.00010108948 seconds.
+;% Time elapsed tileNumber-18-    2291: 0.33847785 seconds.
+;Restoring files for tile      177
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0177.sav
+;File #      19tile #     177 numtargets       11258 numbkgnd         729 numdeeps         151
+;% Time elapsed fileOpen-19: 0.091403961 seconds.
+;Selecting           24 postage stamps out of         2975 stars.
+;Selecting           36 postage stamps out of         5308 stars.
+;% Time elapsed psSel-19: 0.016362906 seconds.
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;needed            9 but got            9 cool ones
+;Created            4 transiting planets out of          121 around        11258 stars.
+;% Time elapsed makeEclipse-19-0: 0.0064179897 seconds.
+;nFile      19 nTrial       0 nTile     177 Ecliplen           4 ncoords        1637
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            6 cool ones
+;Created            3 transiting planets out of          122 around        11258 stars.
+;% Time elapsed makeEclipse-19-1: 0.0066030025 seconds.
+;nFile      19 nTrial       1 nTile     177 Ecliplen           3 ncoords        1637
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            8 cool ones
+;Created            2 transiting planets out of          121 around        11258 stars.
+;% Time elapsed makeEclipse-19-2: 0.0064911842 seconds.
+;nFile      19 nTrial       2 nTile     177 Ecliplen           2 ncoords        1637
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            9 cool ones
+;Created            5 transiting planets out of          122 around        11258 stars.
+;% Time elapsed makeEclipse-19-3: 0.0067269802 seconds.
+;nFile      19 nTrial       3 nTile     177 Ecliplen           5 ncoords        1637
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            6 cool ones
+;Created            1 transiting planets out of          122 around        11258 stars.
+;% Time elapsed makeEclipse-19-4: 0.0063729286 seconds.
+;nFile      19 nTrial       4 nTile     177 Ecliplen           1 ncoords        1637
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            9 cool ones
+;needed            9 but got            9 cool ones
+;Created            3 transiting planets out of          122 around        11258 stars.
+;% Time elapsed makeEclipse-19-5: 0.0063180923 seconds.
+;nFile      19 nTrial       5 nTile     177 Ecliplen           3 ncoords        1637
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;Created            4 transiting planets out of          121 around        11258 stars.
+;% Time elapsed makeEclipse-19-6: 0.0065391064 seconds.
+;nFile      19 nTrial       6 nTile     177 Ecliplen           4 ncoords        1637
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            2 cool ones
+;Created            4 transiting planets out of          117 around        11258 stars.
+;% Time elapsed makeEclipse-19-7: 0.0065178871 seconds.
+;nFile      19 nTrial       7 nTile     177 Ecliplen           4 ncoords        1637
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            2 cool ones
+;Created        0 transiting planets out of          117 around        11258 stars.
+;% Time elapsed makeEclipse-19-8: 0.0061252117 seconds.
+;Adding eclipses to        11258 stars.
+;making       179.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            1 cool ones
+;Created        0 transiting planets out of          117 around        11258 stars.
+;% Time elapsed makeEclipse-19-9: 0.0060269833 seconds.
+;Surveying           26 eclipses.
+;Hemi=      -1 Seg=      12 Cam=       1 ELon=      332.308 ELat=     -42.0000 Nstars=          26
+;% Time elapsed eclipSurvey-19: 0.011276960 seconds.
+;Observing           26 eclipses around        11258 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           23 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            6 transits
+;Stacking and sorting PRFs
+;Diluting            2 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            6 with            4 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            6 with            9 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            6 with            2 stars
+;Detected            6 eclipses.
+;% Time elapsed eclipObserve-19: 0.029203176 seconds.
+;% Time elapsed endClock-19: 8.4161758e-05 seconds.
+;% Time elapsed tileNumber-19-     177: 0.27297211 seconds.
+;Restoring files for tile      447
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0447.sav
+;File #      20tile #     447 numtargets       12442 numbkgnd         566 numdeeps          78
+;% Time elapsed fileOpen-20: 0.063585997 seconds.
+;Selecting            9 postage stamps out of         2703 stars.
+;Selecting           23 postage stamps out of         7036 stars.
+;% Time elapsed psSel-20: 0.018996954 seconds.
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            5 cool ones
+;needed            3 but got            3 cool ones
+;Created            2 transiting planets out of           55 around        12442 stars.
+;% Time elapsed makeEclipse-20-0: 0.0051989555 seconds.
+;nFile      20 nTrial       0 nTile     447 Ecliplen           2 ncoords        1591
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            4 cool ones
+;Created            1 transiting planets out of           54 around        12442 stars.
+;% Time elapsed makeEclipse-20-1: 0.0054218769 seconds.
+;nFile      20 nTrial       1 nTile     447 Ecliplen           1 ncoords        1591
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            4 cool ones
+;needed            3 but got            3 cool ones
+;Created            1 transiting planets out of           54 around        12442 stars.
+;% Time elapsed makeEclipse-20-2: 0.0056061745 seconds.
+;nFile      20 nTrial       2 nTile     447 Ecliplen           1 ncoords        1591
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            4 cool ones
+;needed            3 but got            1 cool ones
+;Created        0 transiting planets out of           52 around        12442 stars.
+;% Time elapsed makeEclipse-20-3: 0.0052690506 seconds.
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            5 cool ones
+;Created            1 transiting planets out of           55 around        12442 stars.
+;% Time elapsed makeEclipse-20-4: 0.0055820942 seconds.
+;nFile      20 nTrial       4 nTile     447 Ecliplen           1 ncoords        1591
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            5 cool ones
+;needed            3 but got            2 cool ones
+;Created            1 transiting planets out of           54 around        12442 stars.
+;% Time elapsed makeEclipse-20-5: 0.0056750774 seconds.
+;nFile      20 nTrial       5 nTile     447 Ecliplen           1 ncoords        1591
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            5 cool ones
+;Created            1 transiting planets out of           55 around        12442 stars.
+;% Time elapsed makeEclipse-20-6: 0.0053880215 seconds.
+;nFile      20 nTrial       6 nTile     447 Ecliplen           1 ncoords        1591
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            4 cool ones
+;needed            3 but got            2 cool ones
+;Created            1 transiting planets out of           53 around        12442 stars.
+;% Time elapsed makeEclipse-20-7: 0.0054528713 seconds.
+;nFile      20 nTrial       7 nTile     447 Ecliplen           1 ncoords        1591
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            5 cool ones
+;needed            3 but got            3 cool ones
+;Created            2 transiting planets out of           55 around        12442 stars.
+;% Time elapsed makeEclipse-20-8: 0.0052669048 seconds.
+;nFile      20 nTrial       8 nTile     447 Ecliplen           2 ncoords        1591
+;Adding eclipses to        12442 stars.
+;making       86.0000 planets.
+;needed            6 but got            5 cool ones
+;needed            3 but got            3 cool ones
+;Created        0 transiting planets out of           52 around        12442 stars.
+;% Time elapsed makeEclipse-20-9: 0.0050690174 seconds.
+;Surveying           10 eclipses.
+;% Time elapsed eclipSurvey-20: 0.011670113 seconds.
+;Observing           10 eclipses around        12442 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;% Time elapsed eclipObserve-20: 0.00028705597 seconds.
+;% Time elapsed endClock-20: 7.8678131e-06 seconds.
+;% Time elapsed tileNumber-20-     447: 0.20629811 seconds.
+;Restoring files for tile     1240
+;/home/luke/Dropbox/tessSimulation/trilegal/hp1240.sav
+;File #      21tile #    1240 numtargets      136095 numbkgnd       18393 numdeeps        6472
+;% Time elapsed fileOpen-21: 0.79615998 seconds.
+;Selecting           16 postage stamps out of        37993 stars.
+;Selecting           23 postage stamps out of        60109 stars.
+;% Time elapsed psSel-21: 0.23167205 seconds.
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            4 cool ones
+;needed            9 but got            8 cool ones
+;Created            5 transiting planets out of           93 around       136095 stars.
+;% Time elapsed makeEclipse-21-0: 0.15473890 seconds.
+;nFile      21 nTrial       0 nTile    1240 Ecliplen           5 ncoords        1573
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            5 cool ones
+;Created        0 transiting planets out of           95 around       136095 stars.
+;% Time elapsed makeEclipse-21-1: 0.15885806 seconds.
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            5 cool ones
+;Created            4 transiting planets out of           96 around       136095 stars.
+;% Time elapsed makeEclipse-21-2: 0.14209700 seconds.
+;nFile      21 nTrial       2 nTile    1240 Ecliplen           4 ncoords        1573
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            6 cool ones
+;Created            8 transiting planets out of           97 around       136095 stars.
+;% Time elapsed makeEclipse-21-3: 0.14018202 seconds.
+;nFile      21 nTrial       3 nTile    1240 Ecliplen           8 ncoords        1573
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            4 cool ones
+;Created            3 transiting planets out of           95 around       136095 stars.
+;% Time elapsed makeEclipse-21-4: 0.15657115 seconds.
+;nFile      21 nTrial       4 nTile    1240 Ecliplen           3 ncoords        1573
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got            8 cool ones
+;needed            7 but got            4 cool ones
+;Created        0 transiting planets out of           93 around       136095 stars.
+;% Time elapsed makeEclipse-21-5: 0.089173079 seconds.
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got           10 cool ones
+;needed            7 but got            6 cool ones
+;Created            4 transiting planets out of           97 around       136095 stars.
+;% Time elapsed makeEclipse-21-6: 0.086264133 seconds.
+;nFile      21 nTrial       6 nTile    1240 Ecliplen           4 ncoords        1573
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            6 cool ones
+;Created        0 transiting planets out of           96 around       136095 stars.
+;% Time elapsed makeEclipse-21-7: 0.14204502 seconds.
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;Created            1 transiting planets out of           97 around       136095 stars.
+;% Time elapsed makeEclipse-21-8: 0.13529897 seconds.
+;nFile      21 nTrial       8 nTile    1240 Ecliplen           1 ncoords        1573
+;Adding eclipses to       136095 stars.
+;making       157.000 planets.
+;needed           12 but got            9 cool ones
+;needed            7 but got            6 cool ones
+;Created            2 transiting planets out of           96 around       136095 stars.
+;% Time elapsed makeEclipse-21-9: 0.091429949 seconds.
+;nFile      21 nTrial       9 nTile    1240 Ecliplen           2 ncoords        1573
+;Surveying           27 eclipses.
+;Hemi=      -1 Seg=       9 Cam=       1 ELon=      249.231 ELat=     -42.0000 Nstars=          27
+;% Time elapsed eclipSurvey-21: 0.011629105 seconds.
+;Observing           27 eclipses around       136095 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           22 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing           12 transits
+;Stacking and sorting PRFs
+;Diluting            4 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of           12 with          141 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of           12 with          180 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of           12 with           26 stars
+;Detected           11 eclipses.
+;% Time elapsed eclipObserve-21: 0.50371695 seconds.
+;% Time elapsed endClock-21: 0.00010299683 seconds.
+;% Time elapsed tileNumber-21-    1240: 3.0538559 seconds.
+;Restoring files for tile     2460
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2460.sav
+;File #      22tile #    2460 numtargets       22278 numbkgnd        2294 numdeeps         693
+;% Time elapsed fileOpen-22: 0.14220810 seconds.
+;Selecting            3 postage stamps out of         5472 stars.
+;Selecting           28 postage stamps out of        11334 stars.
+;% Time elapsed psSel-22: 0.034743071 seconds.
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            3 cool ones
+;needed            6 but got            5 cool ones
+;Created            3 transiting planets out of           59 around        22278 stars.
+;% Time elapsed makeEclipse-22-0: 0.0079779625 seconds.
+;nFile      22 nTrial       0 nTile    2460 Ecliplen           3 ncoords        1624
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            5 cool ones
+;needed            6 but got            6 cool ones
+;Created        0 transiting planets out of           60 around        22278 stars.
+;% Time elapsed makeEclipse-22-1: 0.0075979233 seconds.
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            5 cool ones
+;needed            6 but got            6 cool ones
+;Created        0 transiting planets out of           60 around        22278 stars.
+;% Time elapsed makeEclipse-22-2: 0.0076220036 seconds.
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            6 cool ones
+;Created            1 transiting planets out of           61 around        22278 stars.
+;% Time elapsed makeEclipse-22-3: 0.0077300072 seconds.
+;nFile      22 nTrial       3 nTile    2460 Ecliplen           1 ncoords        1624
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            6 cool ones
+;Created            3 transiting planets out of           61 around        22278 stars.
+;% Time elapsed makeEclipse-22-4: 0.0084800720 seconds.
+;nFile      22 nTrial       4 nTile    2460 Ecliplen           3 ncoords        1624
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            1 cool ones
+;Created        0 transiting planets out of           58 around        22278 stars.
+;% Time elapsed makeEclipse-22-5: 0.0073699951 seconds.
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            5 cool ones
+;needed            4 but got            3 cool ones
+;Created        0 transiting planets out of           59 around        22278 stars.
+;% Time elapsed makeEclipse-22-6: 0.0072848797 seconds.
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            4 cool ones
+;needed            4 but got            4 cool ones
+;Created            1 transiting planets out of           59 around        22278 stars.
+;% Time elapsed makeEclipse-22-7: 0.0075860023 seconds.
+;nFile      22 nTrial       7 nTile    2460 Ecliplen           1 ncoords        1624
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            6 cool ones
+;needed            6 but got            5 cool ones
+;Created            1 transiting planets out of           60 around        22278 stars.
+;% Time elapsed makeEclipse-22-8: 0.0076050758 seconds.
+;nFile      22 nTrial       8 nTile    2460 Ecliplen           1 ncoords        1624
+;Adding eclipses to        22278 stars.
+;making       93.0000 planets.
+;needed            7 but got            6 cool ones
+;needed            4 but got            2 cool ones
+;needed            6 but got            4 cool ones
+;Created            1 transiting planets out of           57 around        22278 stars.
+;% Time elapsed makeEclipse-22-9: 0.0077431202 seconds.
+;nFile      22 nTrial       9 nTile    2460 Ecliplen           1 ncoords        1624
+;Surveying           10 eclipses.
+;% Time elapsed eclipSurvey-22: 0.010790110 seconds.
+;Observing           10 eclipses around        22278 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;% Time elapsed eclipObserve-22: 0.00022697449 seconds.
+;% Time elapsed endClock-22: 5.0067902e-06 seconds.
+;% Time elapsed tileNumber-22-    2460: 0.31735086 seconds.
+;Restoring files for tile     2728
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2728.sav
+;File #      23tile #    2728 numtargets        9986 numbkgnd         498 numdeeps         106
+;% Time elapsed fileOpen-23: 0.052551985 seconds.
+;Selecting           12 postage stamps out of         2610 stars.
+;Selecting           25 postage stamps out of         4766 stars.
+;% Time elapsed psSel-23: 0.014748096 seconds.
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            9 cool ones
+;needed            5 but got            4 cool ones
+;Created        0 transiting planets out of           81 around         9986 stars.
+;% Time elapsed makeEclipse-23-0: 0.0049991608 seconds.
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            7 cool ones
+;needed            6 but got            2 cool ones
+;Created            2 transiting planets out of           82 around         9986 stars.
+;% Time elapsed makeEclipse-23-1: 0.0055148602 seconds.
+;nFile      23 nTrial       1 nTile    2728 Ecliplen           2 ncoords        1610
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            6 cool ones
+;Created        0 transiting planets out of           87 around         9986 stars.
+;% Time elapsed makeEclipse-23-2: 0.0051782131 seconds.
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            8 cool ones
+;Created            1 transiting planets out of           87 around         9986 stars.
+;% Time elapsed makeEclipse-23-3: 0.0054929256 seconds.
+;nFile      23 nTrial       3 nTile    2728 Ecliplen           1 ncoords        1610
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            6 cool ones
+;needed            8 but got            8 cool ones
+;Created            1 transiting planets out of           85 around         9986 stars.
+;% Time elapsed makeEclipse-23-4: 0.0052878857 seconds.
+;nFile      23 nTrial       4 nTile    2728 Ecliplen           1 ncoords        1610
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            9 cool ones
+;needed            8 but got            8 cool ones
+;Created        0 transiting planets out of           88 around         9986 stars.
+;% Time elapsed makeEclipse-23-5: 0.0049679279 seconds.
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            5 cool ones
+;needed            8 but got            6 cool ones
+;Created            5 transiting planets out of           85 around         9986 stars.
+;% Time elapsed makeEclipse-23-6: 0.0057489872 seconds.
+;nFile      23 nTrial       6 nTile    2728 Ecliplen           5 ncoords        1610
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            7 cool ones
+;Created            2 transiting planets out of           86 around         9986 stars.
+;% Time elapsed makeEclipse-23-7: 0.0057110786 seconds.
+;nFile      23 nTrial       7 nTile    2728 Ecliplen           2 ncoords        1610
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            6 cool ones
+;Created            2 transiting planets out of           87 around         9986 stars.
+;% Time elapsed makeEclipse-23-8: 0.0055229664 seconds.
+;nFile      23 nTrial       8 nTile    2728 Ecliplen           2 ncoords        1610
+;Adding eclipses to         9986 stars.
+;making       142.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            4 cool ones
+;Created        0 transiting planets out of           86 around         9986 stars.
+;% Time elapsed makeEclipse-23-9: 0.0052809715 seconds.
+;Surveying           13 eclipses.
+;Hemi=       1 Seg=       5 Cam=       1 ELon=      138.462 ELat=      42.0000 Nstars=          13
+;% Time elapsed eclipSurvey-23: 0.012317896 seconds.
+;Observing           13 eclipses around         9986 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           11 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            5 transits
+;Stacking and sorting PRFs
+;Diluting            1 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            5 with            3 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            5 with            5 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            5 with            1 stars
+;Detected            5 eclipses.
+;% Time elapsed eclipObserve-23: 0.022483826 seconds.
+;% Time elapsed endClock-23: 0.00055313110 seconds.
+;% Time elapsed tileNumber-23-    2728: 0.19474912 seconds.
+;Restoring files for tile     1088
+;/home/luke/Dropbox/tessSimulation/trilegal/hp1088.sav
+;File #      24tile #    1088 numtargets       46112 numbkgnd        2804 numdeeps         383
+;% Time elapsed fileOpen-24: 0.22162795 seconds.
+;Selecting           25 postage stamps out of        13864 stars.
+;Selecting           37 postage stamps out of        18384 stars.
+;% Time elapsed psSel-24: 0.069633961 seconds.
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           16 cool ones
+;Created            3 transiting planets out of          154 around        46112 stars.
+;% Time elapsed makeEclipse-24-0: 0.022199154 seconds.
+;nFile      24 nTrial       0 nTile    1088 Ecliplen           3 ncoords        1591
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           15 cool ones
+;Created        0 transiting planets out of          153 around        46112 stars.
+;% Time elapsed makeEclipse-24-1: 0.019155025 seconds.
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           16 cool ones
+;Created            7 transiting planets out of          154 around        46112 stars.
+;% Time elapsed makeEclipse-24-2: 0.019763947 seconds.
+;nFile      24 nTrial       2 nTile    1088 Ecliplen           7 ncoords        1591
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           16 cool ones
+;needed           11 but got           11 cool ones
+;Created        0 transiting planets out of          154 around        46112 stars.
+;% Time elapsed makeEclipse-24-3: 0.018888950 seconds.
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           14 cool ones
+;Created            4 transiting planets out of          152 around        46112 stars.
+;% Time elapsed makeEclipse-24-4: 0.019129992 seconds.
+;nFile      24 nTrial       4 nTile    1088 Ecliplen           4 ncoords        1591
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           14 cool ones
+;Created            7 transiting planets out of          152 around        46112 stars.
+;% Time elapsed makeEclipse-24-5: 0.019573927 seconds.
+;nFile      24 nTrial       5 nTile    1088 Ecliplen           7 ncoords        1591
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           15 cool ones
+;Created            7 transiting planets out of          153 around        46112 stars.
+;% Time elapsed makeEclipse-24-6: 0.020176888 seconds.
+;nFile      24 nTrial       6 nTile    1088 Ecliplen           7 ncoords        1591
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           16 cool ones
+;needed           11 but got            7 cool ones
+;Created            6 transiting planets out of          150 around        46112 stars.
+;% Time elapsed makeEclipse-24-7: 0.019572973 seconds.
+;nFile      24 nTrial       7 nTile    1088 Ecliplen           6 ncoords        1591
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           16 cool ones
+;needed           11 but got            9 cool ones
+;Created            8 transiting planets out of          152 around        46112 stars.
+;% Time elapsed makeEclipse-24-8: 0.019711971 seconds.
+;nFile      24 nTrial       8 nTile    1088 Ecliplen           8 ncoords        1591
+;Adding eclipses to        46112 stars.
+;making       245.000 planets.
+;needed           19 but got           16 cool ones
+;needed           11 but got            9 cool ones
+;Created            2 transiting planets out of          152 around        46112 stars.
+;% Time elapsed makeEclipse-24-9: 0.019253016 seconds.
+;nFile      24 nTrial       9 nTile    1088 Ecliplen           2 ncoords        1591
+;Surveying           44 eclipses.
+;% Time elapsed eclipSurvey-24: 0.014945030 seconds.
+;Observing           44 eclipses around        46112 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;% Time elapsed eclipObserve-24: 0.00033879280 seconds.
+;% Time elapsed endClock-24: 5.0067902e-06 seconds.
+;% Time elapsed tileNumber-24-    1088: 0.60460401 seconds.
+;Restoring files for tile     1960
+;/home/luke/Dropbox/tessSimulation/trilegal/hp1960.sav
+;File #      25tile #    1960 numtargets       71332 numbkgnd        8531 numdeeps        2955
+;% Time elapsed fileOpen-25: 0.38806581 seconds.
+;Selecting           12 postage stamps out of        21628 stars.
+;Selecting           15 postage stamps out of        28076 stars.
+;% Time elapsed psSel-25: 0.11202407 seconds.
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            8 cool ones
+;needed            5 but got            3 cool ones
+;Created        0 transiting planets out of           74 around        71332 stars.
+;% Time elapsed makeEclipse-25-0: 0.032173872 seconds.
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            6 cool ones
+;needed            5 but got            3 cool ones
+;Created            1 transiting planets out of           72 around        71332 stars.
+;% Time elapsed makeEclipse-25-1: 0.030262947 seconds.
+;nFile      25 nTrial       1 nTile    1960 Ecliplen           1 ncoords        1605
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            5 cool ones
+;needed            5 but got            5 cool ones
+;Created        0 transiting planets out of           73 around        71332 stars.
+;% Time elapsed makeEclipse-25-2: 0.032021999 seconds.
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            6 cool ones
+;Created            2 transiting planets out of           74 around        71332 stars.
+;% Time elapsed makeEclipse-25-3: 0.031449080 seconds.
+;nFile      25 nTrial       3 nTile    1960 Ecliplen           2 ncoords        1605
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            5 cool ones
+;Created            3 transiting planets out of           75 around        71332 stars.
+;% Time elapsed makeEclipse-25-4: 0.033829212 seconds.
+;nFile      25 nTrial       4 nTile    1960 Ecliplen           3 ncoords        1605
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            8 cool ones
+;needed            7 but got            7 cool ones
+;Created            5 transiting planets out of           76 around        71332 stars.
+;% Time elapsed makeEclipse-25-5: 0.034320116 seconds.
+;nFile      25 nTrial       5 nTile    1960 Ecliplen           5 ncoords        1605
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            5 cool ones
+;Created            1 transiting planets out of           75 around        71332 stars.
+;% Time elapsed makeEclipse-25-6: 0.032433987 seconds.
+;nFile      25 nTrial       6 nTile    1960 Ecliplen           1 ncoords        1605
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            8 cool ones
+;Created            2 transiting planets out of           76 around        71332 stars.
+;% Time elapsed makeEclipse-25-7: 0.031100035 seconds.
+;nFile      25 nTrial       7 nTile    1960 Ecliplen           2 ncoords        1605
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            7 cool ones
+;needed            5 but got            5 cool ones
+;Created        0 transiting planets out of           75 around        71332 stars.
+;% Time elapsed makeEclipse-25-8: 0.030535936 seconds.
+;Adding eclipses to        71332 stars.
+;making       118.000 planets.
+;needed           10 but got            7 cool ones
+;Created            3 transiting planets out of           75 around        71332 stars.
+;% Time elapsed makeEclipse-25-9: 0.030149937 seconds.
+;nFile      25 nTrial       9 nTile    1960 Ecliplen           3 ncoords        1605
+;Surveying           17 eclipses.
+;Hemi=       1 Seg=      10 Cam=       1 ELon=      276.923 ELat=      42.0000 Nstars=          17
+;% Time elapsed eclipSurvey-25: 0.010954142 seconds.
+;Observing           17 eclipses around        71332 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           12 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            3 transits
+;Stacking and sorting PRFs
+;Diluting            2 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            3 with           73 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            3 with           88 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            3 with           13 stars
+;Detected            3 eclipses.
+;% Time elapsed eclipObserve-25: 0.084489107 seconds.
+;% Time elapsed endClock-25: 8.3923340e-05 seconds.
+;% Time elapsed tileNumber-25-    1960: 1.0234220 seconds.
+;Restoring files for tile     2530
+;/home/luke/Dropbox/tessSimulation/trilegal/hp2530.sav
+;File #      26tile #    2530 numtargets       18289 numbkgnd        1706 numdeeps         563
+;% Time elapsed fileOpen-26: 0.15253496 seconds.
+;Selecting            9 postage stamps out of         4902 stars.
+;Selecting           35 postage stamps out of         8485 stars.
+;% Time elapsed psSel-26: 0.026438951 seconds.
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            7 cool ones
+;Created            3 transiting planets out of           81 around        18289 stars.
+;% Time elapsed makeEclipse-26-0: 0.0076260567 seconds.
+;nFile      26 nTrial       0 nTile    2530 Ecliplen           3 ncoords        1614
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            8 cool ones
+;needed            5 but got            4 cool ones
+;Created            1 transiting planets out of           76 around        18289 stars.
+;% Time elapsed makeEclipse-26-1: 0.0076148510 seconds.
+;nFile      26 nTrial       1 nTile    2530 Ecliplen           1 ncoords        1614
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            8 cool ones
+;needed            5 but got            5 cool ones
+;Created            3 transiting planets out of           82 around        18289 stars.
+;% Time elapsed makeEclipse-26-2: 0.0079660416 seconds.
+;nFile      26 nTrial       2 nTile    2530 Ecliplen           3 ncoords        1614
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            7 cool ones
+;Created        0 transiting planets out of           81 around        18289 stars.
+;% Time elapsed makeEclipse-26-3: 0.0071430206 seconds.
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            8 cool ones
+;needed            5 but got            3 cool ones
+;Created            4 transiting planets out of           80 around        18289 stars.
+;% Time elapsed makeEclipse-26-4: 0.0078320503 seconds.
+;nFile      26 nTrial       4 nTile    2530 Ecliplen           4 ncoords        1614
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            8 cool ones
+;needed            5 but got            4 cool ones
+;Created            2 transiting planets out of           81 around        18289 stars.
+;% Time elapsed makeEclipse-26-5: 0.0076320171 seconds.
+;nFile      26 nTrial       5 nTile    2530 Ecliplen           2 ncoords        1614
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            8 cool ones
+;needed            5 but got            5 cool ones
+;Created        0 transiting planets out of           82 around        18289 stars.
+;% Time elapsed makeEclipse-26-6: 0.0073440075 seconds.
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            7 cool ones
+;needed            5 but got            5 cool ones
+;Created        0 transiting planets out of           81 around        18289 stars.
+;% Time elapsed makeEclipse-26-7: 0.0076580048 seconds.
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            8 cool ones
+;Created            1 transiting planets out of           82 around        18289 stars.
+;% Time elapsed makeEclipse-26-8: 0.0077629089 seconds.
+;nFile      26 nTrial       8 nTile    2530 Ecliplen           1 ncoords        1614
+;Adding eclipses to        18289 stars.
+;making       127.000 planets.
+;needed            9 but got            7 cool ones
+;needed            5 but got            4 cool ones
+;Created            1 transiting planets out of           80 around        18289 stars.
+;% Time elapsed makeEclipse-26-9: 0.0076649189 seconds.
+;nFile      26 nTrial       9 nTile    2530 Ecliplen           1 ncoords        1614
+;Surveying           15 eclipses.
+;Hemi=       1 Seg=       8 Cam=       0 ELon=      221.538 ELat=      18.0000 Nstars=          15
+;% Time elapsed eclipSurvey-26: 0.011068821 seconds.
+;Observing           15 eclipses around        18289 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           10 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing            3 transits
+;Stacking and sorting PRFs
+;Diluting            1 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of            3 with           12 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of            3 with           13 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of            3 with            3 stars
+;Detected            3 eclipses.
+;% Time elapsed eclipObserve-26: 0.025799036 seconds.
+;% Time elapsed endClock-26: 8.6069107e-05 seconds.
+;% Time elapsed tileNumber-26-    2530: 0.35511208 seconds.
+;Skipping tileNum    2911 because it gets no pointings.
+;Skipping tileNum     749 because it gets no pointings.
+;Restoring files for tile      787
+;/home/luke/Dropbox/tessSimulation/trilegal/hp0787.sav
+;File #      29tile #     787 numtargets       29167 numbkgnd        1857 numdeeps         511
+;% Time elapsed fileOpen-29: 0.14523697 seconds.
+;Selecting           13 postage stamps out of         8230 stars.
+;Selecting           25 postage stamps out of        12707 stars.
+;% Time elapsed psSel-29: 0.044610023 seconds.
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            7 cool ones
+;Created            1 transiting planets out of           87 around        29167 stars.
+;% Time elapsed makeEclipse-29-0: 0.014182091 seconds.
+;nFile      29 nTrial       0 nTile     787 Ecliplen           1 ncoords        1643
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            5 cool ones
+;Created            1 transiting planets out of           87 around        29167 stars.
+;% Time elapsed makeEclipse-29-1: 0.011359215 seconds.
+;nFile      29 nTrial       1 nTile     787 Ecliplen           1 ncoords        1643
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            6 cool ones
+;Created            1 transiting planets out of           89 around        29167 stars.
+;% Time elapsed makeEclipse-29-2: 0.010830879 seconds.
+;nFile      29 nTrial       2 nTile     787 Ecliplen           1 ncoords        1643
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            9 cool ones
+;Created            1 transiting planets out of           89 around        29167 stars.
+;% Time elapsed makeEclipse-29-3: 0.011472940 seconds.
+;nFile      29 nTrial       3 nTile     787 Ecliplen           1 ncoords        1643
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            6 cool ones
+;Created        0 transiting planets out of           89 around        29167 stars.
+;% Time elapsed makeEclipse-29-4: 0.011435032 seconds.
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            1 cool ones
+;Created            1 transiting planets out of           84 around        29167 stars.
+;% Time elapsed makeEclipse-29-5: 0.011378050 seconds.
+;nFile      29 nTrial       5 nTile     787 Ecliplen           1 ncoords        1643
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            9 cool ones
+;needed            6 but got            2 cool ones
+;Created            6 transiting planets out of           85 around        29167 stars.
+;% Time elapsed makeEclipse-29-6: 0.011581898 seconds.
+;nFile      29 nTrial       6 nTile     787 Ecliplen           6 ncoords        1643
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            8 cool ones
+;needed            6 but got            5 cool ones
+;Created            2 transiting planets out of           87 around        29167 stars.
+;% Time elapsed makeEclipse-29-7: 0.011981964 seconds.
+;nFile      29 nTrial       7 nTile     787 Ecliplen           2 ncoords        1643
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            9 cool ones
+;needed            8 but got            7 cool ones
+;Created        0 transiting planets out of           88 around        29167 stars.
+;% Time elapsed makeEclipse-29-8: 0.011800051 seconds.
+;Adding eclipses to        29167 stars.
+;making       144.000 planets.
+;needed           11 but got            7 cool ones
+;needed            6 but got            6 cool ones
+;needed            8 but got            7 cool ones
+;Created            2 transiting planets out of           86 around        29167 stars.
+;% Time elapsed makeEclipse-29-9: 0.011751890 seconds.
+;nFile      29 nTrial       9 nTile     787 Ecliplen           2 ncoords        1643
+;Surveying           15 eclipses.
+;Hemi=      -1 Seg=       0 Cam=       3 ELon=      0.00000 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       1 Cam=       3 ELon=      27.6923 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       2 Cam=       3 ELon=      55.3846 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       3 Cam=       3 ELon=      83.0769 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       4 Cam=       3 ELon=      110.769 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       5 Cam=       3 ELon=      138.462 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       6 Cam=       3 ELon=      166.154 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       7 Cam=       3 ELon=      193.846 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       8 Cam=       3 ELon=      221.538 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=       9 Cam=       3 ELon=      249.231 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=      10 Cam=       3 ELon=      276.923 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=      11 Cam=       3 ELon=      304.615 ELat=     -90.0000 Nstars=          15
+;Hemi=      -1 Seg=      12 Cam=       3 ELon=      332.308 ELat=     -90.0000 Nstars=          15
+;% Time elapsed eclipSurvey-29: 0.011518955 seconds.
+;Observing           15 eclipses around        29167 stars.
+;Calculating number of eclipses
+;Diluting FFIs
+;Observing           15 transits
+;Stacking and sorting PRFs
+;Calculating noise
+;Re-observing           10 transits
+;Stacking and sorting PRFs
+;Diluting            5 binaries
+;Diluting with deep stars
+;Considering stars out to        235.11479 arcsec or        11.509015 pixels
+;On eclipse        0 of           10 with            5 stars
+;Diluting with background stars
+;Considering stars out to        743.49828 arcsec or        36.394701 pixels
+;On eclipse        0 of           10 with           22 stars
+;Diluting with other target stars
+;Considering stars out to        7434.9826 arcsec or        363.94700 pixels
+;On eclipse        0 of           10 with            7 stars
+;Detected           10 eclipses.
+;% Time elapsed eclipObserve-29: 0.095319033 seconds.
+;% Time elapsed endClock-29: 9.7990036e-05 seconds.
+;% Time elapsed tileNumber-29-     787: 0.67114210 seconds.
+;% Time elapsed: 60.833082 seconds.
+;Reached end at totdet =          129
+;      1161.00 postage stamps assigned
+; % Program caused arithmetic error: Floating divide by 0
+; % Program caused arithmetic error: Floating underflow
+; % Program caused arithmetic error: Floating illegal operand

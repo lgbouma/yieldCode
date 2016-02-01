@@ -94,11 +94,11 @@ pro starSurvey, camPointingFile, catFile
 
 	endfor
 	
-	SAVE, cat, FILENAME='psWithPointings.sav'
-	;SAVE, cat, FILENAME='tilesWithNominalPointings.sav'
+	;SAVE, cat, FILENAME='psWithPointings.sav'
+	SAVE, cat, FILENAME='tilesMedWithNominalPointings.sav'
+	tilePrint = 1
 	tStr = ' tiles'
 	psStr = ' postage stamps'
-	tilePrint = 1
 	if tilePrint then str=tStr else str=psStr
 	
 	PRINT, STRING(10B), '==========', STRING(10B), $

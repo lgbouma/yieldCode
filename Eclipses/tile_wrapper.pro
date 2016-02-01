@@ -20,7 +20,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   var_file = 'starvar.fits'
   tband_file = 'tband.csv'
   ; pointingStruct with tile numbers, their avg coordts, and nPointings
-  fTilesWithPointings = '../cameraPointings/tilesWithNominalPointings.sav'
+  fTilesWithPointings = '../cameraPointings/tilesMedWithNominalPointings.sav'
 
   ; User-adjustable settings (yes, that's you!)
   fov = 24. ; degrees

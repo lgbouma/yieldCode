@@ -28,8 +28,8 @@ PRO genTileCoords
 
 		euler, glon, glat, elong, elat, select=6
 
-		avgLat = MEAN(elat)
-		avgLong = MEAN(elong)
+		avgLat = MEDIAN(elat)
+		avgLong = MEDIAN(elong)
 		
 		PRINT, 'tileNum:', fnums[i], ' psNum: 1', ' eclLong:', avgLong, ' eclLat:', avgLat
 	endfor
