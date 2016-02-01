@@ -1,0 +1,221 @@
+; IDL Version 8.3 (linux x86_64 m64)
+; Journal File for luke@crispy
+; Working directory: /home/luke/Dropbox/tessSimulation/tesscode/cameraPointings
+; Date: Mon Feb  1 14:20:46 2016
+ 
+starSurvey, 'nominalCamPointings.dat', 'tileStructMed.sav'
+;Total         2908 possible postage stamps
+
+;nCamPointing       0 pointingNum       0 camNum       0 eLongCam      0.00000 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing       1 pointingNum       0 camNum       1 eLongCam      0.00000 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing       2 pointingNum       0 camNum       2 eLongCam      0.00000 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing       3 pointingNum       0 camNum       3 eLongCam      0.00000 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing       4 pointingNum       1 camNum       0 eLongCam      27.6923 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing       5 pointingNum       1 camNum       1 eLongCam      27.6923 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing       6 pointingNum       1 camNum       2 eLongCam      27.6923 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing       7 pointingNum       1 camNum       3 eLongCam      27.6923 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing       8 pointingNum       2 camNum       0 eLongCam      55.3846 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing       9 pointingNum       2 camNum       1 eLongCam      55.3846 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      10 pointingNum       2 camNum       2 eLongCam      55.3846 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      11 pointingNum       2 camNum       3 eLongCam      55.3846 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      12 pointingNum       3 camNum       0 eLongCam      83.0769 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      13 pointingNum       3 camNum       1 eLongCam      83.0769 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      14 pointingNum       3 camNum       2 eLongCam      83.0769 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      15 pointingNum       3 camNum       3 eLongCam      83.0769 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      16 pointingNum       4 camNum       0 eLongCam      110.769 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      17 pointingNum       4 camNum       1 eLongCam      110.769 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      18 pointingNum       4 camNum       2 eLongCam      110.769 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      19 pointingNum       4 camNum       3 eLongCam      110.769 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      20 pointingNum       5 camNum       0 eLongCam      138.462 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      21 pointingNum       5 camNum       1 eLongCam      138.462 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      22 pointingNum       5 camNum       2 eLongCam      138.462 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      23 pointingNum       5 camNum       3 eLongCam      138.462 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      24 pointingNum       6 camNum       0 eLongCam      166.154 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      25 pointingNum       6 camNum       1 eLongCam      166.154 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      26 pointingNum       6 camNum       2 eLongCam      166.154 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      27 pointingNum       6 camNum       3 eLongCam      166.154 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      28 pointingNum       7 camNum       0 eLongCam      193.846 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      29 pointingNum       7 camNum       1 eLongCam      193.846 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      30 pointingNum       7 camNum       2 eLongCam      193.846 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      31 pointingNum       7 camNum       3 eLongCam      193.846 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      32 pointingNum       8 camNum       0 eLongCam      221.538 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      33 pointingNum       8 camNum       1 eLongCam      221.538 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      34 pointingNum       8 camNum       2 eLongCam      221.538 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      35 pointingNum       8 camNum       3 eLongCam      221.538 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      36 pointingNum       9 camNum       0 eLongCam      249.231 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      37 pointingNum       9 camNum       1 eLongCam      249.231 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      38 pointingNum       9 camNum       2 eLongCam      249.231 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      39 pointingNum       9 camNum       3 eLongCam      249.231 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      40 pointingNum      10 camNum       0 eLongCam      276.923 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      41 pointingNum      10 camNum       1 eLongCam      276.923 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      42 pointingNum      10 camNum       2 eLongCam      276.923 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      43 pointingNum      10 camNum       3 eLongCam      276.923 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      44 pointingNum      11 camNum       0 eLongCam      304.615 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      45 pointingNum      11 camNum       1 eLongCam      304.615 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      46 pointingNum      11 camNum       2 eLongCam      304.615 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      47 pointingNum      11 camNum       3 eLongCam      304.615 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      48 pointingNum      12 camNum       0 eLongCam      332.308 eLatCam      90.0000
+; nStarsOnChip=        2908
+;nCamPointing      49 pointingNum      12 camNum       1 eLongCam      332.308 eLatCam      66.0000
+; nStarsOnChip=        2908
+;nCamPointing      50 pointingNum      12 camNum       2 eLongCam      332.308 eLatCam      42.0000
+; nStarsOnChip=        2908
+;nCamPointing      51 pointingNum      12 camNum       3 eLongCam      332.308 eLatCam      18.0000
+; nStarsOnChip=        2908
+;nCamPointing      52 pointingNum      13 camNum       0 eLongCam      0.00000 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      53 pointingNum      13 camNum       1 eLongCam      0.00000 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      54 pointingNum      13 camNum       2 eLongCam      0.00000 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      55 pointingNum      13 camNum       3 eLongCam      0.00000 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      56 pointingNum      14 camNum       0 eLongCam      27.6923 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      57 pointingNum      14 camNum       1 eLongCam      27.6923 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      58 pointingNum      14 camNum       2 eLongCam      27.6923 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      59 pointingNum      14 camNum       3 eLongCam      27.6923 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      60 pointingNum      15 camNum       0 eLongCam      55.3846 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      61 pointingNum      15 camNum       1 eLongCam      55.3846 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      62 pointingNum      15 camNum       2 eLongCam      55.3846 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      63 pointingNum      15 camNum       3 eLongCam      55.3846 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      64 pointingNum      16 camNum       0 eLongCam      83.0769 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      65 pointingNum      16 camNum       1 eLongCam      83.0769 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      66 pointingNum      16 camNum       2 eLongCam      83.0769 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      67 pointingNum      16 camNum       3 eLongCam      83.0769 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      68 pointingNum      17 camNum       0 eLongCam      110.769 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      69 pointingNum      17 camNum       1 eLongCam      110.769 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      70 pointingNum      17 camNum       2 eLongCam      110.769 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      71 pointingNum      17 camNum       3 eLongCam      110.769 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      72 pointingNum      18 camNum       0 eLongCam      138.462 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      73 pointingNum      18 camNum       1 eLongCam      138.462 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      74 pointingNum      18 camNum       2 eLongCam      138.462 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      75 pointingNum      18 camNum       3 eLongCam      138.462 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      76 pointingNum      19 camNum       0 eLongCam      166.154 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      77 pointingNum      19 camNum       1 eLongCam      166.154 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      78 pointingNum      19 camNum       2 eLongCam      166.154 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      79 pointingNum      19 camNum       3 eLongCam      166.154 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      80 pointingNum      20 camNum       0 eLongCam      193.846 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      81 pointingNum      20 camNum       1 eLongCam      193.846 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      82 pointingNum      20 camNum       2 eLongCam      193.846 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      83 pointingNum      20 camNum       3 eLongCam      193.846 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      84 pointingNum      21 camNum       0 eLongCam      221.538 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      85 pointingNum      21 camNum       1 eLongCam      221.538 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      86 pointingNum      21 camNum       2 eLongCam      221.538 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      87 pointingNum      21 camNum       3 eLongCam      221.538 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      88 pointingNum      22 camNum       0 eLongCam      249.231 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      89 pointingNum      22 camNum       1 eLongCam      249.231 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      90 pointingNum      22 camNum       2 eLongCam      249.231 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      91 pointingNum      22 camNum       3 eLongCam      249.231 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      92 pointingNum      23 camNum       0 eLongCam      276.923 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      93 pointingNum      23 camNum       1 eLongCam      276.923 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      94 pointingNum      23 camNum       2 eLongCam      276.923 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      95 pointingNum      23 camNum       3 eLongCam      276.923 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing      96 pointingNum      24 camNum       0 eLongCam      304.615 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing      97 pointingNum      24 camNum       1 eLongCam      304.615 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing      98 pointingNum      24 camNum       2 eLongCam      304.615 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing      99 pointingNum      24 camNum       3 eLongCam      304.615 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;nCamPointing     100 pointingNum      25 camNum       0 eLongCam      332.308 eLatCam     -90.0000
+; nStarsOnChip=        2908
+;nCamPointing     101 pointingNum      25 camNum       1 eLongCam      332.308 eLatCam     -66.0000
+; nStarsOnChip=        2908
+;nCamPointing     102 pointingNum      25 camNum       2 eLongCam      332.308 eLatCam     -42.0000
+; nStarsOnChip=        2908
+;nCamPointing     103 pointingNum      25 camNum       3 eLongCam      332.308 eLatCam     -18.0000
+; nStarsOnChip=        2908
+;
+==========
+Total # assigned tiles        2908Total # tiles with 0 pointings         439
+;Total # tiles with >0 pointings        2469
+==========

@@ -3,7 +3,7 @@ pro starSurvey, camPointingFile, catFile
 ; NAME: starSurvey
 ; PURPOSE: given an input list of camera pointings and a catalog of 
 ; 	stars (e.g., postage stamps), calculate how many pointings
-; 	each star gets.
+; 	each star (in a pointingStruct object) gets.
 ; INPUTS: 
 ;	camPointingFile: text file (e.g., "nominalCamPointings.dat")
 ;	formatted in columns as:
@@ -61,28 +61,34 @@ pro starSurvey, camPointingFile, catFile
 
 		ad2xy, cat.coord.elon, cat.coord.elat, astr, x, y	
 		; x and y (units of arcsec) of stars in CCD image for this camera orientation
+		; n.b.: first pixel is 0 (IDL convention), NOT fits convention (1-based counting)
 
-		; Is the star (known x,y coords) on CCD chip?
-		onChip =   ($   ; Upper left
-				   ((x gt 0.0) and $
-					(x lt (ccdPix-gapPix)/2.-1.) and $
-					(y gt 0.0) and $
-					(y lt (ccdPix-gapPix)/2.-1.)) $
-				   or $ ; Upper Right
-				   ((x gt (ccdPix+gapPix)/2.-1.) and $
-					(x lt (ccdPix+gapPix)-1.) and $
-					(y gt 0.0) and $
-					(y lt (ccdPix-gapPix)/2.-1.)) $
-				   or $ ; Lower Right
-				   ((x gt (ccdPix+gapPix)/2.-1.) and $
-					(x lt (ccdPix+gapPix)-1.) and $
-					(y gt (ccdPix+gapPix)/2.-1.) and $
-					(y lt (ccdPix+gapPix)-1.)) $
-				   or $ ; Lower Left
-				   ((x gt 0.0) and $
-					(x lt (ccdPix-gapPix)/2.-1.) and $
-					(y gt (ccdPix+gapPix)/2.-1.) and $
-					(y lt (ccdPix+gapPix)-1.)))
+		; Is the star (known x,y coords) on CCD chip? Ignore dead pixels.
+		onchip = ( (x gt 0.) and $
+				   (x lt (ccdPix+gapPix)-1.) and $
+				   (y gt 0.) and $
+				   (y lt (ccdPix+gapPix)-1.))	
+
+		;onChip =   ($   ; Upper left (LB 16/02/01: these labels must be worng)
+		;		   ((x gt 0.0) and $
+		;			(x lt (ccdPix-gapPix)/2.-1.) and $
+		;			(y gt 0.0) and $
+		;			(y lt (ccdPix-gapPix)/2.-1.)) $
+		;		   or $ ; Upper Right
+		;		   ((x gt (ccdPix+gapPix)/2.-1.) and $
+		;			(x lt (ccdPix+gapPix)-1.) and $
+		;			(y gt 0.0) and $
+		;			(y lt (ccdPix-gapPix)/2.-1.)) $
+		;		   or $ ; Lower Right
+		;		   ((x gt (ccdPix+gapPix)/2.-1.) and $
+		;			(x lt (ccdPix+gapPix)-1.) and $
+		;			(y gt (ccdPix+gapPix)/2.-1.) and $
+		;			(y lt (ccdPix+gapPix)-1.)) $
+		;		   or $ ; Lower Left
+		;		   ((x gt 0.0) and $
+		;			(x lt (ccdPix-gapPix)/2.-1.) and $
+		;			(y gt (ccdPix+gapPix)/2.-1.) and $
+		;			(y lt (ccdPix+gapPix)-1.)))
 				
 		assert, TOTAL(onChip) gt 0, 'Your pointings are off b/c some do not see *anything*'
 
@@ -95,7 +101,7 @@ pro starSurvey, camPointingFile, catFile
 	endfor
 	
 	;SAVE, cat, FILENAME='psWithPointings.sav'
-	SAVE, cat, FILENAME='tilesMedWithNominalPointings.sav'
+	SAVE, cat, FILENAME='tilesAndCounts.sav'
 	tilePrint = 1
 	tStr = ' tiles'
 	psStr = ' postage stamps'

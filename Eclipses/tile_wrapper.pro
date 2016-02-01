@@ -19,8 +19,9 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   dart_file = 'dartmouth_grid.sav'
   var_file = 'starvar.fits'
   tband_file = 'tband.csv'
-  ; pointingStruct with tile numbers, their avg coordts, and nPointings
-  fTilesWithPointings = '../cameraPointings/tilesMedWithNominalPointings.sav'
+  ; pointingStruct with tile numbers, their avg coordts, and nPointings each tile receives,
+  ; assuming CCDs with no gaps and a given observing mission.
+  fTilesWithPointings = '../cameraPointings/tilesAndCounts.sav'
 
   ; User-adjustable settings (yes, that's you!)
   fov = 24. ; degrees
