@@ -1,6 +1,6 @@
 PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
-	prototypeMode=prototypeMode
+	prototypeMode=prototypeMode,fCamCoord=fCamCoord,fTilesCounts=fTilesCounts
 
   TIC ; Grab initial system time
 
@@ -25,13 +25,10 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   dart_file = 'dartmouth_grid.sav'
   var_file = 'starvar.fits'
   tband_file = 'tband.csv'
-  ; pointingStruct with tile numbers, their avg coordts, and nPointings each tile receives
-  fTilesWithPointings = '../cameraPointings/tilesAndCounts.sav'
 
   ; User-adjustable settings (yes, that's you!)
   fov = 24. ; degrees
   seg = 13  ; number of segments per hemisphere
-  skirt=6.  ; offset from ecliptic
   effarea = 69.1 ;43.9 ;54.9 ;100. ;54.9 ;69.1 ; in cm^2. 
   readnoise = 10. ;10. ;10.0 ; in e- per subexposure
   subexptime = 2.0 ; sec in subexposure
@@ -81,7 +78,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   cr_fits = fltarr(100,64)
 ;  cr_fits = mrdfits(cr_file)
   restore, dart_file
-  RESTORE, fTilesWithPointings
+  RESTORE, fTilesCounts 
   dartstruct = ss
   tic_fits = mrdfits(tic_file)
 
@@ -102,7 +99,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
 
 	; If in postage stamp only mode and tile gets no pointings, skip tile.
-	if cat[ii].npointings eq 0 then begin
+	if ((cat[ii].npointings eq 0) and (ps_only eq 1)) then begin
 		print, 'Skipping tileNum', fnums[ii], ' because it gets no pointings.'
 		continue
 	endif
@@ -130,6 +127,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     TOC, fopenClock
     
     ; Choose which stars are postage stamps vs ffis
+	; With 16/02/01 debug: postage stamps are only allowed on tiles that get >=1 pnting.
+	; Their distributions are weighted according to the # of pointings their _tile_ gets.
     psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
     targets.ffi = 1
     pri = where(targets.pri eq 1) ; targets.pri true if target is primary star in their system
@@ -142,7 +141,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       numps[ii] = numps[ii]+n_elements(selpri)
     endif
     sing = where((targets.pri eq 0) and (targets.sec eq 0)) ; targets.sec true are secondary of binary.
-	;LB 16: unclear why this isn't targets.sec eq 1...
+	; LB 16: unclear why this isn't targets.sec eq 1...
     selsing = ps_sel(targets[sing].mag.t, targets[sing].teff, targets[sing].m, $
 		targets[sing].r, ph_fits, rn_pix=15., npnt=cat[ii].npointings)
     if (selsing[0] ne -1) then begin 
@@ -152,6 +151,9 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     TOC, psSelClock  
 
     ecliplen_tot = 0L
+
+	; At this point in the sim, "targets" is an array of starStruct objs. E.g., if 
+	; PS only, it'll be of length about 7700 (->200k over all obs'd tiles).
 
     ;Loop over each trial to generate eclipses
     for jj=0,n_trial-1 do begin
@@ -198,19 +200,19 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     if (ecliplen_tot gt 0) then begin
       if (detmag eq 0) then begin
         ; Survey: figure out npointings and field angles
-	eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
-        eclip_survey, seg, fov, eclip, offset=skirt
-	TOC, eclipSurveyClock 
+		eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
+        eclip_survey, fov, eclip, fCamCoord
+		TOC, eclipSurveyClock 
       
         ; Observe      
-	eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
+		eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
         eclip_observe, eclip, targets, bkgnds, deeps, $
           frac_fits, ph_fits, cr_fits, var_fits, $
           aspix=aspix, effarea=effarea, sys_limit=sys_limit, $ ;infil=sp_name,outfile=spo_name
           readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
           duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
           subexptime=subexptime, dwell_time=orbit_period, downlink=downlink
-	TOC, eclipObserveClock 
+		TOC, eclipObserveClock 
 
         det = where(eclip.det1 or eclip.det2 or eclip.det)
       endif else det = where((targets[eclip.hostid].mag.ic lt detmag) or $ 

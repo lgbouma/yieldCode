@@ -41,7 +41,6 @@ pro starSurvey, camPointingFile, catFile, outFileName
 	PRINT, 'Total ', nPS, ' possible targets', STRING(10B)
 
 	fov = 24.	; degrees
-	nSeg = 13	; integer number of observing segments per hemisphere (presumably 13 is fixed)
 	nPointings = MAX(pointingNum)+1 ; 26 pointings 2yr, 52 4yr
 	nCams = 4
 	nCamPointings = nPointings * nCams
@@ -76,10 +75,6 @@ pro starSurvey, camPointingFile, catFile, outFileName
 		assert, TOTAL(onChip) gt 0, 'Your pointings are off b/c some do not see *anything*'
 
 		cat.nPointings += onChip
-
-	    ;PRINT, 'nCamPointing', i, ' pointingNum', pointingNum[i], $
-		;	  ' camNum', camNum[i], ' eLongCam', eLongCams[i], ' eLatCam', eLatCams[i], $
-		;	  ' nStarsOnChip=', N_ELEMENTS(onChip)
 	endfor
 	
 	;Format and save output
