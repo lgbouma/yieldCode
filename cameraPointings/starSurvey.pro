@@ -64,44 +64,23 @@ pro starSurvey, camPointingFile, catFile
 		; n.b.: first pixel is 0 (IDL convention), NOT fits convention (1-based counting)
 
 		; Is the star (known x,y coords) on CCD chip? Ignore dead pixels.
-		onchip = ( (x gt 0.) and $
-				   (x lt (ccdPix+gapPix)-1.) and $
+		onChip = ( (x gt 0.) and $
+				   (x lt (ccdPix+gapPix)) and $
 				   (y gt 0.) and $
-				   (y lt (ccdPix+gapPix)-1.))	
+				   (y lt (ccdPix+gapPix)))	
 
-		;onChip =   ($   ; Upper left (LB 16/02/01: these labels must be worng)
-		;		   ((x gt 0.0) and $
-		;			(x lt (ccdPix-gapPix)/2.-1.) and $
-		;			(y gt 0.0) and $
-		;			(y lt (ccdPix-gapPix)/2.-1.)) $
-		;		   or $ ; Upper Right
-		;		   ((x gt (ccdPix+gapPix)/2.-1.) and $
-		;			(x lt (ccdPix+gapPix)-1.) and $
-		;			(y gt 0.0) and $
-		;			(y lt (ccdPix-gapPix)/2.-1.)) $
-		;		   or $ ; Lower Right
-		;		   ((x gt (ccdPix+gapPix)/2.-1.) and $
-		;			(x lt (ccdPix+gapPix)-1.) and $
-		;			(y gt (ccdPix+gapPix)/2.-1.) and $
-		;			(y lt (ccdPix+gapPix)-1.)) $
-		;		   or $ ; Lower Left
-		;		   ((x gt 0.0) and $
-		;			(x lt (ccdPix-gapPix)/2.-1.) and $
-		;			(y gt (ccdPix+gapPix)/2.-1.) and $
-		;			(y lt (ccdPix+gapPix)-1.)))
-				
 		assert, TOTAL(onChip) gt 0, 'Your pointings are off b/c some do not see *anything*'
 
 		cat.nPointings += onChip
 
-	    PRINT, 'nCamPointing', i, ' pointingNum', pointingNum[i], $
-			  ' camNum', camNum[i], ' eLongCam', eLongCams[i], ' eLatCam', eLatCams[i], $
-			  ' nStarsOnChip=', N_ELEMENTS(onchip)
-
+	    ;PRINT, 'nCamPointing', i, ' pointingNum', pointingNum[i], $
+		;	  ' camNum', camNum[i], ' eLongCam', eLongCams[i], ' eLatCam', eLatCams[i], $
+		;	  ' nStarsOnChip=', N_ELEMENTS(onChip)
 	endfor
 	
+	;Format and save output
 	;SAVE, cat, FILENAME='psWithPointings.sav'
-	SAVE, cat, FILENAME='tilesAndCounts.sav'
+	SAVE, cat, FILENAME='YOURNAMEHERE.SAV'
 	tilePrint = 1
 	tStr = ' tiles'
 	psStr = ' postage stamps'
@@ -112,4 +91,5 @@ pro starSurvey, camPointingFile, catFile
 		'Total #' + str + ' with 0 pointings', N_ELEMENTS(WHERE(cat.nPointings eq 0)), $
 		'Total #' + str + ' with >0 pointings', N_ELEMENTS(WHERE(cat.nPointings gt 0)), $
 	    STRING(10B), '=========='
+
 end

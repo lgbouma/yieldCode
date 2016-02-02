@@ -8,11 +8,11 @@ import numpy as np
 radPerDeg = 2.*np.pi/360.
 fov = 24*radPerDeg
 
-missionLen = 24 # months
+missionLen = 2 # years
 
 nCams = 4
-nPointingsPerHemi = 13
-nPointings = nPointingsPerHemi * 2
+nPointingsPerHemi = 13 # per year
+nPointings = nPointingsPerHemi * missionLen
 
 # Pointing number, camera number, ecl lat/ ecl long
 pointingCoords = np.zeros([nPointings, nCams, 2]) 
