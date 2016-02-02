@@ -5,11 +5,17 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   TIC ; Grab initial system time
 
   numfil = N_ELEMENTS(fnums) ; fnums is file containing healpix numbers (~3000 of them).
-  ; Get random tile numbers for rapid prototyping (look at 1/100th of the tiles)
   randomNumbers = RANDOMU(seed, numfil)
   randomIndices = SORT(ROUND(randomNumbers * (numfil-1)))
   randomIndices = randomIndices[0:ROUND(numfil/100)]
-  if (prototypeMode eq 1) then fnums=fnums[randomIndices] else fnums=fnums
+  assert, (prototypeMode eq 2) or (prototypeMode eq 1) or (prototypeMode eq 0), $
+	  	'Invalid prototype mode assignment.'
+  case prototypeMode of
+  	0: fnums = fnums			; look at all tiles
+	1: fnums = fnums[randomIndices[0]]	; look at a single random tile
+	2: fnums = fnums[randomIndices[0:9]] ; look at 10 random tiles
+	3: fnums = fnums[randomIndices] 	; look at 1/100th of tiles (~290), randomly selected
+  endcase
   numfil = N_ELEMENTS(fnums)
 
   ; Input files
@@ -19,8 +25,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   dart_file = 'dartmouth_grid.sav'
   var_file = 'starvar.fits'
   tband_file = 'tband.csv'
-  ; pointingStruct with tile numbers, their avg coordts, and nPointings each tile receives,
-  ; assuming CCDs with no gaps and a given observing mission.
+  ; pointingStruct with tile numbers, their avg coordts, and nPointings each tile receives
   fTilesWithPointings = '../cameraPointings/tilesAndCounts.sav'
 
   ; User-adjustable settings (yes, that's you!)

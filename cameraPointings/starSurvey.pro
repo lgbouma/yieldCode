@@ -1,22 +1,25 @@
-pro starSurvey, camPointingFile, catFile
+pro starSurvey, camPointingFile, catFile, outFileName
 ;+
 ; NAME: starSurvey
 ; PURPOSE: given an input list of camera pointings and a catalog of 
 ; 	stars (e.g., postage stamps), calculate how many pointings
 ; 	each star (in a pointingStruct object) gets.
 ; INPUTS: 
-;	camPointingFile: text file (e.g., "nominalCamPointings.dat")
+;	camPointingFile: text file (e.g., "nominalCamPointings.dat", or
+;	"nssn_hemi_camCoord.dat")
 ;	formatted in columns as:
 ;	- pointing number (nominal run goes from 0 to 23)
 ;	- camera number (0, 1, 2, 3)
 ;	- ecliptic latitude (-90 to 90 deg)
 ; 	- ecliptic longitude (0 to 360)
-;	catFile: .sav file, (e.g., "psStruct.sav") containing object of 
-;	type pointingStruct, output from genPSstarStruct.pro. It's a 
-;	catalog of PS stars, with tileNum, PSnum, elong, and elat for the star. 
+;	catFile: .sav file, (e.g., "psStruct.sav", or "tileStructMed.sav") 
+;	containing object of type pointingStruct, output from genStarStruct.pro. 
+;	It's a catalog of PS stars / tile coordinates, with tileNum, PSnum, elong, 
+;	and elat for the star / tile. 
 ;	CAUTION: it does NOT have any non-zero pointing numbers yet.
 ; OUTPUTS: 
 ;	Catalog, with star.npointings calculated. 
+;	outFileName should be something like: "nsns_hemi_tilesCounts.sav"
 ; COMMENTS:
 ;	Originally written to answer the question: "how many stars that are 
 ;	assigned as postage stamps are actually observed?" (since these are
@@ -35,11 +38,11 @@ pro starSurvey, camPointingFile, catFile
 
 	RESTORE, catFile 	
 	nPS = N_ELEMENTS(cat)
-	PRINT, 'Total ', nPS, ' possible postage stamps', STRING(10B)
+	PRINT, 'Total ', nPS, ' possible targets', STRING(10B)
 
 	fov = 24.	; degrees
 	nSeg = 13	; integer number of observing segments per hemisphere (presumably 13 is fixed)
-	nPointings = MAX(pointingNum)+1 ; 26 pointings (but generated in python counting)
+	nPointings = MAX(pointingNum)+1 ; 26 pointings 2yr, 52 4yr
 	nCams = 4
 	nCamPointings = nPointings * nCams
 	assert, nCamPointings eq N_ELEMENTS(pointingNum), $ 
@@ -69,6 +72,7 @@ pro starSurvey, camPointingFile, catFile
 				   (y gt 0.) and $
 				   (y lt (ccdPix+gapPix)))	
 
+		print, i
 		assert, TOTAL(onChip) gt 0, 'Your pointings are off b/c some do not see *anything*'
 
 		cat.nPointings += onChip
@@ -79,8 +83,7 @@ pro starSurvey, camPointingFile, catFile
 	endfor
 	
 	;Format and save output
-	;SAVE, cat, FILENAME='psWithPointings.sav'
-	SAVE, cat, FILENAME='YOURNAMEHERE.SAV'
+	SAVE, cat, FILENAME=outFileName
 	tilePrint = 1
 	tStr = ' tiles'
 	psStr = ' postage stamps'

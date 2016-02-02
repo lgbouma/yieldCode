@@ -40,9 +40,8 @@ while j < 25:
 nCoords = len(pointingCoords) * nCams
 assert (nCoords == nPointings * nCams)
 
-# output format:
-# pointingNum / ecl lat / ecl long
-
+'''
+# nominal 2yr scenario
 k = 0
 for i in range(len(pointingCoords)):
     for j in range(nCams):
@@ -51,3 +50,31 @@ for i in range(len(pointingCoords)):
 
 # Now, being too lazy to learn proper file I/O with python, run in terminal with python,
 # bash pipe it into nominalCamPointings.txt
+'''
+
+'''
+# one 4 yr scenario: N, S, N, S hemis
+pCoord = np.zeros([2*nPointings, nCams, 2])
+pCoord[:nPointings] = pointingCoords
+pCoord[nPointings:] = pointingCoords
+
+k = 0
+for i in range(len(pCoord)):
+    for j in range(nCams):
+        print k//nCams, j, pCoord[i,j,0], pCoord[i,j,1]
+        k += 1
+'''
+
+'''
+# another: N, S, S, N hemis
+pCoord = np.zeros([2*nPointings, nCams, 2])
+pCoord[:nPointings] = pointingCoords
+pCoord[nPointings:nPointings*1.5] = pointingCoords[nPointings/2.:]
+pCoord[nPointings*1.5:] = pointingCoords[:nPointings/2.]
+
+k = 0
+for i in range(len(pCoord)):
+    for j in range(nCams):
+        print k//nCams, j, pCoord[i,j,0], pCoord[i,j,1]
+        k += 1
+'''
