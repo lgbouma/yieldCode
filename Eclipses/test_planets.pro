@@ -19,4 +19,3 @@ PRO test_planets
   hid = eclip.hostid
   mwrfits, [[rp],[per],[teff],[mult],[pr],[hid]], 'test_add_planets.fits'
 END
-sfasdf

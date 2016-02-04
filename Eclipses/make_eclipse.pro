@@ -1,19 +1,36 @@
+function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefftic, $
+  eclass, tband, min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, pla_err=pla_err
 ;+
 ;NAME: make_eclipse
 ;PURPOSE: Assign planets and generate "eclip" objects (data struct with
 ; 	all eclipse information).
 ;INPUTS:
+; 1. sstruct. A starStruct object (targets), selected for postage stamps and FFIs.
+; 2. bkstruct. Passed "bkgnds" a starStruct object for K>15 stars (dimmer->diluting)
+; 3. estruct. Passed "eclip_trial", undefined at the call in tile_wrapper (i.e., at
+;		time of call, has no data).
+; 4. frac. PRF data from Deb Woods.
+; 5. ph_p. Photon fluxes for T=10 vs T_eff.
+; 6. dartstruct. dartStruct object from "dartmouth_grid.sav". 
+; 7. tefftic. "tic_fits", from "tic_teff.fits". (?)
+; 8. eclass. Include planets / EBs / BEBs / HEBs / BTPs.
+; 9. tband. TESS transmission bandpass vs wavelength (cf Sullivan+ Fig 2).
+; 10. min_depth. Minimum transit depth to retain from eclipses (nominally 1e-6)
+; 11. max_depth. Max '' (nominally 1).
+; 12. ps_only. Bool value for whether or not only postage stamps.
+; 13. pla_err. 0: (standard) nominal occurrence rates / +1: upper bounds / -1: lower bounds.
 ;OUTPUTS:
-;
+; 1. estruct, an array of eclip_struct objects. E.g., `make_eclipse` will make 3
+;	  transiting planets out of a total of 78 created planets about 700 stars on
+;	  a single tile. Each transiting planet gets its own eclip_struct entry in the 
+;     array.
 ;
 ;-
-function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefftic, $
-  eclass, tband, min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, pla_err=pla_err
   ecliplen = 0L
   if (keyword_set(min_depth)) then min_depth=min_depth else min_depth = 0.0
   if (keyword_set(max_depth)) then max_depth=max_depth else max_depth = 1.0 
 
-  print, 'Adding eclipses to ', n_elements(sstruct), ' stars.'
+  print, 'Make_eclipse: adding eclipses to ', n_elements(sstruct), ' stars (targets).'
   
   ; Add HEBs
   if (eclass[3]) then begin

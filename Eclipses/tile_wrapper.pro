@@ -1,22 +1,22 @@
 PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
-	prototypeMode=prototypeMode,fCamCoord=fCamCoord,fTilesCounts=fTilesCounts
+	prototypeMode=prototypeMode,fCamCoord=fCamCoord,fTilesCounts=fTilesCounts, $
+	radCutoff=radCutoff
 
   TIC ; Grab initial system time
-  SPAWN, 'cat main.pro' ; Print input file to log so you know what you did
 
   ; Assign prototype mode
   numfil = N_ELEMENTS(fnums)   
   randomNumbers = RANDOMU(seed, numfil)
   randomIndices = SORT(ROUND(randomNumbers * (numfil-1)))
-  randomIndices = randomIndices[0:ROUND(numfil/100)]
-  assert, (prototypeMode eq 2) or (prototypeMode eq 1) or (prototypeMode eq 0), $
-	  	'Invalid prototype mode assignment.'
+  randomIndices = randomIndices[0:ROUND(numfil/10)]
+  assert, (prototypeMode eq 3) or (prototypeMode eq 2) or (prototypeMode eq 1) $
+  		or (prototypeMode eq 0), 'Invalid prototype mode assignment.'
   case prototypeMode of
   	0: fnums = fnums			; look at all tiles
 	1: fnums = fnums[randomIndices[0]]	; look at a single random tile
 	2: fnums = fnums[randomIndices[0:9]] ; look at 10 random tiles
-	3: fnums = fnums[randomIndices] 	; look at 1/100th of tiles (~290), randomly selected
+	3: fnums = fnums[randomIndices] 	; look at ~300 random tiles
   endcase
   numfil = N_ELEMENTS(fnums)
 
@@ -96,6 +96,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   dartstruct = ss
   tic_fits = mrdfits(tic_file)
 
+  SPAWN, 'cat main.pro' ; Print input file to log so you know what you did
+
   ; Make random spherical coords
   tempBigStarNumber = 5e6	; WARNING: no good for FFIs. Size set by available local memory.
   print, 'Using ', tempBigStarNumber, ' as tempBigStarNumber to make coordinate list (WARNING).'
@@ -114,8 +116,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
     fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
 
-	; If in postage stamp only mode and tile gets no pointings, skip tile.
-	if ((cat[ii].npointings eq 0) and (ps_only eq 1)) then begin
+	; If tile gets no pointings, skip tile.
+	if (cat[ii].npointings eq 0) then begin
 		print, 'Skipping tileNum', fnums[ii], ' because it gets no pointings.'
 		continue
 	endif
@@ -149,7 +151,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     targets.ffi = 1
     pri = where(targets.pri eq 1) ; targets.pri true if target is primary star in their system
     selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
-			rn_pix=15., npnt=cat[ii].npointings)
+			minrad=radCutoff, rn_pix=15., npnt=cat[ii].npointings)
     if (selpri[0] ne -1) then begin 
       targets[pri[selpri]].ffi=0
       secffi = targets[pri[selpri]].companion.ind
@@ -170,18 +172,24 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 
 	; At this point in the sim, "targets" is an array of starStruct objs. E.g., if 
 	; PS only, it'll be of length about 7700 (->200k over all obs'd tiles).
+	; If with FFIs, presumably it'll be longer.
 
     ;Loop over each trial to generate eclipses
     for jj=0,n_trial-1 do begin
       ; Re-radomize the inclination
       targets.cosi = -1 + 2.0*randomu(seed, n_elements(targets))
 
-      ; Add eclipses
+      ; Add eclipses. E.g., eclip_trial will come back with 2 eclipses, from 80 planets
+	  ; created about 7000 stars on the tile.
       makeEclipseClock = TIC('makeEclipse-' + STRTRIM(ii, 2) + '-' + STRTRIM(jj, 2))
       ecliplen =  make_eclipse(targets, bkgnds, eclip_trial, frac_fits, $
 	  			  ph_fits, dartstruct, tic_fits, eclass, tband, pla_err=pla_err, $
 	 	          min_depth=min_depth, max_depth=max_depth, ps_only=ps_only)
       TOC, makeEclipseClock 
+
+	  print, 'Debugging'
+	  STOP
+	  ;TODO: remove
 
       if (ecliplen gt 0) then begin
       	eclip_trial.trial = jj + 1
@@ -190,9 +198,13 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
         ncoord = n_elements(thispix)
         coordind = lindgen(ecliplen) mod ncoord
 
-		assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/01/29
-		print, 'nFile', ii, ' nTrial', jj, ' nTile', fnums[ii], $
-			' Ecliplen', ecliplen, ' ncoords', ncoord
+		if (ecliplen gt ncoord) then $
+        	print, "Needed ", ecliplen, " coords but got ", ncoord, " on tile ", ii
+
+		;TODO change this to make sense. BUG FIX.
+		;assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/01/29
+		;print, 'nFile', ii, ' nTrial', jj, ' nTile', fnums[ii], $
+		;	' Ecliplen', ecliplen, ' ncoords', ncoord
 
         glon = phi[thispix[coordind]]*180./!dpi
         glat = (theta[thispix[coordind]]-!dpi/2.)*180./!dpi

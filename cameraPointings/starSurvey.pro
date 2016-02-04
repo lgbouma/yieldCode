@@ -5,18 +5,19 @@ pro starSurvey, camPointingFile, catFile, outFileName
 ; 	stars (e.g., postage stamps), calculate how many pointings
 ; 	each star (in a pointingStruct object) gets.
 ; INPUTS: 
-;	camPointingFile: text file (e.g., "nominalCamPointings.dat", or
+;	1. camPointingFile: text file (e.g., "nominalCamPointings.dat", or
 ;	"nssn_hemi_camCoord.dat")
 ;	formatted in columns as:
 ;	- pointing number (nominal run goes from 0 to 23)
 ;	- camera number (0, 1, 2, 3)
 ;	- ecliptic latitude (-90 to 90 deg)
 ; 	- ecliptic longitude (0 to 360)
-;	catFile: .sav file, (e.g., "psStruct.sav", or "tileStructMed.sav") 
+;	2. catFile: .sav file, (e.g., "psStruct.sav", or "tileStructMed.sav") 
 ;	containing object of type pointingStruct, output from genStarStruct.pro. 
 ;	It's a catalog of PS stars / tile coordinates, with tileNum, PSnum, elong, 
 ;	and elat for the star / tile. 
 ;	CAUTION: it does NOT have any non-zero pointing numbers yet.
+;	3. outName: the name of output .sav file, (e.g., 'nssn_hemi_tilesCounts.sav')
 ; OUTPUTS: 
 ;	Catalog, with star.npointings calculated. 
 ;	outFileName should be something like: "nsns_hemi_tilesCounts.sav"
