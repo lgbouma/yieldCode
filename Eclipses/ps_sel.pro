@@ -2,7 +2,8 @@ function ps_sel, tmag, teff, mass, rad, ph_p, $
   minrad=minrad, per=per, rn_pix=rn_pix, geom_area=geom_area, npnt=npnt
 ;+
 ;NAME: ps_sel
-;PURPOSE: Select stars that are postage stamps. 
+;PURPOSE: Select stars that are postage stamps in this tile. 
+;		(down to resolution of healpix tiles, at the time of writing). 
 ;			TODO: Eventually, also select those that are FFIs
 ;INPUTS:
 ;	tmag: tess magnitude of targets object (starstruct restored from trilegal files).
@@ -32,7 +33,7 @@ function ps_sel, tmag, teff, mass, rad, ph_p, $
 ; 	ps_sel.pro should never be called.
 
 	nStars = N_ELEMENTS(tmag)		; number of stars (total) for this tile
-	if (KEYWORD_SET(minrad)) then minrad=minrad else minrad=2.27
+	if (KEYWORD_SET(minrad)) then minrad=minrad else minrad=2.27 ; diff from Sullivan+ 2015 value.
 	if (KEYWORD_SET(per)) then per=per else per=20.0 
 	assert, KEYWORD_SET(npnt), 'ps_sel must be called with # of pointings tile gets.'
 	assert, npnt ne 0, 'NumPointings in ps_sel is 0. This tile should have been skipped.'

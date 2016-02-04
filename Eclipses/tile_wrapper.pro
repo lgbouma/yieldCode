@@ -3,8 +3,10 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	prototypeMode=prototypeMode,fCamCoord=fCamCoord,fTilesCounts=fTilesCounts
 
   TIC ; Grab initial system time
+  SPAWN, 'cat main.pro' ; Print input file to log so you know what you did
 
-  numfil = N_ELEMENTS(fnums) ; fnums is file containing healpix numbers (~3000 of them).
+  ; Assign prototype mode
+  numfil = N_ELEMENTS(fnums)   
   randomNumbers = RANDOMU(seed, numfil)
   randomIndices = SORT(ROUND(randomNumbers * (numfil-1)))
   randomIndices = randomIndices[0:ROUND(numfil/100)]
@@ -18,9 +20,22 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   endcase
   numfil = N_ELEMENTS(fnums)
 
+  ; Assign extended mission mode
+  MT = 'I,I,F,F' ; get camera pointing info for observing specification 
+  READCOL, fCamCoord, F=FMT, pointingNumber, camNumber, camElat, camElong
+  nPointings = MAX(pointingNumber)+1 ; 26 pntgs 2yr, 52 4yr
+  nCams = 4
+  nCamPointings = nPointings * nCams
+  assert, nCamPointings eq N_ELEMENTS(pointingNumber), $
+	  'Need as many camPointings as elements passed in camPointingFile'
+  assert, (nPointings eq 26) or (nPointings eq 52), $
+  	  'Invalid camera pointings specified. Need 2 years or 4 years.'
+  if nPointings eq 52 then extMission = 1 else extMission = 0
+  if extMission then missionCount = 2 else missionCount = 1 ; count used in for loop
+
   ; Input files
   ph_file = 'ph_T_filt.fits' ; photon fluxes for T=10 vs Teff
-  cr_file = 'crnoise.fits' ; photon fluxes for T=10 vs Teff
+  cr_file = 'crnoise.fits'   
   tic_file = 'tic_teff.fits'
   dart_file = 'dartmouth_grid.sav'
   var_file = 'starvar.fits'
@@ -78,7 +93,6 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   cr_fits = fltarr(100,64)
 ;  cr_fits = mrdfits(cr_file)
   restore, dart_file
-  RESTORE, fTilesCounts 
   dartstruct = ss
   tic_fits = mrdfits(tic_file)
 
@@ -94,6 +108,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   totdet = 0L
   star_out = dblarr(tempBigStarNumber+1E6*n_trial,nparam)
 
+  for mc=0, missionCount-1 do begin ; for nominal mission, then possible ext mission
+  RESTORE, fTilesCounts ; restores a "catalog" of tile #s and their npointings.
   for ii=0, numfil-1 do begin ; for each healpix tile
     tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
     fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
@@ -260,6 +276,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       TOC, tileClock 
     endif
   endfor ; end tile loop
+  endfor ; end mission count loop
   TOC 
   print, 'Reached end at totdet = ', totdet
   if (totdet gt 0) then mwrfits, star_out[0:(totdet-1),*], outname
