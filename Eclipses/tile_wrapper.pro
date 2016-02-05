@@ -187,13 +187,12 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	 	          min_depth=min_depth, max_depth=max_depth, ps_only=ps_only)
       TOC, makeEclipseClock 
 
-	  print, 'Debugging'
-	  STOP
-	  ;TODO: remove
-
+	  ; Add coordinates to the eclipses
       if (ecliplen gt 0) then begin
       	eclip_trial.trial = jj + 1
-        ; Add coordinates to the eclipses
+
+		; Get indices corresponding to random coordinates at this tile.
+		;TODO coordinate assignment procedure to be comp cheaper. (req's major local memory)
         thispix = where(ipring eq fnums[ii])
         ncoord = n_elements(thispix)
         coordind = lindgen(ecliplen) mod ncoord
@@ -201,16 +200,14 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 		if (ecliplen gt ncoord) then $
         	print, "Needed ", ecliplen, " coords but got ", ncoord, " on tile ", ii
 
-		;TODO change this to make sense. BUG FIX.
-		;assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/01/29
-		;print, 'nFile', ii, ' nTrial', jj, ' nTile', fnums[ii], $
-		;	' Ecliplen', ecliplen, ' ncoords', ncoord
 
         glon = phi[thispix[coordind]]*180./!dpi
         glat = (theta[thispix[coordind]]-!dpi/2.)*180./!dpi
         ; Transform from galactic healpix to ecliptic observations
         euler, glon, glat, elon, elat, select=6
         euler, glon, glat, ra, dec, select=2
+
+		; Assign every eclipse object in eclip_trial unique coords
         eclip_trial.coord.elon = elon
         eclip_trial.coord.elat = elat
         eclip_trial.coord.ra = ra
@@ -218,7 +215,24 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
         eclip_trial.coord.glon = glon
         eclip_trial.coord.glat = glat
         eclip_trial.coord.healpix_n = fnums[ii]
-      
+
+		; If you assigned different coords to eclipses w/ same host id, no good.
+		; loop over eclip_trial & set coord to whatever was first assigned to first eclip.
+		if (ecliplen gt 0) then begin
+			hostList = eclip_trial.hostid
+			for kk=0, ecliplen-1 do begin
+				thisEclipHostID = hostList[kk]
+				sameStar = WHERE(thisEclipHostID eq hostList)
+				nMultiEclipse = N_ELEMENTS(sameStar) ; # of eclipsing planets sameStar has
+				for ll=0, nMultiEclipse-1 do begin
+					eclip_trial[sameStar[ll]].coord = eclip_trial[sameStar[0]].coord
+				endfor
+			endfor
+		endif
+
+		assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/02/05
+		assert, (ecliplen gt 0), 'Want eclips to be seen. Interesting for FFI multi questions'
+  
         if (ecliplen_tot gt 0) then eclip = struct_append(eclip, eclip_trial) $
         else eclip = eclip_trial
         ecliplen_tot = ecliplen_tot + ecliplen
