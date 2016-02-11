@@ -2,8 +2,9 @@ function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefft
   eclass, tband, min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, pla_err=pla_err
 ;+
 ;NAME: make_eclipse
-;PURPOSE: Assign planets and generate "eclip" objects (data struct with
-; 	all eclipse information).
+;PURPOSE: wrap around add_hebs, add_planets, add_ebs, add_bebs, which are the
+; routines that assign planets and generate "eclip" objects (data struct with
+; all eclipse information). Give these eclip objects back to tile_wrapper.
 ;INPUTS:
 ; 1. sstruct. A starStruct object (targets), selected for postage stamps and FFIs.
 ; 2. bkstruct. Passed "bkgnds" a starStruct object for K>15 stars (dimmer->diluting)
@@ -46,10 +47,10 @@ function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefft
   if (eclass[0]) then begin
     gd = add_planets(sstruct, p_eclip, frac, ph_p, tband, err=pla_err, min_depth=min_depth, dressing=1, ps_only=ps_only)
     if (gd gt 0) then begin
-      if (ecliplen gt 0) then estruct = struct_append(estruct, p_eclip) $
+      if (ecliplen gt 0) then estruct = struct_append(estruct, p_eclip) $ ; append eclipsing planets
       else estruct = p_eclip
     endif
-    ecliplen = ecliplen + gd
+    ecliplen += gd
   endif
 
   ; Add EBs (identify EBs among target stars)

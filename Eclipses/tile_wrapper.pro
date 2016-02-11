@@ -148,15 +148,15 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	; With 16/02/01 debug: postage stamps are only allowed on tiles that get >=1 pnting.
 	; Their distributions are weighted according to the # of pointings their _tile_ gets.
     psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
-    targets.ffi = 1
-    pri = where(targets.pri eq 1) ; targets.pri true if target is primary star in their system
+    targets.ffi = 1 ; by definition all "target" stars will be in FFIs
+    pri = where(targets.pri eq 1) ; target is primary star in system
     selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
 			minrad=radCutoff, rn_pix=15., npnt=cat[ii].npointings)
     if (selpri[0] ne -1) then begin 
       targets[pri[selpri]].ffi=0
       secffi = targets[pri[selpri]].companion.ind
       targets[secffi].ffi=0
-      numps[ii] = numps[ii]+n_elements(selpri)
+      numps[ii] += n_elements(selpri)
     endif
     sing = where((targets.pri eq 0) and (targets.sec eq 0)) ; targets.sec true are secondary of binary.
 	; LB 16: unclear why this isn't targets.sec eq 1...
@@ -164,7 +164,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 		targets[sing].r, ph_fits, rn_pix=15., npnt=cat[ii].npointings)
     if (selsing[0] ne -1) then begin 
       targets[sing[selsing]].ffi=0
-      numps[ii] = numps[ii]+n_elements(selsing)
+      numps[ii] += n_elements(selsing)
     endif
     TOC, psSelClock  
 
@@ -258,7 +258,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 		print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
 		TOC, eclipObserveClock 
 
-        det = where(eclip.det1 or eclip.det2 or eclip.det) ; only saves detected transits/eclipses
+        ;det = where(eclip.det1 or eclip.det2 or eclip.det) ; only saves detected transits/eclipses
+		det = WHERE(eclip.det or not(eclip.det)) ; saves all transits
       endif 
       if (ecliplen_tot eq 0) then begin
       	det = where((targets[eclip.hostid].mag.ic lt detmag) or $ 
