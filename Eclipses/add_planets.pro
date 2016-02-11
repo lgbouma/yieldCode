@@ -287,6 +287,7 @@ function add_planets, star, pstruct, frac, ph_p, tband, err=err, $
      planet_eclip.icsys = star[traid].mag.icsys
      planet_eclip.jsys = star[traid].mag.jsys
      planet_eclip.hostid = planet_hid[tra]
+     planet_eclip.cosi = star[traid].cosi ; LB 16/02/08
      planet_eclip.dep1 = (planet_eclip.r2 / planet_eclip.r1 )^2.0
      toodeep = where(planet_eclip.dep1 gt 1.0)
      if (toodeep[0] ne -1) then planet_eclip[toodeep].dep1 = 1.0

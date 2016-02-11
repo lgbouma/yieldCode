@@ -35,8 +35,9 @@ function ps_sel, tmag, teff, mass, rad, ph_p, $
 	nStars = N_ELEMENTS(tmag)		; number of stars (total) for this tile
 	if (KEYWORD_SET(minrad)) then minrad=minrad else minrad=2.27 ; diff from Sullivan+ 2015 value.
 	if (KEYWORD_SET(per)) then per=per else per=20.0 
-	assert, KEYWORD_SET(npnt), 'ps_sel must be called with # of pointings tile gets.'
-	assert, npnt ne 0, 'NumPointings in ps_sel is 0. This tile should have been skipped.'
+	;TODO: remove these comments, re-instate the assertion
+	assert, (npnt ge 0), 'at least need npnt to be well-defined!'
+	;assert, npnt ne 0, 'NumPointings in ps_sel is 0. This tile should have been skipped.'
 
 	sz_ph_p = size(ph_p)
 	nfilt = sz_ph_p[1]
