@@ -15,7 +15,7 @@ PRO main
 	pla_err=0, $    ; 0=run with nominal occurrence rates, +1 for upper bounds, -1 for lower
 	;prf_file='psfs/dfrac_t75_f3p31_3.fits' ; ideal PRF file
 	prf_file='psfs/dfrac_asbuilt_75c_0f.fits', $ ; built PRF from Deb Woods
-	prototypeMode=0, $	; 0=full simulations. 1= 1 tile, 2=10 tiles, 3=~290 tiles (1/10th of sky)
+	prototypeMode=2, $	; 0=full simulations. 1= 1 tile, 2=10 tiles, 3=~290 tiles (1/10th of sky)
 	fCamCoord='../cameraPointings/ns_nominal_camCoord.dat', $ ;where cams pnt for this mission.
 	fTilesCounts='../cameraPointings/ns_nominal_tilesCounts.sav', $ ;pointingStruct w tileNum, coord, nPntg
 				; Clearly, fTilesCounts needs to _match_ fCamCoord (it's generated separately).

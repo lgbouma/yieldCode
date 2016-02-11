@@ -99,7 +99,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   SPAWN, 'cat main.pro' ; Print input file to log so you know what you did
 
   ; Make random spherical coords
-  tempBigStarNumber = 1.4e7	; WARNING: no good for FFIs. Size set by available local memory.
+  tempBigStarNumber = 5e6	; WARNING: no good for FFIs. Size set by available local memory.
   print, 'Using ', tempBigStarNumber, ' as tempBigStarNumber to make coordinate list (WARNING).'
   u = randomu(seed, tempBigStarNumber)
   v = randomu(seed, tempBigStarNumber)
@@ -117,13 +117,11 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
 
 	; If tile gets no pointings, skip tile.
-	; 16/02/10: TODO: put assertion for tiles to not be observed back in (only 
-	; sensible with current viewing scheme)
-	;if (cat[ii].npointings eq 0) then begin
-	;	print, 'Skipping tileNum', fnums[ii], ' because it gets no pointings.'
-	;	continue
-	;endif
-	;assert, cat[ii].npointings ne 0, 'Did not skip tile that is not observed.'
+	if (cat[ii].npointings eq 0) then begin
+		print, 'Skipping tileNum', fnums[ii], ' because it gets no pointings.'
+		continue
+	endif
+	assert, cat[ii].npointings ne 0, 'Did not skip tile that is not observed.'
 
     ; Gather the .sav files. These are starstructs. 
     print, 'Restoring files for tile ', fnums[ii]
@@ -232,7 +230,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 			endfor
 		endif
 
-	;	assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/02/05
+		assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/02/05
 		assert, (ecliplen gt 0), 'Want eclips to be seen. Interesting for FFI multi questions'
   
         if (ecliplen_tot gt 0) then eclip = struct_append(eclip, eclip_trial) $
@@ -244,29 +242,28 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     if (ecliplen_tot gt 0) then begin
       if (detmag eq 0) then begin
         ; Survey: figure out npointings and field angles
-	eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
+		eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
         eclip_survey, fov, eclip, fCamCoord
-	TOC, eclipSurveyClock 
+		TOC, eclipSurveyClock 
       
         ; Observe      
-	eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
-	print, 'Entering eclip_observe with nelements eclip:', N_ELEMENTS(eclip)
+		eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
+		print, 'Entering eclip_observe with nelements eclip:', N_ELEMENTS(eclip)
         eclip_observe, eclip, targets, bkgnds, deeps, $
           frac_fits, ph_fits, cr_fits, var_fits, $
           aspix=aspix, effarea=effarea, sys_limit=sys_limit, $ ;infil=sp_name,outfile=spo_name
           readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
           duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
           subexptime=subexptime, dwell_time=orbit_period, downlink=downlink
-  	print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
-	TOC, eclipObserveClock 
+		print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
+		TOC, eclipObserveClock 
 
-        ;det = where(eclip.det1 or eclip.det2 or eclip.det)
-	det = WHERE(eclip.det or not(eclip.det)) ; temporary, for Stephen Messenger
+        det = where(eclip.det1 or eclip.det2 or eclip.det) ; only saves detected transits/eclipses
       endif 
       if (ecliplen_tot eq 0) then begin
       	det = where((targets[eclip.hostid].mag.ic lt detmag) or $ 
 	      (targets[eclip.hostid].mag.k lt detmag) or $
-              (targets[eclip.hostid].mag.v lt detmag) or $
+		  (targets[eclip.hostid].mag.v lt detmag) or $
 	      (eclip.icsys lt detmag) or (eclip.kpsys lt detmag))
       	print, "This never should be printed!"
       endif
