@@ -1,8 +1,10 @@
-function add_planets, star, pstruct, frac, ph_p, tband, err=err, $
-	aspix=aspix, fov=fov, dressing=dressing, min_depth=min_depth, ps_only=ps_only
+function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
+	aspix=aspix, fov=fov, dressing=dressing, min_depth=min_depth, ps_only=ps_only, $
+	burtCatalog=burtCatalog
 ;+
 ; NAME: add_planets
-; PURPOSE: 
+; PURPOSE: Over each trial (usually 1-10), over each tile (1-2908), populate
+;	the stars on this trial with ecipsing objects.
 ; INPUTS: 
 ; 1. star: a starStruct object (called from targets in tile_wrapper), selected for postage 
 ; 	stamps and FFIs.
@@ -18,6 +20,10 @@ function add_planets, star, pstruct, frac, ph_p, tband, err=err, $
 ;		Sullivan+ 2015. Otherwise, no temperature dependent occurrences.
 ; 10. min_depth: minimum transit depth. Called with 0.
 ; 11. ps_only: option from main for only giving planets about PS stars, or all stars.
+; 12. burtCatalog: do you want an output eclip_trial with some objects that do NOT
+;		eclipse? (specifically: if at least one planet in system is detected, get the rest)
+; 13. noEclComp: companions of transiting planets that do not transit (burt catalog). Is
+;		eclipCompStruct type (to keep it straight)
 ; OUTPUTS:
 ; 1. ntra: number of transiting planets
 ; 2. pstruct: an _eclip_Struct that gets passed back to `make_eclipse` with all added 
@@ -40,6 +46,7 @@ function add_planets, star, pstruct, frac, ph_p, tband, err=err, $
   ccd_pix = 4096.0
   if (keyword_set(aspix)) then aspix=aspix else aspix=21.1
   if (keyword_set(err)) then err=1 else err=0
+  if (KEYWORD_SET(burtCatalog)) then burtCatalog=burtCatalog else burtCatalog=0
 
   nstars = n_elements(star)
   if (keyword_set(ps_only)) then ps = (star.ffi ne 1) else ps = intarr(nstars) + 1
@@ -127,7 +134,7 @@ function add_planets, star, pstruct, frac, ph_p, tband, err=err, $
      ;planet = replicate(template_planet, total(nplanets))
      planet_rad = dblarr(nplanets)
      planet_per = dblarr(nplanets)
-     planet_hid = lonarr(nplanets) - 99;
+     planet_hid = lonarr(nplanets) - 99 ; array of "-99"'s, length nPlanets
      idx0 = 0L
      for i=0,(n_elements(fressin_period)-2) do begin
         for j=(n_elements(fressin_radius)-2),0,-1 do begin
@@ -263,21 +270,30 @@ function add_planets, star, pstruct, frac, ph_p, tband, err=err, $
    planet_k = RV_AMP*planet_per^(-1./3.) * planet_m * $ 
 	sqrt(1.0-star[allid].cosi^2.) * (star[allid].m)^(-2./3.) 
 
-   ; Work out transit properties
+   ; compPlaInd holds indices of nontransiting planets in systems w/ at least one transiting planet
+   ; transPlaInd holds indices of transiting planets
+   if burtCatalog eq 1 then begin 
+	   compPlaInd = LIST() 
+	   transPlaInd = LIST()
+   endif
+
+   ; Select transiting planets, and then work out transit properties
    dep1 = (planet_rad*REARTH_IN_RSUN / star[allid].r )^2.0
-   ; FOR test_planets ONLY   
-   ; tra = lindgen(n_elements(planet_hid))
    tra = where((abs(planet_b) lt 1.0) and (planet_a gt min_a) and (dep1 gt min_depth))
-   if (tra[0] ne -1)  then begin
-     traid = planet_hid[tra]
+   if (tra[0] ne -1) then begin ; if you have at least one transiting planet
+     traid = planet_hid[tra] ; hostIDs of transiting planets
      ntra = n_elements(tra)
      planet_multi = intarr(ntra)
      planet_tmulti = intarr(ntra)
      planet_pr = fltarr(ntra)
-     for t=0,(ntra-1) do begin
+     for t=0,(ntra-1) do begin ; for each transiting system
        pos = where(planet_hid eq traid[t]) ; index of planet_per where other planets live
        tos = where(traid eq traid[t]) ; other trasiting planets live
-       if (n_elements(pos) gt 1) then begin
+       if (burtCatalog eq 1) then begin
+			 compPlaInd.Add, pos ; each element in compPlaInd list gets array of plnt IDs in trans sysm
+			 transPlaInd.Add, tra[t]
+	   endif
+		 if (n_elements(pos) gt 1) then begin
          planet_multi[t] = n_elements(pos) - 1  ; Number of other planets in the system
          planet_tmulti[t] = n_elements(tos) - 1 ; Number of other transiting planets
          pp = [tra[t]] ; index of transit indices
@@ -286,9 +302,86 @@ function add_planets, star, pstruct, frac, ph_p, tband, err=err, $
            planet_pr[t] = min(planet_per[opos]/planet_per[tra[t]] > $ 
 			   				  planet_per[opos]^(-1)*planet_per[tra[t]])
          endif 
-       end
-     end
+	   endif
+     endfor
+	 
+	 compPlaIndWithDupes = compPlaInd[*] ; copy all elements to new list (avoids reference dup)
+	 ; You only want unique compPlaInd entries, do this slow sort to get them.
+	 loopLen = N_ELEMENTS(compPlaIndWithDupes)
+	 if loopLen gt 1 then begin
+		 for i=0,(loopLen-1) do begin
+			 thisCompPl = compPlaIndWithDupes[i]
+			 duplicate = WHERE(thisCompPl eq compPlaInd)
+			 if N_ELEMENTS(duplicate) gt 1 then begin
+				 toRemove = duplicate[1:N_ELEMENTS(duplicate)-1]
+				 compPlaInd.REMOVE, toRemove
+			 endif
+		 endfor
+	 endif
+	 ; Now compPlaInd has unique indices of systems with at least 1 transiting planet. 
+
      planet_eclip = replicate({eclipstruct}, ntra)
+	 compPlaIndArr = []
+	 for q=0,(N_ELEMENTS(compPlaInd)-1) do begin
+		compPlaIndArr = [compPlaIndArr, compPlaInd[q]] ; for counting
+	 endfor
+	 burtNumber = N_ELEMENTS(compPlaIndArr) ; how many planets are in systems w/ >=1 transiter
+	 cArr = compPlaIndArr
+	 cArrID = planet_hid[cArr]
+
+	 eclOthers = REPLICATE({eclipcompstruct}, burtNumber) ; array of burt eclipCompStruct objects
+
+	 if burtCatalog eq 1 then begin ; clearly a bloated way to do this
+		 r2 = planet_rad[cArr]*REARTH_IN_RSUN
+		 dep2 = phot_ratio_planet(star[cArrID].teff, planet_teq[cArr], star[cArrID].mag.t, $ 
+								  star[cArrID].mag.dm, r2, ph_p, tband)
+		 eclOthers.class=1
+		 eclOthers.m1 = star[cArrID].m
+		 eclOthers.m2 = planet_m[cArr]/MSUN_IN_MEARTH
+		 eclOthers.k = planet_k[cArr]
+		 eclOthers.r1 = star[cArrID].r
+		 eclOthers.r2 = r2
+		 eclOthers.teff1 = star[cArrID].teff
+		 eclOthers.teff2 = planet_teq[cArr]
+		 eclOthers.a = planet_a[cArr]
+		 eclOthers.s = planet_s[cArr]
+		 eclOthers.p = planet_per[cArr]
+		 eclOthers.b = planet_b[cArr]
+		 eclOthers.tsys = star[cArrID].mag.tsys
+		 eclOthers.kpsys = star[cArrID].mag.kpsys
+		 eclOthers.icsys = star[cArrID].mag.icsys
+		 eclOthers.jsys = star[cArrID].mag.jsys
+		 eclOthers.hostid = planet_hid[cArr]
+		 eclOthers.cosi = star[cArrID].cosi ; LB 16/02/08
+		 eclOthers.dep1 = (eclOthers.r2 / eclOthers.r1 )^2.0
+		 toodeep = where(eclOthers.dep1 gt 1.0)
+		 if (toodeep[0] ne -1) then eclOthers[toodeep].dep1 = 1.0
+		 eclOthers.dep2 = dep2 
+		 eclOthers.compPlaInd = compPlaIndArr
+		 for q=0,burtNumber-1 do begin
+			 if WHERE(eclOthers[q].compPlaInd eq tra) eq -1 then eclOthers[q].isTransiting = 0
+			 if WHERE(eclOthers[q].compPlaInd eq tra) ne -1 then eclOthers[q].isTransiting = 1
+		 endfor
+		 t=0
+		 for r=0,N_ELEMENTS(compPlaInd)-1 do begin
+			 thisSystem = compPlaInd[r]
+			 nThisSystem = N_ELEMENTS(thisSystem)
+			 for s=0,nThisSystem-1 do begin
+				 eclOthers[t].mult = nThisSystem-1 ; number of other planets in this system
+				 t += 1
+			 endfor 
+		 endfor
+		 print, t
+		 eclOthers.dur1 = eclOthers.r1 * eclOthers.p * $ 
+							 sqrt(1.-(eclOthers.b)^2.) / (!PI*eclOthers.a*AU_IN_RSUN)
+		 eclOthers.dur2 = eclOthers.r1 * eclOthers.p * $ 
+							 sqrt(1.-(eclOthers.b)^2.) / (!PI*eclOthers.a*AU_IN_RSUN)
+		 eclOthers.gress1 = eclOthers.r2 * eclOthers.p / $
+							   (!PI*eclOthers.a*AU_IN_RSUN*sqrt(1.-(eclOthers.b)^2.))
+		 eclOthers.gress2 = eclOthers.r2 * eclOthers.p / $
+							   (!PI*eclOthers.a*AU_IN_RSUN*sqrt(1.-(eclOthers.b)^2.))
+	 endif
+	 
      r2 = planet_rad[tra]*REARTH_IN_RSUN
      dep2 = phot_ratio_planet(star[traid].teff, planet_teq[tra], star[traid].mag.t, $ 
 		 					  star[traid].mag.dm, r2, ph_p, tband)
@@ -327,10 +420,10 @@ function add_planets, star, pstruct, frac, ph_p, tband, err=err, $
 	 					   (!PI*planet_eclip.a*AU_IN_RSUN*sqrt(1.-(planet_eclip.b)^2.))
 
      pstruct=planet_eclip
+	 noEclComp=eclOthers
    endif
   endif
   print, 'Created ', ntra, ' transiting planets out of ', nplanets, ' around ', $
         nstars, ' stars.'
- 	;total(planet_multi gt 0), ' in multi systems'
   return, ntra
 end

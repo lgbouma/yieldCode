@@ -1,7 +1,7 @@
 PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
 	prototypeMode=prototypeMode,fCamCoord=fCamCoord,fTilesCounts=fTilesCounts, $
-	radCutoff=radCutoff
+	radCutoff=radCutoff,burtCatalog=burtCatalog
 
   TIC ; Grab initial system time
 
@@ -42,7 +42,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   tband_file = 'tband.csv'
 
   ; User-adjustable settings (yes, that's you!)
-  nparam = 69 ; output table width
+  nparam = 70 ; output table width
   fov = 24. ; degrees
   seg = 13  ; number of segments per hemisphere
   effarea = 69.1 ;43.9 ;54.9 ;100. ;54.9 ;69.1 ; in cm^2. 
@@ -116,8 +116,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
     fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
 
-	; If tile gets no pointings, skip tile.
-	if (cat[ii].npointings eq 0) then begin
+	; If tile gets no pointings (and in ps_only mode, for 'proper' ps alloc), skip tile.
+	if ((cat[ii].npointings eq 0) and (ps_only eq 1)) then begin
 		print, 'Skipping tileNum', fnums[ii], ' because it gets no pointings.'
 		continue
 	endif
@@ -183,13 +183,19 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	  ; created about 7000 stars on the tile.
       makeEclipseClock = TIC('makeEclipse-' + STRTRIM(ii, 2) + '-' + STRTRIM(jj, 2))
       ecliplen =  make_eclipse(targets, bkgnds, eclip_trial, frac_fits, $
-	  			  ph_fits, dartstruct, tic_fits, eclass, tband, pla_err=pla_err, $
-	 	          min_depth=min_depth, max_depth=max_depth, ps_only=ps_only)
+	  			  ph_fits, dartstruct, tic_fits, eclass, tband, noEclComp, pla_err=pla_err, $
+	 	          min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, $
+				  burtCatalog=burtCatalog)
       TOC, makeEclipseClock 
-
+	  
 	  ; Add coordinates to the eclipses
       if (ecliplen gt 0) then begin
-      	eclip_trial.trial = jj + 1
+		if burtCatalog eq 1 then begin ; passed back "noEclComp" with all eclipses/companions.
+			  DELVARX, eclip_trial
+			  eclip_trial = noEclComp ; _careful_. this is eclipCompStruct now.
+			  ecliplen = N_ELEMENTS(eclip_trial)
+		endif
+		eclip_trial.trial = jj + 1
 
 		; Get indices corresponding to random coordinates at this tile.
 		;TODO coordinate assignment procedure to be comp cheaper. (req's major local memory)
@@ -235,7 +241,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   
         if (ecliplen_tot gt 0) then eclip = struct_append(eclip, eclip_trial) $
         else eclip = eclip_trial
-        ecliplen_tot = ecliplen_tot + ecliplen
+        ecliplen_tot += ecliplen
       endif
     endfor
 
@@ -254,13 +260,15 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
           aspix=aspix, effarea=effarea, sys_limit=sys_limit, $ ;infil=sp_name,outfile=spo_name
           readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
           duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
-          subexptime=subexptime, dwell_time=orbit_period, downlink=downlink
+          subexptime=subexptime, dwell_time=orbit_period, downlink=downlink, $
+		  burtCatalog=burtCatalog
 		print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
 		TOC, eclipObserveClock 
 
         ;det = where(eclip.det1 or eclip.det2 or eclip.det) ; only saves detected transits/eclipses
-		det = WHERE(eclip.det or not(eclip.det)) ; saves all transits
+		det = WHERE(eclip.det or not(eclip.det)) ; will save all objects (any sysm w >=1 transiting pla)
       endif 
+	  ASSERT, ecliplen_tot gt 0, 'ecliplen_tot should be gt 0.'
       if (ecliplen_tot eq 0) then begin
       	det = where((targets[eclip.hostid].mag.ic lt detmag) or $ 
 	      (targets[eclip.hostid].mag.k lt detmag) or $
@@ -288,7 +296,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
                 [eclip[det].snreclp1], [eclip[det].gress1], $
                 [eclip[det].snreclp2], [eclip[det].gress2], $
                 [eclip[det].k], [eclip[det].snrhr], $
-	        [eclip[det].star_ph], [eclip[det].bk_ph], [eclip[det].zodi_ph], $
+                [eclip[det].star_ph], [eclip[det].bk_ph], [eclip[det].zodi_ph], $
                 [eclip[det].npix], [eclip[det].dil], [targets[detid].ffi], [eclip[det].npointings] ,$
                 [eclip[det].sat], [eclip[det].coord.fov_r], $
                 [eclip[det].class], [eclip[det].sep], $
@@ -297,14 +305,13 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
                 [eclip[det].cenerr1], [eclip[det].cenerr2], $
                 [eclip[det].var], [eclip[det].coord.healpix_n], $
                 [eclip[det].mult], [eclip[det].tmult], [eclip[det].pr], $
-                [bins], [targets[detid].companion.sep], [targets[targets[detid].companion.ind].mag.t], $
- 		[targets[detid].mag.dm], [targets[detid].age], [eclip[det].det], [eclip[det].det1], $
-	 	[eclip[det].det2], detid]
+                [bins], [targets[detid].companion.sep], $ 
+				[targets[targets[detid].companion.ind].mag.t], $
+                [targets[detid].mag.dm], [targets[detid].age], [eclip[det].det], [eclip[det].det1], $
+                [eclip[det].det2], eclip[det].hostid, eclip[det].isTransiting]
         idx = lindgen(ndet) + totdet
         star_out[idx,*] = tmp_star
         totdet += ndet
-
-      ; if keyword set FFI... then do a fancy write out procedure (e.g., write every 290 tiles)
       endif
       TOC, endClock 
       TOC, tileClock 

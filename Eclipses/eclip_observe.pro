@@ -4,9 +4,16 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 	ps_len=ps_len, ffi_len=ffi_len, saturation=saturation, $
 	sys_limit=sys_limit, duty_cycle=duty_cycle, $
         dwell_time=dwell_time, downlink=downlink, $
-        subexptime=subexptime
- REARTH_IN_RSUN = 0.0091705248
-;;;;;; basic parameters here
+        subexptime=subexptime, burtCatalog=burtCatalog
+;+
+; NAME: eclip_observe
+; PURPOSE: take in an eclipStruct (or, if burtCatalog, an eclipCompStruct)
+;	and find out which are detected. I think there is also "dilution" due to
+;	binaries going on in where. When does it get called? 16/02/12 I don't know.
+; IN:
+; OUT:
+;-
+  REARTH_IN_RSUN = 0.0091705248
   if (keyword_set(ps_len)) then ps_len=ps_len else ps_len = 2.0
   if (keyword_set(thresh)) then SNR_MIN=thresh else SNR_MIN = 7.0
   if (keyword_set(tranmin)) then NTRA_OBS_MIN = tranmin else NTRA_OBS_MIN = 2
@@ -46,8 +53,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   crind = dy*5 + dx
 
   vtf = [1D7, 6000., 5000., 4500., 1D0]
-  ;starvar = fltarr(n_elements(eclipse))
-
   
   ecid = eclipse.hostid
   print, 'Calculating number of eclipses'
@@ -76,10 +81,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     end
   end
 
-;  toolow = where(m1 lt 0)
-;  if (toolow[0] ne -1) then m1(toolow) + m1(toolow)+1.0
-;  toolow = where(m2 lt 0)
-;  if (toolow[0] ne -1) then m2(toolow) + m2(toolow)+1.0
   dayoff1 = (dr1 mod 1)*p 
   dayoff2 = (dr2 mod 1)*p
  
@@ -190,10 +191,17 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     eclipse[obs].snr1 = eclipse[obs].snreclp1 * sqrt(double(eclipse[obs].neclip_obs1))
     eclipse[obs].snr2 = eclipse[obs].snreclp2 * sqrt(double(eclipse[obs].neclip_obs2))
     eclipse[obs].snr  = sqrt(eclipse[obs].snr1^2. + eclipse[obs].snr2^2.)
+
 ;   decide if it is 'detected'.
+	if burtCatalog eq 1 then begin
+		det = WHERE(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
+			  (eclipse.snr ge SNR_MIN) and (eclipse.isTransiting eq 1))
+	endif else begin
+		det = WHERE(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
+			  (eclipse.snr ge SNR_MIN))
+	endelse
+
     ; Dilute
-    det = where(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
-	      (eclipse.snr ge SNR_MIN))
     if (det[0] ne -1) then begin
       ;print, 'Calculating noise again'
       detid = eclipse[det].hostid
@@ -314,15 +322,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       eclipse[det].cenerr2 = sqrt((xcennoise2s[ind]*xcenshift2s[ind]/censhift2)^2. + $
 		    (ycennoise2s[ind]*ycenshift2s[ind]/censhift2)^2.)
       ;eclipse[det].cenerr2 = xcennoise2s[ind]*ycennoise2s[ind]/den2
-        ;for ss=0,ndet-1 do eclipse[det[ss]].star_ph = star_ph[eclipse[det[ss]].npix-1,ss]
-          ;eclipse[obs].star_ph = reform(star_ph[eclipse[obs].npix-1, *])
-      ;if (bebdil[0] ne -1) then begin
-	; add it to the overall dilution
-        ;dil_ph[bebdil] = dil_ph[bebdil] + bebvec 
-        ;for kk=0, nbeb-1 do begin
-	;  beb_ph[*,kk] = total(bebvec[sind[*,bebdil[kk]],kk], /cumulative)
-        ;end
-      ;end
       
       ; Sort into the same pixel order as target star flux
       for jj=0,ndet-1 do begin
@@ -353,8 +352,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
         dilution[*,ii] = dil
         if (keyword_set(nodil)) then noises[*,ii] = noise $
 	else noises[*,ii] = dil*noise
-        ;shot_noises[*,ii] = shot_noise*1d6
-        ;print, median(shot_noise*1d6)
         if (ii eq 0) then eclipse[det].sat = (estar gt SATURATION)
       end
       noises = noises[*,(npix_min-1):(npix_max-1)]
@@ -364,7 +361,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       eclipse[det].dil = dilution[ind]
       eclipse[det].snrhr = 1. / minnoise
       for ss=0,ndet-1 do eclipse[det[ss]].star_ph = star_ph[eclipse[det[ss]].npix-1,ss]
-      ;eclipse[obs].star_ph = reform(star_ph[eclipse[obs].npix-1, *])
       
       ; Dilute the BEBs (and HEBs) now that we tricked aperture into excluding the bebs
       if (bebdil[0] ne -1) then begin
@@ -386,26 +382,23 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       eclipse[det].snr2 = eclipse[det].snreclp2 * sqrt(double(eclipse[det].neclip_obs2))
       eclipse[det].snr  = sqrt(eclipse[det].snr1^2. + eclipse[det].snr2^2.)
    
- 
-      ;eclipse[det].snrgress1 = eclipse[det].snreclp1 * $
-      ;		sqrt(2. * eclipse[det].neclp_obs1 * $
- ;		     REARTH_IN_RSUN * eclipse[obs].r2 / $
-;		    (6.0*eclipse[obs].r1*(1.0+eclipse[obs].b^2.)))
-
       det1 = where((eclipse.neclip_obs1 ge NTRA_OBS_MIN) and $
 	      (eclipse.snr1 ge SNR_MIN))
       det2 = where((eclipse.neclip_obs2 ge NTRA_OBS_MIN) and $
 	      (eclipse.snr2 ge SNR_MIN))
-      det = where(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
-	      (eclipse.snr ge SNR_MIN))
+      if burtCatalog eq 1 then begin ; why Peter wrote this twice? idk. but now I have to do the same.
+		det = WHERE(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
+			  (eclipse.snr ge SNR_MIN) and (eclipse.isTransiting eq 1))
+	  endif else begin
+		det = WHERE(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
+			  (eclipse.snr ge SNR_MIN))
+	  endelse
       if (det1[0] ne -1) then eclipse[det1].det1 = 1
       if (det2[0] ne -1) then eclipse[det2].det2 = 1
       if (det[0] ne -1)  then begin
         eclipse[det].det = 1
         print, 'Detected ', n_elements(det), ' eclipses.'
       endif
-      ;  detected = where(star.eclipse_hz.tra gt 0 and star.eclipse_hz.neclp1_obs ge NTRA_OBS_MIN and star.eclipse_hz.snr ge SNR_MIN)
-      ;  star[detected].eclipse_hz.det = 1
     end ;det if
   end ; obs if
 end ; PRO

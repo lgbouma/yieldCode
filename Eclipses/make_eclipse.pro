@@ -1,5 +1,6 @@
 function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefftic, $
-  eclass, tband, min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, pla_err=pla_err
+  eclass, tband, noEclComp, min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, pla_err=pla_err, $
+  burtCatalog=burtCatalog
 ;+
 ;NAME: make_eclipse
 ;PURPOSE: wrap around add_hebs, add_planets, add_ebs, add_bebs, which are the
@@ -20,6 +21,8 @@ function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefft
 ; 11. max_depth. Max '' (nominally 1).
 ; 12. ps_only. Bool value for whether or not only postage stamps.
 ; 13. pla_err. 0: (standard) nominal occurrence rates / +1: upper bounds / -1: lower bounds.
+; 14. noEclComp. `eclip` data structure containing the data from planets who have planets
+;		in their system that transit, although they do not (Burt Catalog relevant).
 ;OUTPUTS:
 ; 1. estruct, an array of eclip_struct objects. E.g., `make_eclipse` will make 3
 ;	  transiting planets out of a total of 78 created planets about 700 stars on
@@ -45,7 +48,9 @@ function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefft
   
   ; Add Planets to all target stars
   if (eclass[0]) then begin
-    gd = add_planets(sstruct, p_eclip, frac, ph_p, tband, err=pla_err, min_depth=min_depth, dressing=1, ps_only=ps_only)
+    gd = add_planets(sstruct, p_eclip, frac, ph_p, tband, noEclComp, err=pla_err, $ 
+					 min_depth=min_depth, dressing=1, ps_only=ps_only, $
+					 burtCatalog=burtCatalog)
     if (gd gt 0) then begin
       if (ecliplen gt 0) then estruct = struct_append(estruct, p_eclip) $ ; append eclipsing planets
       else estruct = p_eclip

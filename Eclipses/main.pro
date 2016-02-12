@@ -6,8 +6,8 @@ PRO main
                 0, $ ; HEBs
                 0  ] ; BTPs
   tile_wrapper, '/home/luke/Dropbox/tessSimulation/trilegal/', fnums, $
-	'temp.fits', $; output file name. Nb: fits files dont overwrite
-  	n_trial=10, $	; number of trials (10 good for reasonable statistics)
+	'burt-ps-nominal.fits', $; output file name. Nb: fits files dont overwrite
+  	n_trial=1, $	; number of trials (10 good for reasonable statistics)
 	eclass=eclass, $; from above
 	ps_only=1, $	; 1=only run postage stamps, 0=run ffis as well
 	detmag=0, $	; If you want the sim to return a magnitude-limited catalog, set this to the limit
@@ -19,5 +19,6 @@ PRO main
 	fCamCoord='../cameraPointings/ns_nominal_camCoord.dat', $ ;where cams pnt for this mission.
 	fTilesCounts='../cameraPointings/ns_nominal_tilesCounts.sav', $ ;pointingStruct w tileNum, coord, nPntg
 				; Clearly, fTilesCounts needs to _match_ fCamCoord (it's generated separately).
-	radCutoff=2.27 ; cutoff radius (in R_earth) for ps selection
+	radCutoff=2.27, $ ; cutoff radius (in R_earth) for ps selection
+	burtCatalog=1 ; are you making catalogs to send to Jenn Burt so she can plan for APF?
 END
