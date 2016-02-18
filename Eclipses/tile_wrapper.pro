@@ -42,7 +42,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   tband_file = 'tband.csv'
 
   ; User-adjustable settings (yes, that's you!)
-  nparam = 70 ; output table width
+  if burtCatalog eq 1 then nparam = 70 ; output table width
+  if burtCatalog eq 0 then nparam = 69
   fov = 24. ; degrees
   seg = 13  ; number of segments per hemisphere
   effarea = 69.1 ;43.9 ;54.9 ;100. ;54.9 ;69.1 ; in cm^2. 
@@ -269,8 +270,12 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 		print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
 		TOC, eclipObserveClock 
 
-        ;det = where(eclip.det1 or eclip.det2 or eclip.det) ; only saves detected transits/eclipses
-		det = WHERE(eclip.det or not(eclip.det)) ; will save all objects (any sysm w >=1 transiting pla)
+		if burtCatalog eq 0 then begin
+			det = where(eclip.det1 or eclip.det2 or eclip.det) ; only saves detected transits/eclipses
+		endif 
+		if burtCatalog eq 1 then begin
+			det = WHERE(eclip.det or not(eclip.det)) ; any sysm w/ >=1 transiting planet
+		endif
       endif 
 	  ASSERT, ecliplen_tot gt 0, 'ecliplen_tot should be gt 0.'
       if (ecliplen_tot eq 0) then begin
@@ -286,7 +291,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
         detid = eclip[det].hostid
         ndet = n_elements(det)
         bins = targets[detid].pri + 2*targets[detid].sec
-        tmp_star = [[eclip[det].trial], [targets[detid].mag.v], [targets[detid].mag.ic], $
+		if burtCatalog eq 1 then begin
+           tmp_star = [[eclip[det].trial], [targets[detid].mag.v], [targets[detid].mag.ic], $
                 [targets[detid].mag.t], [targets[detid].mag.j], $
                 [targets[detid].mag.h], [targets[detid].mag.k], [targets[detid].teff], $
                 [eclip[det].coord.elon], [eclip[det].coord.elat], $
@@ -313,6 +319,36 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 				[targets[targets[detid].companion.ind].mag.t], $
                 [targets[detid].mag.dm], [targets[detid].age], [eclip[det].det], [eclip[det].det1], $
                 [eclip[det].det2], eclip[det].hostid, eclip[det].isTransiting]
+		endif 
+		if burtCatalog eq 0 then begin ; standard non-transiting detected planets
+           tmp_star = [[eclip[det].trial], [targets[detid].mag.v], [targets[detid].mag.ic], $
+                [targets[detid].mag.t], [targets[detid].mag.j], $
+                [targets[detid].mag.h], [targets[detid].mag.k], [targets[detid].teff], $
+                [eclip[det].coord.elon], [eclip[det].coord.elat], $
+                [eclip[det].coord.glon], [eclip[det].coord.glat], $
+                [eclip[det].coord.ra], [eclip[det].coord.dec], $
+                [eclip[det].p], [eclip[det].a], [eclip[det].s], [eclip[det].cosi], $
+                [eclip[det].teff2], [eclip[det].m2], [eclip[det].r2], $
+                [eclip[det].dep1_eff], [eclip[det].dur1], [eclip[det].neclip_obs1], $
+                [eclip[det].teff1], [eclip[det].m1], [eclip[det].r1], $ 
+                [eclip[det].dep2_eff], [eclip[det].dur2], [eclip[det].neclip_obs2], $
+                [eclip[det].snreclp1], [eclip[det].gress1], $
+                [eclip[det].snreclp2], [eclip[det].gress2], $
+                [eclip[det].k], [eclip[det].snrhr], $
+                [eclip[det].star_ph], [eclip[det].bk_ph], [eclip[det].zodi_ph], $
+                [eclip[det].npix], [eclip[det].dil], [targets[detid].ffi], [eclip[det].npointings] ,$
+                [eclip[det].sat], [eclip[det].coord.fov_r], $
+                [eclip[det].class], [eclip[det].sep], $
+                [eclip[det].icsys],  [eclip[det].tsys],  [eclip[det].jsys], [eclip[det].kpsys], $ 
+                [eclip[det].censhift1], [eclip[det].censhift2], $
+                [eclip[det].cenerr1], [eclip[det].cenerr2], $
+                [eclip[det].var], [eclip[det].coord.healpix_n], $
+                [eclip[det].mult], [eclip[det].tmult], [eclip[det].pr], $
+                [bins], [targets[detid].companion.sep], $ 
+				[targets[targets[detid].companion.ind].mag.t], $
+                [targets[detid].mag.dm], [targets[detid].age], [eclip[det].det], [eclip[det].det1], $
+                [eclip[det].det2], eclip[det].hostid]
+		endif
         idx = lindgen(ndet) + totdet
         star_out[idx,*] = tmp_star
         totdet += ndet

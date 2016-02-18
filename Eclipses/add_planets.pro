@@ -21,7 +21,8 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 ; 10. min_depth: minimum transit depth. Called with 0.
 ; 11. ps_only: option from main for only giving planets about PS stars, or all stars.
 ; 12. burtCatalog: do you want an output eclip_trial with some objects that do NOT
-;		eclipse? (specifically: if at least one planet in system is detected, get the rest)
+;		eclipse? (specifically: if at least one planet in system is transiting, as-written
+;		we return all other planets in that system + that planet. Detection fine-tuning later)
 ; 13. noEclComp: companions of transiting planets that do not transit (burt catalog). Is
 ;		eclipCompStruct type (to keep it straight)
 ; OUTPUTS:
@@ -305,33 +306,33 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 	   endif
      endfor
 	 
-	 compPlaIndWithDupes = compPlaInd[*] ; copy all elements to new list (avoids reference dup)
-	 ; You only want unique compPlaInd entries, do this slow sort to get them.
-	 loopLen = N_ELEMENTS(compPlaIndWithDupes)
-	 if loopLen gt 1 then begin
-		 for i=0,(loopLen-1) do begin
-			 thisCompPl = compPlaIndWithDupes[i]
-			 duplicate = WHERE(thisCompPl eq compPlaInd)
-			 if N_ELEMENTS(duplicate) gt 1 then begin
-				 toRemove = duplicate[1:N_ELEMENTS(duplicate)-1]
-				 compPlaInd.REMOVE, toRemove
-			 endif
-		 endfor
-	 endif
-	 ; Now compPlaInd has unique indices of systems with at least 1 transiting planet. 
-
-     planet_eclip = replicate({eclipstruct}, ntra)
-	 compPlaIndArr = []
-	 for q=0,(N_ELEMENTS(compPlaInd)-1) do begin
-		compPlaIndArr = [compPlaIndArr, compPlaInd[q]] ; for counting
-	 endfor
-	 burtNumber = N_ELEMENTS(compPlaIndArr) ; how many planets are in systems w/ >=1 transiter
-	 cArr = compPlaIndArr
-	 cArrID = planet_hid[cArr]
-
-	 eclOthers = REPLICATE({eclipcompstruct}, burtNumber) ; array of burt eclipCompStruct objects
-
+	 planet_eclip = replicate({eclipstruct}, ntra)
 	 if burtCatalog eq 1 then begin ; clearly a bloated way to do this
+		 compPlaIndWithDupes = compPlaInd[*] ; copy all elements to new list (avoids reference dup)
+		 ; You only want unique compPlaInd entries, do this slow sort to get them.
+		 loopLen = N_ELEMENTS(compPlaIndWithDupes)
+		 if loopLen gt 1 then begin
+			 for i=0,(loopLen-1) do begin
+				 thisCompPl = compPlaIndWithDupes[i]
+				 duplicate = WHERE(thisCompPl eq compPlaInd)
+				 if N_ELEMENTS(duplicate) gt 1 then begin
+					 toRemove = duplicate[1:N_ELEMENTS(duplicate)-1]
+					 compPlaInd.REMOVE, toRemove
+				 endif
+			 endfor
+		 endif
+		 ; Now compPlaInd has unique indices of systems with at least 1 transiting planet. 
+
+		 compPlaIndArr = []
+		 for q=0,(N_ELEMENTS(compPlaInd)-1) do begin
+			compPlaIndArr = [compPlaIndArr, compPlaInd[q]] ; for counting
+		 endfor
+		 burtNumber = N_ELEMENTS(compPlaIndArr) ; how many planets are in systems w/ >=1 transiter
+		 cArr = compPlaIndArr
+		 cArrID = planet_hid[cArr]
+
+		 eclOthers = REPLICATE({eclipcompstruct}, burtNumber) ; array of burt eclipCompStruct objects
+
 		 r2 = planet_rad[cArr]*REARTH_IN_RSUN
 		 dep2 = phot_ratio_planet(star[cArrID].teff, planet_teq[cArr], star[cArrID].mag.t, $ 
 								  star[cArrID].mag.dm, r2, ph_p, tband)
@@ -420,7 +421,7 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 	 					   (!PI*planet_eclip.a*AU_IN_RSUN*sqrt(1.-(planet_eclip.b)^2.))
 
      pstruct=planet_eclip
-	 noEclComp=eclOthers
+	 if burtCatalog eq 1 then noEclComp=eclOthers
    endif
   endif
   print, 'Created ', ntra, ' transiting planets out of ', nplanets, ' around ', $
