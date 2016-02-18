@@ -122,7 +122,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 		print, 'Skipping tileNum', fnums[ii], ' because it gets no pointings.'
 		continue
 	endif
-	assert, cat[ii].npointings ne 0, 'Did not skip tile that is not observed.'
+	if ps_only eq 1 then assert, cat[ii].npointings ne 0, 'Did not skip tile that is not observed.'
 
     ; Gather the .sav files. These are starstructs. 
     print, 'Restoring files for tile ', fnums[ii]
@@ -152,7 +152,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     targets.ffi = 1 ; by definition all "target" stars will be in FFIs
     pri = where(targets.pri eq 1) ; target is primary star in system
     selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
-			minrad=radCutoff, rn_pix=15., npnt=cat[ii].npointings)
+			minrad=radCutoff, rn_pix=15., npnt=cat[ii].npointings, ps_only=ps_only)
     if (selpri[0] ne -1) then begin 
       targets[pri[selpri]].ffi=0
       secffi = targets[pri[selpri]].companion.ind
@@ -162,7 +162,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     sing = where((targets.pri eq 0) and (targets.sec eq 0)) ; targets.sec true are secondary of binary.
 	; LB 16: unclear why this isn't targets.sec eq 1...
     selsing = ps_sel(targets[sing].mag.t, targets[sing].teff, targets[sing].m, $
-		targets[sing].r, ph_fits, rn_pix=15., npnt=cat[ii].npointings)
+		targets[sing].r, ph_fits, rn_pix=15., npnt=cat[ii].npointings, ps_only=ps_only)
     if (selsing[0] ne -1) then begin 
       targets[sing[selsing]].ffi=0
       numps[ii] += n_elements(selsing)
