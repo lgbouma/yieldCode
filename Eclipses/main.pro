@@ -6,7 +6,7 @@ PRO main
                 0, $ ; HEBs
                 0  ] ; BTPs
   tile_wrapper, '/home/luke/Dropbox/tessSimulation/trilegal/', fnums, $
-	'burt-ps-nominal.fits', $; output file name. Nb: fits files dont overwrite
+	'temp-Pepper.fits', $; output file name. Nb: fits files dont overwrite
   	n_trial=1, $	; number of trials (10 good for reasonable statistics)
 	eclass=eclass, $; from above
 	ps_only=1, $	; 1=only run postage stamps, 0=run ffis as well
@@ -20,5 +20,6 @@ PRO main
 	fTilesCounts='../cameraPointings/ns_nominal_tilesCounts.sav', $ ;pointingStruct w tileNum, coord, nPntg
 				; Clearly, fTilesCounts needs to _match_ fCamCoord (it's generated separately).
 	radCutoff=2.27, $ ; cutoff radius (in R_earth) for ps selection
-	burtCatalog=1 ; are you making catalogs to send to Jenn Burt so she can plan for APF?
+	burtCatalog=1, $ ; are you making catalogs to send to Jenn Burt so she can plan APF RV followup?
+	pepperCatalog=0 ; are you putting together TSWG star catalogs?
 END

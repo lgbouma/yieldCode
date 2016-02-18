@@ -1,7 +1,7 @@
 PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
 	prototypeMode=prototypeMode,fCamCoord=fCamCoord,fTilesCounts=fTilesCounts, $
-	radCutoff=radCutoff,burtCatalog=burtCatalog
+	radCutoff=radCutoff,burtCatalog=burtCatalog,pepperCatalog=pepperCatalog
 
   TIC ; Grab initial system time
 
@@ -170,6 +170,10 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 
     ecliplen_tot = 0L
 
+	if pepperCatalog eq 1 then begin
+		pepperDat = pepperGetCat(targets, selpri, selsing) ; requires `.run pepperGetCat` pre-main
+	endif
+
 	; At this point in the sim, "targets" is an array of starStruct objs. E.g., if 
 	; PS only, it'll be of length about 7700 (->200k over all obs'd tiles).
 	; If with FFIs, presumably it'll be longer.
@@ -317,6 +321,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       TOC, tileClock 
     endif
   endfor ; end tile loop
+  if pepperCatalog eq 1 then WRITE_CSV, 'pepper-psStars.csv', pepperDat
   endfor ; end mission count loop
   TOC 
   print, 'Reached end at totdet = ', totdet
