@@ -75,7 +75,6 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 				0, $ ; HEBs
 				0  ] ; BTPs
 
-  ; Don't phuck with physics, though
   REARTH_IN_RSUN = 0.0091705248
   AU_IN_RSUN = 215.093990942
 
@@ -86,30 +85,21 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   numps = lonarr(numfil)
   ; Open the fits files
   frac_fits = mrdfits(frac_file)
-;  rad_fits = mrdfits(rad_file)/60. ; put into pixels
   ph_fits = mrdfits(ph_file)
   var_fits = mrdfits(var_file)
   readcol, 'tband.csv', lam, t
   tband = [[lam],[t]]
   cr_fits = fltarr(100,64)
-;  cr_fits = mrdfits(cr_file)
   restore, dart_file
   dartstruct = ss
   tic_fits = mrdfits(tic_file)
 
   SPAWN, 'cat main.pro' ; Print input file to log so you know what you did
 
-  ; Make random spherical coords
-  tempBigStarNumber = 5e6	; WARNING: no good for FFIs. Size set by available local memory.
-  print, 'Using ', tempBigStarNumber, ' as tempBigStarNumber to make coordinate list (WARNING).'
-  u = randomu(seed, tempBigStarNumber)
-  v = randomu(seed, tempBigStarNumber)
-  phi = 2.*!dpi*u
-  theta = acos(2.*v-1.)
-  ang2pix_ring, 16, theta, phi, ipring
-
+  ; Pre-allocate for output
+  bigOutNumber = 1e6
   totdet = 0L
-  star_out = dblarr(tempBigStarNumber+1E6*n_trial,nparam)
+  star_out = dblarr(bigOutNumber+1E6*n_trial,nparam)
 
   for mc=0, missionCount-1 do begin ; for nominal mission, then possible ext mission
   RESTORE, fTilesCounts ; restores a "catalog" of tile #s and their npointings.
@@ -144,10 +134,22 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	    numbkgnd[ii], ' numdeeps', numdeeps[ii]
     delvarx, star
     TOC, fopenClock
+
+	; Restore ~201k random coordinates for this tile from coordLib.
+	RESTORE, '../../coordLib/coordHPnum'+STRTRIM(STRING(fnums[ii]),2)+'.sav'
+	ipring = coordNum[0,*]
+	glon = coordNum[1,*]
+	glat = coordNum[2,*]
+	elon = coordNum[3,*]
+	elat = coordNum[4,*]
+	ra = coordNum[5,*]
+	dec = coordNum[6,*]
+	DELVARX, coordNum
     
     ; Choose which stars are postage stamps vs ffis
 	; With 16/02/01 debug: postage stamps are only allowed on tiles that get >=1 pnting.
 	; Their distributions are weighted according to the # of pointings their _tile_ gets.
+	; With 16/02/19 coordt switch: wouldn't it make sense to assign stars coords by now?
     psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
     targets.ffi = 1 ; by definition all "target" stars will be in FFIs
     pri = where(targets.pri eq 1) ; target is primary star in system
@@ -177,9 +179,11 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 
 	; At this point in the sim, "targets" is an array of starStruct objs. E.g., if 
 	; PS only, it'll be of length about 7700 (->200k over all obs'd tiles).
-	; If with FFIs, presumably it'll be longer.
+	; If with FFIs at bad points, it's like 50k (maybe more)
 
-    ;Loop over each trial to generate eclipses
+    ;Loop over each trial to generate eclipses. We guarantee that each eclip (as long as not
+	;in multi system) gets unique coordinates for same _trial_. Not true for diff trials.
+	;In fact, diff trials get the same coords (but diff inclinations -> diff transiters)
     for jj=0,n_trial-1 do begin
       ; Re-radomize the inclination
       targets.cosi = -1 + 2.0*randomu(seed, n_elements(targets))
@@ -203,28 +207,18 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 		eclip_trial.trial = jj + 1
 
 		; Get indices corresponding to random coordinates at this tile.
-		;TODO coordinate assignment procedure to be comp cheaper. (req's major local memory)
         thispix = where(ipring eq fnums[ii])
         ncoord = n_elements(thispix)
-        coordind = lindgen(ecliplen) mod ncoord
-
-		if (ecliplen gt ncoord) then $
-        	print, "Needed ", ecliplen, " coords but got ", ncoord, " on tile ", ii
-
-
-        glon = phi[thispix[coordind]]*180./!dpi
-        glat = (theta[thispix[coordind]]-!dpi/2.)*180./!dpi
-        ; Transform from galactic healpix to ecliptic observations
-        euler, glon, glat, elon, elat, select=6
-        euler, glon, glat, ra, dec, select=2
+        coordind = lindgen(ecliplen)
+		assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/02/05
 
 		; Assign every eclipse object in eclip_trial unique coords
-        eclip_trial.coord.elon = elon
-        eclip_trial.coord.elat = elat
-        eclip_trial.coord.ra = ra
-        eclip_trial.coord.dec = dec
-        eclip_trial.coord.glon = glon
-        eclip_trial.coord.glat = glat
+        eclip_trial.coord.elon = elon[thispix[coordind]]
+        eclip_trial.coord.elat = elat[thispix[coordind]]
+        eclip_trial.coord.ra = ra[thispix[coordind]]
+        eclip_trial.coord.dec = dec[thispix[coordind]]
+        eclip_trial.coord.glon = glon[thispix[coordind]]
+        eclip_trial.coord.glat = glat[thispix[coordind]]
         eclip_trial.coord.healpix_n = fnums[ii]
 
 		; If you assigned different coords to eclipses w/ same host id, no good.
@@ -241,9 +235,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 			endfor
 		endif
 
-		assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/02/05
 		assert, (ecliplen gt 0), 'Want eclips to be seen. Interesting for FFI multi questions'
-  
         if (ecliplen_tot gt 0) then eclip = struct_append(eclip, eclip_trial) $
         else eclip = eclip_trial
         ecliplen_tot += ecliplen
