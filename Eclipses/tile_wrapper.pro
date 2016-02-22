@@ -100,6 +100,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   bigOutNumber = 1e6
   totdet = 0L
   star_out = dblarr(bigOutNumber+1E6*n_trial,nparam)
+  nPepperEls = 9
+  pepperDat = DBLARR(1, nPepperEls)
 
   for mc=0, missionCount-1 do begin ; for nominal mission, then possible ext mission
   RESTORE, fTilesCounts ; restores a "catalog" of tile #s and their npointings.
@@ -174,7 +176,8 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
     ecliplen_tot = 0L
 
 	if pepperCatalog eq 1 then begin
-		pepperDat = pepperGetCat(targets, selpri, selsing) ; requires `.run pepperGetCat` pre-main
+		pepperDatThisTile = pepperGetCat(targets, selpri, selsing) ; requires `.run pepperGetCat` pre-main
+		pepperDat = [pepperDat, pepperDatThisTIle]
 	endif
 
 	; At this point in the sim, "targets" is an array of starStruct objs. E.g., if 
@@ -349,7 +352,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       TOC, tileClock 
     endif
   endfor ; end tile loop
-  if pepperCatalog eq 1 then WRITE_CSV, 'pepper-psStars.csv', pepperDat
+  if pepperCatalog eq 1 then WRITE_CSV, 'pepperMinPtEq1.csv', pepperDat
   endfor ; end mission count loop
   TOC 
   print, 'Reached end at totdet = ', totdet

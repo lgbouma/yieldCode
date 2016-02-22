@@ -3,8 +3,6 @@ function pepperGetCat, targets, selpri, selsing
 ; PURPOSE: produce a catalog (of TRILEGAL star properties)to be saved to 
 ; 	CSV good for filtergraph comparison.
 ;-
-	nPepperEls = 9
-	pepperDat = LONARR(1,nPepperEls)
 
 	; Some day, I may get around to giving stars coordinates.
     v = [targets[selpri].mag.v, targets[selsing].mag.v]
@@ -18,7 +16,6 @@ function pepperGetCat, targets, selpri, selsing
     m = [targets[selpri].m, targets[selsing].m]
 
     pepperDatThisTile = [[v], [ic], [j], [kp], [t], [teff], [logg], [rad], [m]]
-    pepperDat = [pepperDat, pepperDatThisTile]
 
-	RETURN, pepperDat
+	RETURN, pepperDatThisTile
 END
