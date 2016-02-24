@@ -1,7 +1,8 @@
 PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
 	prototypeMode=prototypeMode,fCamCoord=fCamCoord,fTilesCounts=fTilesCounts, $
-	radCutoff=radCutoff,burtCatalog=burtCatalog,pepperCatalog=pepperCatalog
+	radCutoff=radCutoff,burtCatalog=burtCatalog,pepperCatalog=pepperCatalog, $
+	asteroseisCalc=asteroseisCalc
 
   TIC ; Grab initial system time
 
