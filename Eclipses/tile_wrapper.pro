@@ -149,12 +149,11 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	DELVARX, coordNum
     
     ; Choose which stars are postage stamps vs ffis
-	; With 16/02/01 debug: postage stamps are only allowed on tiles that get >=1 pnting.
 	; Their distributions are weighted according to the # of pointings their _tile_ gets.
 	; With 16/02/19 coordt switch: wouldn't it make sense to assign stars coords by now?
     psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
     targets.ffi = 1 ; by definition all "target" stars will be in FFIs
-    pri = where(targets.pri eq 1) ; target is primary star in system
+    pri = where(targets.pri eq 1) ; target is primary star in binary system
     selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
 			minrad=radCutoff, rn_pix=15., npnt=cat[ii].npointings, ps_only=ps_only)
     if (selpri[0] ne -1) then begin 
@@ -164,7 +163,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
       numps[ii] += n_elements(selpri)
     endif
     sing = where((targets.pri eq 0) and (targets.sec eq 0)) ; targets.sec true are secondary of binary.
-	; LB 16: unclear why this isn't targets.sec eq 1...
+	; 16/02/23: the logic is now clear: you only select about primary of binary and single stars
     selsing = ps_sel(targets[sing].mag.t, targets[sing].teff, targets[sing].m, $
 		targets[sing].r, ph_fits, rn_pix=15., npnt=cat[ii].npointings, ps_only=ps_only)
     if (selsing[0] ne -1) then begin 
