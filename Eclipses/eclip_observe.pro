@@ -192,6 +192,8 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     eclipse[obs].snr2 = eclipse[obs].snreclp2 * sqrt(double(eclipse[obs].neclip_obs2))
     eclipse[obs].snr  = sqrt(eclipse[obs].snr1^2. + eclipse[obs].snr2^2.)
 
+    print, 'SNR for these eclipses is', eclipse.snr
+
 ;   decide if it is 'detected'.
 	if burtCatalog eq 1 then begin
 		det = WHERE(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
@@ -381,7 +383,9 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       eclipse[det].snr1 = eclipse[det].snreclp1 * sqrt(double(eclipse[det].neclip_obs1))
       eclipse[det].snr2 = eclipse[det].snreclp2 * sqrt(double(eclipse[det].neclip_obs2))
       eclipse[det].snr  = sqrt(eclipse[det].snr1^2. + eclipse[det].snr2^2.)
-   
+      
+      print, 'SNR for these eclipses are', eclipse.snr
+
       det1 = where((eclipse.neclip_obs1 ge NTRA_OBS_MIN) and $
 	      (eclipse.snr1 ge SNR_MIN))
       det2 = where((eclipse.neclip_obs2 ge NTRA_OBS_MIN) and $
@@ -397,7 +401,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       if (det2[0] ne -1) then eclipse[det2].det2 = 1
       if (det[0] ne -1)  then begin
         eclipse[det].det = 1
-        print, 'Detected ', n_elements(det), ' eclipses.'
+        print, '!!!Detected ', n_elements(det), ' eclipses!!!'
       endif
     end ;det if
   end ; obs if

@@ -1,6 +1,6 @@
 function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 	aspix=aspix, fov=fov, dressing=dressing, min_depth=min_depth, ps_only=ps_only, $
-	burtCatalog=burtCatalog
+	burtCatalog=burtCatalog, asteroseisCalc=asteroseisCalc
 ;+
 ; NAME: add_planets
 ; PURPOSE: Over each trial (usually 1-10), over each tile (1-2908), populate
@@ -25,6 +25,7 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 ;		we return all other planets in that system + that planet. Detection fine-tuning later)
 ; 13. noEclComp: companions of transiting planets that do not transit (burt catalog). Is
 ;		eclipCompStruct type (to keep it straight)
+; 14. asteroseisCalc: bool
 ; OUTPUTS:
 ; 1. ntra: number of transiting planets
 ; 2. pstruct: an _eclip_Struct that gets passed back to `make_eclipse` with all added 

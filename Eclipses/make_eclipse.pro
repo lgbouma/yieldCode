@@ -1,6 +1,6 @@
 function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefftic, $
   eclass, tband, noEclComp, min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, pla_err=pla_err, $
-  burtCatalog=burtCatalog
+  burtCatalog=burtCatalog, asteroseisCalc=asteroseisCalc, startNum=startNum
 ;+
 ;NAME: make_eclipse
 ;PURPOSE: wrap around add_hebs, add_planets, add_ebs, add_bebs, which are the
@@ -48,9 +48,11 @@ function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefft
   
   ; Add Planets to all target stars
   if (eclass[0]) then begin
-    gd = add_planets(sstruct, p_eclip, frac, ph_p, tband, noEclComp, err=pla_err, $ 
-					 min_depth=min_depth, dressing=1, ps_only=ps_only, $
-					 burtCatalog=burtCatalog)
+    outAddSG = addSubGiantPlanets(sstruct, p_eclip, frac, ph_p, tband, noEclComp, err=pla_err, $
+                            min_depth=min_depth, dressing=1, ps_only=ps_only, $
+                            burtCatalog=burtCatalog, startNum=startNum)
+    gd = outAddSG[0]
+    nPlanetsThisTrial = outAddSG[1]
     if (gd gt 0) then begin
       if (ecliplen gt 0) then estruct = struct_append(estruct, p_eclip) $ ; append eclipsing planets
       else estruct = p_eclip
@@ -95,5 +97,5 @@ function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefft
 ;      ecliplen = n_elements(egd)
 ;    endif else ecliplen = 0  
 ;  endif
-  return, ecliplen
+  return, [ecliplen, nPlanetsThisTrial]
 END

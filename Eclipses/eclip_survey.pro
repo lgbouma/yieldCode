@@ -19,7 +19,7 @@ pro eclip_survey, fov, eclip, fCamCoord
 ;-
 
 	nEcl = n_elements(eclip)
-	print, 'Surveying', nEcl, ' possible eclipses (computing #pntgs and field angles).'
+	print, 'Surveying', nEcl, ' possible eclipses over all trials (getting #pntgs and field angles).'
 
 	MT = 'I,I,F,F' ; get camera pointing info for observing specification 
 	READCOL, fCamCoord, F=FMT, pointingNumber, camNumber, camElat, camElong 
