@@ -11,12 +11,12 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   randomIndices = SORT(ROUND(randomNumbers * (numfil-1)))
   randomIndices = randomIndices[0:ROUND(numfil/10)]
   assert, (prototypeMode eq 3) or (prototypeMode eq 2) or (prototypeMode eq 1) $
-  		or (prototypeMode eq 0), 'Invalid prototype mode assignment.'
+          or (prototypeMode eq 0), 'Invalid prototype mode assignment.'
   case prototypeMode of
-  	0: fnums = fnums			; look at all tiles
-	1: fnums = fnums[randomIndices[0]]	; look at a single random tile
-	2: fnums = fnums[randomIndices[0:9]] ; look at 10 random tiles
-	3: fnums = fnums[randomIndices] 	; look at ~300 random tiles
+    0: fnums = fnums			; look at all tiles
+    1: fnums = fnums[randomIndices[0]]	; look at a single random tile
+    2: fnums = fnums[randomIndices[0:9]] ; look at 10 random tiles
+    3: fnums = fnums[randomIndices] 	; look at ~300 random tiles
   endcase
   numfil = N_ELEMENTS(fnums)
 
@@ -29,7 +29,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   assert, nCamPointings eq N_ELEMENTS(pointingNumber), $
 	  'Need as many camPointings as elements passed in camPointingFile'
   assert, (nPointings eq 26) or (nPointings eq 52), $
-  	  'Invalid camera pointings specified. Need 2 years or 4 years.'
+    'Invalid camera pointings specified. Need 2 years or 4 years.'
   if nPointings eq 52 then extMission = 1 else extMission = 0
   if extMission then missionCount = 2 else missionCount = 1 ; count used in for loop
 
@@ -70,10 +70,10 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   aspix = fov*3600/(CCD_PIX+GAP_PIX) ;20.43 ; arcseconds per pixel
   if (keyword_set(eclass)) then eclass = eclass else $
   eclass = [	1, $ ; Planets
-				0, $ ; EBs
-				0, $ ; BEBs
-				0, $ ; HEBs
-				0  ] ; BTPs
+              0, $ ; EBs
+              0, $ ; BEBs
+              0, $ ; HEBs
+              0  ] ; BTPs
 
   REARTH_IN_RSUN = 0.0091705248
   AU_IN_RSUN = 215.093990942
@@ -116,26 +116,26 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	endif
 	if ps_only eq 1 then assert, cat[ii].npointings ne 0, 'Did not skip tile that is not observed.'
 
-    ; Gather the .sav files. These are starstructs. 
-    print, 'Restoring files for tile ', fnums[ii]
-    fname = fpath+'hp'+string(fnums[ii], format='(I04)')+'.sav'
-    print, fname
-    restore, fname
-    targets = star ;"bright catalog", 2.11e7 total stars. 
-    numtargets[ii] = n_elements(targets)
-    fname = fpath+'bk'+string(fnums[ii], format='(I04)')+'.sav'
-    restore, fname
-    bkgnds = star ;[where(star.mag.ksys gt 15)]
-    numbkgnd[ii] = n_elements(bkgnds)
-    fname = fpath+'dp'+string(fnums[ii], format='(I04)')+'.sav'
-    restore, fname
-    deeps = star ;[where(star.mag.tsys gt 21)]
-    numdeeps[ii] = n_elements(deeps)
-    ; Debugging
-    print, 'File #', ii, 'tile #', fnums[ii], ' numtargets', numtargets[ii], ' numbkgnd', $ 
-	    numbkgnd[ii], ' numdeeps', numdeeps[ii]
-    delvarx, star
-    TOC, fopenClock
+  ; Gather the .sav files. These are starstructs. 
+  print, 'Restoring files for tile ', fnums[ii]
+  fname = fpath+'hp'+string(fnums[ii], format='(I04)')+'.sav'
+  print, fname
+  restore, fname
+  targets = star ;"bright catalog", 2.11e7 total stars. 
+  numtargets[ii] = n_elements(targets)
+  fname = fpath+'bk'+string(fnums[ii], format='(I04)')+'.sav'
+  restore, fname
+  bkgnds = star ;[where(star.mag.ksys gt 15)]
+  numbkgnd[ii] = n_elements(bkgnds)
+  fname = fpath+'dp'+string(fnums[ii], format='(I04)')+'.sav'
+  restore, fname
+  deeps = star ;[where(star.mag.tsys gt 21)]
+  numdeeps[ii] = n_elements(deeps)
+  ; Debugging
+  print, 'File #', ii, 'tile #', fnums[ii], ' numtargets', numtargets[ii], ' numbkgnd', $ 
+    numbkgnd[ii], ' numdeeps', numdeeps[ii]
+  delvarx, star
+  TOC, fopenClock
 
 	; Restore ~201k random coordinates for this tile from coordLib.
 	RESTORE, '../../coordLib/coordHPnum'+STRTRIM(STRING(fnums[ii]),2)+'.sav'
@@ -148,145 +148,145 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 	dec = coordNum[6,*]
 	DELVARX, coordNum
     
-    ; Choose which stars are postage stamps vs ffis
+  ; Choose which stars are postage stamps vs ffis
 	; Their distributions are weighted according to the # of pointings their _tile_ gets.
 	; With 16/02/19 coordt switch: wouldn't it make sense to assign stars coords by now?
-    psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
-    targets.ffi = 1 ; by definition all "target" stars will be in FFIs
-    pri = where(targets.pri eq 1) ; target is primary star in binary system
-    selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
-			minrad=radCutoff, rn_pix=15., npnt=cat[ii].npointings, ps_only=ps_only)
-    if (selpri[0] ne -1) then begin 
-      targets[pri[selpri]].ffi=0
-      secffi = targets[pri[selpri]].companion.ind
-      targets[secffi].ffi=0
-      numps[ii] += n_elements(selpri)
-    endif
-    sing = where((targets.pri eq 0) and (targets.sec eq 0)) ; targets.sec true are secondary of binary.
-	; 16/02/23: the logic is now clear: you only select about primary of binary and single stars
-    selsing = ps_sel(targets[sing].mag.t, targets[sing].teff, targets[sing].m, $
-		targets[sing].r, ph_fits, rn_pix=15., npnt=cat[ii].npointings, ps_only=ps_only)
-    if (selsing[0] ne -1) then begin 
-      targets[sing[selsing]].ffi=0
-      numps[ii] += n_elements(selsing)
-    endif
-    TOC, psSelClock  
+  psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
+  targets.ffi = 1 ; by definition all "target" stars will be in FFIs
+  pri = where(targets.pri eq 1) ; target is primary star in binary system
+  selpri = ps_sel(targets[pri].mag.t, targets[pri].teff, targets[pri].m, targets[pri].r, ph_fits, $
+    minrad=radCutoff, rn_pix=15., npnt=cat[ii].npointings, ps_only=ps_only)
+  if (selpri[0] ne -1) then begin 
+    targets[pri[selpri]].ffi=0
+    secffi = targets[pri[selpri]].companion.ind
+    targets[secffi].ffi=0
+    numps[ii] += n_elements(selpri)
+  endif
+  sing = where((targets.pri eq 0) and (targets.sec eq 0)) ; targets.sec true are secondary of binary.
+  ; 16/02/23: the logic is now clear: you only select about primary of binary and single stars
+  selsing = ps_sel(targets[sing].mag.t, targets[sing].teff, targets[sing].m, $
+  targets[sing].r, ph_fits, rn_pix=15., npnt=cat[ii].npointings, ps_only=ps_only)
+  if (selsing[0] ne -1) then begin 
+    targets[sing[selsing]].ffi=0
+    numps[ii] += n_elements(selsing)
+  endif
+  TOC, psSelClock  
 
-    ecliplen_tot = 0L
+  ecliplen_tot = 0L
 
 	if pepperCatalog eq 1 then begin
-		pepperDatThisTile = pepperGetCat(targets, selpri, selsing) ; requires `.run pepperGetCat` pre-main
-		pepperDat = [pepperDat, pepperDatThisTIle]
+    pepperDatThisTile = pepperGetCat(targets, selpri, selsing) ; requires `.run pepperGetCat` pre-main
+    pepperDat = [pepperDat, pepperDatThisTIle]
 	endif
 
 	; At this point in the sim, "targets" is an array of starStruct objs. E.g., if 
 	; PS only, it'll be of length about 7700 (->200k over all obs'd tiles).
 	; If with FFIs at bad points, it's like 50k (maybe more)
 
-    ;Loop over each trial to generate eclipses. We guarantee that each eclip (as long as not
+  ;Loop over each trial to generate eclipses. We guarantee that each eclip (as long as not
 	;in multi system) gets unique coordinates for same _trial_. Not true for diff trials.
 	;In fact, diff trials get the same coords (but diff inclinations -> diff transiters)
-    for jj=0,n_trial-1 do begin
-      ; Re-radomize the inclination
-      targets.cosi = -1 + 2.0*randomu(seed, n_elements(targets))
+  for jj=0,n_trial-1 do begin
+    ; Re-radomize the inclination
+    targets.cosi = -1 + 2.0*randomu(seed, n_elements(targets))
 
-      ; Add eclipses. E.g., eclip_trial will come back with 2 eclipses, from 80 planets
-	  ; created about 7000 stars on the tile.
-      makeEclipseClock = TIC('makeEclipse-' + STRTRIM(ii, 2) + '-' + STRTRIM(jj, 2))
-      ecliplen =  make_eclipse(targets, bkgnds, eclip_trial, frac_fits, $
-	  			  ph_fits, dartstruct, tic_fits, eclass, tband, noEclComp, pla_err=pla_err, $
-	 	          min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, $
-				  burtCatalog=burtCatalog)
-      TOC, makeEclipseClock 
-	  
-	  ; Add coordinates to the eclipses
+    ; Add eclipses. E.g., eclip_trial will come back with 2 eclipses, from 80 planets
+    ; created about 7000 stars on the tile.
+    makeEclipseClock = TIC('makeEclipse-' + STRTRIM(ii, 2) + '-' + STRTRIM(jj, 2))
+    ecliplen =  make_eclipse(targets, bkgnds, eclip_trial, frac_fits, $
+          ph_fits, dartstruct, tic_fits, eclass, tband, noEclComp, pla_err=pla_err, $
+          min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, $
+          burtCatalog=burtCatalog)
+    TOC, makeEclipseClock
+
+    ; Add coordinates to the eclipses
+    if (ecliplen gt 0) then begin
+      if burtCatalog eq 1 then begin ; passed back "noEclComp" with all eclipses/companions.
+        DELVARX, eclip_trial
+        eclip_trial = noEclComp ; _careful_. this is eclipCompStruct now.
+        ecliplen = N_ELEMENTS(eclip_trial)
+      endif
+      eclip_trial.trial = jj + 1
+
+      ; Get indices corresponding to random coordinates at this tile.
+      thispix = where(ipring eq fnums[ii])
+      ncoord = n_elements(thispix)
+      coordind = lindgen(ecliplen)
+      assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/02/05
+
+      ; Assign every eclipse object in eclip_trial unique coords
+      eclip_trial.coord.elon = elon[thispix[coordind]]
+      eclip_trial.coord.elat = elat[thispix[coordind]]
+      eclip_trial.coord.ra = ra[thispix[coordind]]
+      eclip_trial.coord.dec = dec[thispix[coordind]]
+      eclip_trial.coord.glon = glon[thispix[coordind]]
+      eclip_trial.coord.glat = glat[thispix[coordind]]
+      eclip_trial.coord.healpix_n = fnums[ii]
+
+      ; If you assigned different coords to eclipses w/ same host id, no good.
+      ; loop over eclip_trial & set coord to whatever was first assigned to first eclip.
       if (ecliplen gt 0) then begin
-		if burtCatalog eq 1 then begin ; passed back "noEclComp" with all eclipses/companions.
-			  DELVARX, eclip_trial
-			  eclip_trial = noEclComp ; _careful_. this is eclipCompStruct now.
-			  ecliplen = N_ELEMENTS(eclip_trial)
-		endif
-		eclip_trial.trial = jj + 1
-
-		; Get indices corresponding to random coordinates at this tile.
-        thispix = where(ipring eq fnums[ii])
-        ncoord = n_elements(thispix)
-        coordind = lindgen(ecliplen)
-		assert, (ecliplen lt ncoord), 'You need unique coords for each eclip.' ; LB 16/02/05
-
-		; Assign every eclipse object in eclip_trial unique coords
-        eclip_trial.coord.elon = elon[thispix[coordind]]
-        eclip_trial.coord.elat = elat[thispix[coordind]]
-        eclip_trial.coord.ra = ra[thispix[coordind]]
-        eclip_trial.coord.dec = dec[thispix[coordind]]
-        eclip_trial.coord.glon = glon[thispix[coordind]]
-        eclip_trial.coord.glat = glat[thispix[coordind]]
-        eclip_trial.coord.healpix_n = fnums[ii]
-
-		; If you assigned different coords to eclipses w/ same host id, no good.
-		; loop over eclip_trial & set coord to whatever was first assigned to first eclip.
-		if (ecliplen gt 0) then begin
-			hostList = eclip_trial.hostid
-			for kk=0, ecliplen-1 do begin
-				thisEclipHostID = hostList[kk]
-				sameStar = WHERE(thisEclipHostID eq hostList)
-				nMultiEclipse = N_ELEMENTS(sameStar) ; # of eclipsing planets sameStar has
-				for ll=0, nMultiEclipse-1 do begin
-					eclip_trial[sameStar[ll]].coord = eclip_trial[sameStar[0]].coord
-				endfor
-			endfor
-		endif
-
-		assert, (ecliplen gt 0), 'Want eclips to be seen. Interesting for FFI multi questions'
-        if (ecliplen_tot gt 0) then eclip = struct_append(eclip, eclip_trial) $
-        else eclip = eclip_trial
-        ecliplen_tot += ecliplen
+        hostList = eclip_trial.hostid
+        for kk=0, ecliplen-1 do begin
+          thisEclipHostID = hostList[kk]
+          sameStar = WHERE(thisEclipHostID eq hostList)
+          nMultiEclipse = N_ELEMENTS(sameStar) ; # of eclipsing planets sameStar has
+          for ll=0, nMultiEclipse-1 do begin
+            eclip_trial[sameStar[ll]].coord = eclip_trial[sameStar[0]].coord
+          endfor
+        endfor
       endif
-    endfor
 
-    if (ecliplen_tot gt 0) then begin
-      if (detmag eq 0) then begin
-        ; Survey: figure out npointings and field angles
-		eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
-        eclip_survey, fov, eclip, fCamCoord
-		TOC, eclipSurveyClock 
+      assert, (ecliplen gt 0), 'Want eclips to be seen. Interesting for FFI multi questions'
+      if (ecliplen_tot gt 0) then eclip = struct_append(eclip, eclip_trial) $
+      else eclip = eclip_trial
+      ecliplen_tot += ecliplen
+    endif
+  endfor
+
+  if (ecliplen_tot gt 0) then begin
+    if (detmag eq 0) then begin
+      ; Survey: figure out npointings and field angles
+      eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
+      eclip_survey, fov, eclip, fCamCoord
+      TOC, eclipSurveyClock 
       
-        ; Observe      
-		eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
-		print, 'Entering eclip_observe with nelements eclip:', N_ELEMENTS(eclip)
-        eclip_observe, eclip, targets, bkgnds, deeps, $
-          frac_fits, ph_fits, cr_fits, var_fits, $
-          aspix=aspix, effarea=effarea, sys_limit=sys_limit, $ ;infil=sp_name,outfile=spo_name
-          readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
-          duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
-          subexptime=subexptime, dwell_time=orbit_period, downlink=downlink, $
-		  burtCatalog=burtCatalog
-		print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
-		TOC, eclipObserveClock 
+      ; Observe      
+      eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
+      print, 'Entering eclip_observe with nelements eclip:', N_ELEMENTS(eclip)
+      eclip_observe, eclip, targets, bkgnds, deeps, $
+              frac_fits, ph_fits, cr_fits, var_fits, $
+              aspix=aspix, effarea=effarea, sys_limit=sys_limit, $
+              readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
+              duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
+              subexptime=subexptime, dwell_time=orbit_period, downlink=downlink, $
+              burtCatalog=burtCatalog
+      print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
+      TOC, eclipObserveClock 
 
-		if burtCatalog eq 0 then begin
-			det = where(eclip.det1 or eclip.det2 or eclip.det) ; only saves detected transits/eclipses
-		endif 
-		if burtCatalog eq 1 then begin
-			det = WHERE(eclip.det or not(eclip.det)) ; any sysm w/ >=1 transiting planet
-		endif
+      if burtCatalog eq 0 then begin
+        det = where(eclip.det1 or eclip.det2 or eclip.det) ; only saves detected transits/eclipses
       endif 
-	  ASSERT, ecliplen_tot gt 0, 'ecliplen_tot should be gt 0.'
-      if (ecliplen_tot eq 0) then begin
-      	det = where((targets[eclip.hostid].mag.ic lt detmag) or $ 
-	      (targets[eclip.hostid].mag.k lt detmag) or $
-		  (targets[eclip.hostid].mag.v lt detmag) or $
-	      (eclip.icsys lt detmag) or (eclip.kpsys lt detmag))
-      	print, "This never should be printed!"
+      if burtCatalog eq 1 then begin
+        det = WHERE(eclip.det or not(eclip.det)) ; any sysm w/ >=1 transiting planet
       endif
+    endif 
+	  ASSERT, ecliplen_tot gt 0, 'ecliplen_tot should be gt 0.'
+    if (ecliplen_tot eq 0) then begin
+      det = where((targets[eclip.hostid].mag.ic lt detmag) or $ 
+            (targets[eclip.hostid].mag.k lt detmag) or $
+            (targets[eclip.hostid].mag.v lt detmag) or $
+            (eclip.icsys lt detmag) or (eclip.kpsys lt detmag))
+      print, "This never should be printed!"
+    endif
       
-      endClock = TIC('endClock-' + STRTRIM(ii, 2))
-      if (det[0] ne -1) then begin
-        detid = eclip[det].hostid
-        ndet = n_elements(det)
-        bins = targets[detid].pri + 2*targets[detid].sec
-		if burtCatalog eq 1 then begin
-           tmp_star = [[eclip[det].trial], [targets[detid].mag.v], [targets[detid].mag.ic], $
+    endClock = TIC('endClock-' + STRTRIM(ii, 2))
+    if (det[0] ne -1) then begin
+      detid = eclip[det].hostid
+      ndet = n_elements(det)
+      bins = targets[detid].pri + 2*targets[detid].sec
+      if burtCatalog eq 1 then begin
+        tmp_star = [[eclip[det].trial], [targets[detid].mag.v], [targets[detid].mag.ic], $
                 [targets[detid].mag.t], [targets[detid].mag.j], $
                 [targets[detid].mag.h], [targets[detid].mag.k], [targets[detid].teff], $
                 [eclip[det].coord.elon], [eclip[det].coord.elat], $
@@ -301,7 +301,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
                 [eclip[det].snreclp2], [eclip[det].gress2], $
                 [eclip[det].k], [eclip[det].snrhr], $
                 [eclip[det].star_ph], [eclip[det].bk_ph], [eclip[det].zodi_ph], $
-                [eclip[det].npix], [eclip[det].dil], [targets[detid].ffi], [eclip[det].npointings] ,$
+                [eclip[det].npix], [eclip[det].dil], [targets[detid].ffi], [eclip[det].npointings], $
                 [eclip[det].sat], [eclip[det].coord.fov_r], $
                 [eclip[det].class], [eclip[det].sep], $
                 [eclip[det].icsys],  [eclip[det].tsys],  [eclip[det].jsys], [eclip[det].kpsys], $ 
@@ -310,47 +310,47 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
                 [eclip[det].var], [eclip[det].coord.healpix_n], $
                 [eclip[det].mult], [eclip[det].tmult], [eclip[det].pr], $
                 [bins], [targets[detid].companion.sep], $ 
-				[targets[targets[detid].companion.ind].mag.t], $
+                [targets[targets[detid].companion.ind].mag.t], $
                 [targets[detid].mag.dm], [targets[detid].age], [eclip[det].det], [eclip[det].det1], $
                 [eclip[det].det2], eclip[det].hostid, eclip[det].isTransiting]
-		endif 
-		if burtCatalog eq 0 then begin ; standard non-transiting detected planets
-           tmp_star = [[eclip[det].trial], [targets[detid].mag.v], [targets[detid].mag.ic], $
-                [targets[detid].mag.t], [targets[detid].mag.j], $
-                [targets[detid].mag.h], [targets[detid].mag.k], [targets[detid].teff], $
-                [eclip[det].coord.elon], [eclip[det].coord.elat], $
-                [eclip[det].coord.glon], [eclip[det].coord.glat], $
-                [eclip[det].coord.ra], [eclip[det].coord.dec], $
-                [eclip[det].p], [eclip[det].a], [eclip[det].s], [eclip[det].cosi], $
-                [eclip[det].teff2], [eclip[det].m2], [eclip[det].r2], $
-                [eclip[det].dep1_eff], [eclip[det].dur1], [eclip[det].neclip_obs1], $
-                [eclip[det].teff1], [eclip[det].m1], [eclip[det].r1], $ 
-                [eclip[det].dep2_eff], [eclip[det].dur2], [eclip[det].neclip_obs2], $
-                [eclip[det].snreclp1], [eclip[det].gress1], $
-                [eclip[det].snreclp2], [eclip[det].gress2], $
-                [eclip[det].k], [eclip[det].snrhr], $
-                [eclip[det].star_ph], [eclip[det].bk_ph], [eclip[det].zodi_ph], $
-                [eclip[det].npix], [eclip[det].dil], [targets[detid].ffi], [eclip[det].npointings] ,$
-                [eclip[det].sat], [eclip[det].coord.fov_r], $
-                [eclip[det].class], [eclip[det].sep], $
-                [eclip[det].icsys],  [eclip[det].tsys],  [eclip[det].jsys], [eclip[det].kpsys], $ 
-                [eclip[det].censhift1], [eclip[det].censhift2], $
-                [eclip[det].cenerr1], [eclip[det].cenerr2], $
-                [eclip[det].var], [eclip[det].coord.healpix_n], $
-                [eclip[det].mult], [eclip[det].tmult], [eclip[det].pr], $
-                [bins], [targets[detid].companion.sep], $ 
-				[targets[targets[detid].companion.ind].mag.t], $
-                [targets[detid].mag.dm], [targets[detid].age], [eclip[det].det], [eclip[det].det1], $
-                [eclip[det].det2], eclip[det].hostid]
-		endif
-        idx = lindgen(ndet) + totdet
-        star_out[idx,*] = tmp_star
-        totdet += ndet
+      endif 
+      if burtCatalog eq 0 then begin ; standard non-transiting detected planets
+        tmp_star = [[eclip[det].trial], [targets[detid].mag.v], [targets[detid].mag.ic], $
+                  [targets[detid].mag.t], [targets[detid].mag.j], $
+                  [targets[detid].mag.h], [targets[detid].mag.k], [targets[detid].teff], $
+                  [eclip[det].coord.elon], [eclip[det].coord.elat], $
+                  [eclip[det].coord.glon], [eclip[det].coord.glat], $
+                  [eclip[det].coord.ra], [eclip[det].coord.dec], $
+                  [eclip[det].p], [eclip[det].a], [eclip[det].s], [eclip[det].cosi], $
+                  [eclip[det].teff2], [eclip[det].m2], [eclip[det].r2], $
+                  [eclip[det].dep1_eff], [eclip[det].dur1], [eclip[det].neclip_obs1], $
+                  [eclip[det].teff1], [eclip[det].m1], [eclip[det].r1], $ 
+                  [eclip[det].dep2_eff], [eclip[det].dur2], [eclip[det].neclip_obs2], $
+                  [eclip[det].snreclp1], [eclip[det].gress1], $
+                  [eclip[det].snreclp2], [eclip[det].gress2], $
+                  [eclip[det].k], [eclip[det].snrhr], $
+                  [eclip[det].star_ph], [eclip[det].bk_ph], [eclip[det].zodi_ph], $
+                  [eclip[det].npix], [eclip[det].dil], [targets[detid].ffi], [eclip[det].npointings] ,$
+                  [eclip[det].sat], [eclip[det].coord.fov_r], $
+                  [eclip[det].class], [eclip[det].sep], $
+                  [eclip[det].icsys],  [eclip[det].tsys],  [eclip[det].jsys], [eclip[det].kpsys], $ 
+                  [eclip[det].censhift1], [eclip[det].censhift2], $
+                  [eclip[det].cenerr1], [eclip[det].cenerr2], $
+                  [eclip[det].var], [eclip[det].coord.healpix_n], $
+                  [eclip[det].mult], [eclip[det].tmult], [eclip[det].pr], $
+                  [bins], [targets[detid].companion.sep], $ 
+                  [targets[targets[detid].companion.ind].mag.t], $
+                  [targets[detid].mag.dm], [targets[detid].age], [eclip[det].det], [eclip[det].det1], $
+                  [eclip[det].det2], eclip[det].hostid]
       endif
-      TOC, endClock 
-      TOC, tileClock 
+      idx = lindgen(ndet) + totdet
+      star_out[idx,*] = tmp_star
+      totdet += ndet
     endif
-  endfor ; end tile loop
+    TOC, endClock 
+    TOC, tileClock 
+  endif
+  endfor ; end tile loop (n.b., dropped indent to keep legible)
   if pepperCatalog eq 1 then WRITE_CSV, 'pepperMinPtEq1.csv', pepperDat
   endfor ; end mission count loop
   TOC 
