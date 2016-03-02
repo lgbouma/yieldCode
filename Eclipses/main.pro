@@ -6,7 +6,7 @@ PRO main
                 0, $ ; HEBs
                 0  ] ; BTPs
   tile_wrapper, '../../trilegal/', fnums, $
-    'asteroseisOut.fits', $; output file name. Nb: fits files dont overwrite
+    'astseis-ps-trueTar.fits', $; output file name. Nb: fits files dont overwrite
     n_trial=10, $	; number of trials (10 good for reasonable statistics)
     eclass=eclass, $; from above
     ps_only=1, $	; 1=only run postage stamps, 0=run ffis as well

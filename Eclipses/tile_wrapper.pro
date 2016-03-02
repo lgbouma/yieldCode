@@ -107,7 +107,7 @@ PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
   nPepperEls = 9
   pepperDat = DBLARR(1, nPepperEls)
 
-  inDat = read_csv_col('../asteroseis/asteroseisStars.csv')
+  inDat = read_csv_col('../asteroseis/asteroseisStars-2.csv')
   nSG = n_elements(indat.glon)
   PRINT, 'Total ', nSG, ' possible subgiant stars', STRING(10B)
 
