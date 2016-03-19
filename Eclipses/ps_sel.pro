@@ -1,7 +1,6 @@
 function ps_sel, tmag, teff, mass, rad, ph_p, $ 
   minrad=minrad, per=per, rn_pix=rn_pix, geom_area=geom_area, npnt=npnt, ps_only=ps_only
 ;+
-;NAME: ps_sel
 ;PURPOSE: Select stars that are postage stamps in this healpix tile. 
 ;		(down to resolution of healpix tiles, at the time of writing). 
 ;INPUTS:
@@ -22,15 +21,11 @@ function ps_sel, tmag, teff, mass, rad, ph_p, $
 ;RETURNS:
 ;	sel: stars selected as postage stamps (an array of their indices).
 ;COMMENTS:
-;	Description of method Section6.7 S+2015.
-;	As of S+2015 publication, summing # postage stamps from final line 
-;	gave the 196k number. This was a bug, since the selection process miscounted
-;	whether or not the PSs got any observing time.
-;	npnt in S+15 is in 'npnt.fits'. It gives all tiles at least one pointing.
-;
+;	Description of method Section6.7 S+2015. As of S+15 process miscounted
+;	PS observing time (gave all at least one pointing) (see 'npts.fits')
 ;	Bug fix: 2016-01-31, Luke Bouma. Implemented in tile_wrapper as "fix" of
 ;	npnt_fits by skipping entire tile if tile has no postage stamps (& is ps_only).
-;   In this case, ps_sel.pro should never be called.
+;   	In this case, ps_sel.pro should never be called.
 
 	nStars = N_ELEMENTS(tmag)		; number of stars (total) for this tile
 	if (KEYWORD_SET(minrad)) then minrad=minrad else minrad=2.27 ; diff from Sullivan+ 2015 value.
@@ -65,7 +60,7 @@ function ps_sel, tmag, teff, mass, rad, ph_p, $
 	rn = rn_pix*sqrt(4.0*exptime/2.0) ; read noise. Read/stack every 2sec, *4 for CCDs(?)
 	minphot = 1.5*(1.+sqrt(1.+4.*sig^2.*rn^2.))/(2.*sig^2.)
 	; note minphot/(exptime*geom_area) is the minimum flux required for signal detection
-	; also pretty clear here that you can't have exptime = 0...
+	; also pretty clear here that shouldn't have exptime = 0, but idl doesn't raise div0 errors...
 	sel = where(ph_star gt (minphot/(exptime*geom_area)) and teff gt 1500 and teff lt 15000)
 
 	print, 'Selecting ', n_elements(sel),' postage stamps out of ', nstars, ' stars.'

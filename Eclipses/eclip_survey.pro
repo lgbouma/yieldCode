@@ -25,8 +25,8 @@ pro eclip_survey, fov, eclip, fCamCoord
 	READCOL, fCamCoord, F=FMT, pointingNumber, camNumber, camElat, camElong 
 	nPointings = MAX(pointingNumber)+1 ; 26 pntgs 2yr, 52 4yr
 	nCams = 4
-    nCamPointings = nPointings * nCams
-    assert, nCamPointings eq N_ELEMENTS(pointingNumber), $
+  nCamPointings = nPointings * nCams
+  assert, nCamPointings eq N_ELEMENTS(pointingNumber), $
 	    'Need as many camPointings as elements passed in camPointingFile'
 
 	;CCD info
@@ -44,37 +44,37 @@ pro eclip_survey, fov, eclip, fCamCoord
 	; fancier b/c we want CCD gaps and field angles.
 
 	for i=0, nCamPointings-1 do begin ; loop over camera pointings
-        make_astr, astr, $       ; build astrometry structure from input params
-        crpix=ccdCtr, $      ; indices of reference pixel (center of image)
-        crval=[camElong[i], camElat[i]], $ ; lon & lat of reference pixel
-        delta=delt, $        ; degrees per pixel at reference pixel location
-        ctype=['RA---TAN', 'DEC--TAN']  ; coordt type, RA & DEC is fine.
+    make_astr, astr, $       ; build astrometry structure from input params
+      crpix=ccdCtr, $      ; indices of reference pixel (center of image)
+      crval=[camElong[i], camElat[i]], $ ; lon & lat of reference pixel
+      delta=delt, $        ; degrees per pixel at reference pixel location
+      ctype=['RA---TAN', 'DEC--TAN']  ; coordt type, RA & DEC is fine.
 
 		ad2xy, eclip.coord.elon, eclip.coord.elat, astr, x, y
 
 		; 16/02/02 LB: this logic seems fine. "-1." probably shouldn't be there, but
 		; negligible effect for 4k*4k pixels.
-		onChip =   ( $ ; Lower left
-					   ((x gt 0.0) and $
-						(x lt (ccdPix-gapPix)/2.-1.) and $
-						(y gt 0.0) and $
-						(y lt (ccdPix-gapPix)/2.-1.)) $
-					   or $ ; Lower Right
-					   ((x gt (ccdPix+gapPix)/2.-1.) and $
-						(x lt (ccdPix+gapPix)-1.) and $
-						(y gt 0.0) and $
-						(y lt (ccdPix-gapPix)/2.-1.)) $
-					   or $ ; Upper Right
-					   ((x gt (ccdPix+gapPix)/2.-1.) and $
-						(x lt (ccdPix+gapPix)-1.) and $
-						(y gt (ccdPix+gapPix)/2.-1.) and $
-						(y lt (ccdPix+gapPix)-1.)) $
-					   or $ ; Upper Left
-					   ((x gt 0.0) and $
-						(x lt (ccdPix-gapPix)/2.-1.) and $
-						(y gt (ccdPix+gapPix)/2.-1.) and $
-						(y lt (ccdPix+gapPix)-1.)))
-		
+		onChip = ( $ ; Lower left
+             ((x gt 0.0) and $
+             (x lt (ccdPix-gapPix)/2.-1.) and $
+             (y gt 0.0) and $
+             (y lt (ccdPix-gapPix)/2.-1.)) $
+             or $ ; Lower Right
+             ((x gt (ccdPix+gapPix)/2.-1.) and $
+             (x lt (ccdPix+gapPix)-1.) and $
+             (y gt 0.0) and $
+             (y lt (ccdPix-gapPix)/2.-1.)) $
+             or $ ; Upper Right
+             ((x gt (ccdPix+gapPix)/2.-1.) and $
+             (x lt (ccdPix+gapPix)-1.) and $
+             (y gt (ccdPix+gapPix)/2.-1.) and $
+             (y lt (ccdPix+gapPix)-1.)) $
+             or $ ; Upper Left
+             ((x gt 0.0) and $
+             (x lt (ccdPix-gapPix)/2.-1.) and $
+             (y gt (ccdPix+gapPix)/2.-1.) and $
+             (y lt (ccdPix+gapPix)-1.)))
+
 		;Remember you're calling this subroutine for every tile. Thus there will be
 		;many pointings which do not see that tile. Logic below this is Peter's.	
 		if TOTAL(onChip) gt 0 then begin
@@ -89,7 +89,7 @@ pro eclip_survey, fov, eclip, fCamCoord
 	    eclip[chipind].coord.fov_r = r/float(new_npointings[chipind]) + $
 	    float(prev_npointings[chipind])*eclip[chipind].coord.fov_r/float(new_npointings[chipind])
 	    old_onChip = onChip
-	   	endif
+    endif
 	endfor
 
 	; Determine FOV index

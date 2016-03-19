@@ -6,7 +6,7 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 ; PURPOSE: Over each trial (usually 1-10), over each tile (1-2908), populate
 ;	the stars on this trial with ecipsing objects.
 ; INPUTS: 
-; 1. star: a starStruct object (called from targets in tile_wrapper), selected for postage 
+; 1. star: an outStarStruct object (called from targets in tile_wrapper), selected for postage 
 ; 	stamps and FFIs.
 ; 2. pstruct: passed a dummy name, will be populated with an eclipStruct of eclipsing planet
 ;	data.
@@ -131,298 +131,203 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
              total(round((rate_dressing + psig_dressing) * ncoolstars))
   print, 'making ', nplanets, ' planets.'
   if (nplanets gt 0) then begin
-     ; Pre-allocate for speed
-     ;planet = replicate(template_planet, total(nplanets))
-     planet_rad = dblarr(nplanets)
-     planet_per = dblarr(nplanets)
-     planet_hid = lonarr(nplanets) - 99 ; array of "-99"'s, length nPlanets
-     idx0 = 0L
-     for i=0,(n_elements(fressin_period)-2) do begin
-        for j=(n_elements(fressin_radius)-2),0,-1 do begin
-		   thisrate = rate_fressin[i,j]
-           if err then thisrate = thisrate + sig_fressin[i,j]*randomn(seed);
-		   binplanets = round(thisrate * nhotstars)
-           if (binplanets gt 0) then begin 
-              ; planet_per is either 0 or a smaller number since period is increasing.
-              ; 1. Find the bad periods
-              bd_ind = where((planet_per ge fressin_period[i]/1.2))
-			  ; 2. Find the remaining periods
-              bd_hid = where((hot_companion_p lt fressin_period[i+1]*5.0) and $
-							(hot_companion_p gt fressin_period[i]/5.0))
-              if (bd_ind[0] ne -1) then gd_hid = setdifference(hotstars, planet_hid[bd_ind]) $
-			  else gd_hid = hotstars
-              if (bd_hid[0] ne -1) then gd_hid = setdifference(gd_hid, bd_hid)
-			  if (gd_hid[0] ne -1) then begin
-                ngdhot = n_elements(gd_hid)
-                if (binplanets lt ngdhot) then begin
-                  rand_inds = sort(randomu(seed, ngdhot))
-                  use_inds = rand_inds[0:binplanets-1]
-                  hostids = gd_hid[use_inds]
-                endif else begin 
-  	          print, 'needed ', binplanets, ' but got ', ngdhot, ' hot ones' 
-                  hostids = gd_hid
-                  binplanets = ngdhot
-                endelse
-                ;endif else hostids = gd_hid[floor(double(ngdhot)*randomu(seed, binplanets))]
-                if(j eq 0) then radpow = 0.0 else radpow = -1.7
-                randomp, periods, -1.0, binplanets, $
-					range_x = [fressin_period[i], fressin_period[i+1]], seed=seed
-                randomp, radii, radpow, binplanets, $
-					range_x = [fressin_radius[j], fressin_radius[j+1]], seed=seed
-                ;tmp_planet.r = radii
-                ;tmp_planet.p = periods
-                ; Period check
-                for k=0, (binplanets-1) do begin
-                  same_host = where(planet_hid eq hostids[k])
-                  if(total(planet_per[same_host] gt periods[k]/1.2 )) then begin
-					print, 'added ', periods[k], ' to ', planet_per[same_host]
-					stop
-				endif
-                endfor
-                ;if ((n_elements(bd_ind) gt 10) and (max(idx0) gt nhotstars)) then stop
-                idx = lindgen(binplanets) + idx0
-				planet_per[idx] = periods
-				planet_rad[idx] = radii
-				planet_hid[idx] = hostids
-                ;planet[idx] = tmp_planet
-                ;delvar, tmp_planet
-                ;if (binplanets gt 3) then stop  
-
-                idx0 = max(idx) + 1
-              endif
+    ; Pre-allocate for speed
+    ;planet = replicate(template_planet, total(nplanets))
+    planet_rad = dblarr(nplanets)
+    planet_per = dblarr(nplanets)
+    planet_hid = lonarr(nplanets) - 99 ; array of "-99"'s, length nPlanets
+    idx0 = 0L
+    for i=0,(n_elements(fressin_period)-2) do begin
+      for j=(n_elements(fressin_radius)-2),0,-1 do begin
+        thisrate = rate_fressin[i,j]
+        if err then thisrate = thisrate + sig_fressin[i,j]*randomn(seed);
+        binplanets = round(thisrate * nhotstars)
+        if (binplanets gt 0) then begin 
+           ; planet_per is either 0 or a smaller number since period is increasing.
+           ; 1. Find the bad periods
+           bd_ind = where((planet_per ge fressin_period[i]/1.2))
+           ; 2. Find the remaining periods
+           bd_hid = where((hot_companion_p lt fressin_period[i+1]*5.0) and $
+           (hot_companion_p gt fressin_period[i]/5.0))
+           if (bd_ind[0] ne -1) then gd_hid = setdifference(hotstars, planet_hid[bd_ind]) $
+           else gd_hid = hotstars
+           if (bd_hid[0] ne -1) then gd_hid = setdifference(gd_hid, bd_hid)
+           if (gd_hid[0] ne -1) then begin
+             ngdhot = n_elements(gd_hid)
+             if (binplanets lt ngdhot) then begin
+               rand_inds = sort(randomu(seed, ngdhot))
+               use_inds = rand_inds[0:binplanets-1]
+               hostids = gd_hid[use_inds]
+             endif else begin 
+               print, 'needed ', binplanets, ' but got ', ngdhot, ' hot ones' 
+               hostids = gd_hid
+               binplanets = ngdhot
+             endelse
+             if(j eq 0) then radpow = 0.0 else radpow = -1.7
+             randomp, periods, -1.0, binplanets, $
+               range_x = [fressin_period[i], fressin_period[i+1]], seed=seed
+             randomp, radii, radpow, binplanets, $
+               range_x = [fressin_radius[j], fressin_radius[j+1]], seed=seed
+             ; Period check
+             for k=0, (binplanets-1) do begin
+               same_host = where(planet_hid eq hostids[k])
+               if(total(planet_per[same_host] gt periods[k]/1.2 )) then begin
+                 print, 'added ', periods[k], ' to ', planet_per[same_host]
+                 stop
+               endif
+             endfor
+             idx = lindgen(binplanets) + idx0
+             planet_per[idx] = periods
+             planet_rad[idx] = radii
+             planet_hid[idx] = hostids
+             
+             idx0 = max(idx) + 1
            endif
-        endfor
-     endfor
-     if (keyword_set(dressing)) then begin
-       for i=0,(n_elements(dressing_period)-2) do begin
+        endif
+      endfor
+    endfor
+    if (keyword_set(dressing)) then begin
+      for i=0,(n_elements(dressing_period)-2) do begin
         for j=(n_elements(dressing_radius)-2),0,-1 do begin
-            thisrate = rate_dressing[i,j]
-	    if err then begin
-	       thisrand = randomn(seed);
-	       if (thisrand gt 0) then thisrate = thisrate + psig_dressing[i,j]*thisrand $
-	       else thisrate = thisrate + nsig_dressing[i,j]*thisrand
-           end
-           binplanets = round(thisrate * ncoolstars)
-		   ;print, 'binplanets in:', binplanets, ' per:', dressing_period[i], ' rad:', dressing_radius[j]
-           if (binplanets gt 0) then begin
-              bd_ind = where(planet_per ge dressing_period[i]/1.2)
-              bd_hid = where((cool_companion_p lt dressing_period[i+1]*5.0) and $ 
-				  			(cool_companion_p gt dressing_period[i]/5.0))
-		   if (bd_ind[0] ne -1) then gd_hid = setdifference(coolstars, planet_hid[bd_ind]) $
-	       else gd_hid = coolstars
-	       if (bd_hid[0] ne -1) then gd_hid = setdifference(gd_hid, bd_hid)
-              if (gd_hid[0] ne -1) then begin
-                ngdcool = n_elements(gd_hid)
-                if (binplanets lt ngdcool) then begin
-                  rand_inds = sort(randomu(seed, ngdcool))
-                  hostids = gd_hid[rand_inds[0:binplanets-1]]
-                endif else begin
-  	              print, 'needed ', binplanets, ' but got ', ngdcool, ' cool ones'
-                  hostids = gd_hid
-                  binplanets = ngdcool
-                endelse
-                ;endif else hostids = gd_hid[floor(double(ngdcool)*randomu(seed, binplanets))]
-                if(j lt 2) then radpow = 0.0 else if (j eq 2) then radpow = -1 else radpow = -1.7
-                randomp, periods, -1.0, binplanets, $
-					range_x = [dressing_period[i], dressing_period[i+1]], seed=seed
-                randomp, radii, radpow, binplanets, $
-					range_x = [dressing_radius[j], dressing_radius[j+1]], seed=seed
-                ;tmp_planet.r = radii
-                ;tmp_planet.p = periods
-                idx = lindgen(binplanets) + idx0
-                planet_per[idx] = periods
-	        planet_rad[idx] = radii
-                planet_hid[idx] = hostids
-                ;print, i, j, binplanets, n_elements(tmp_planet), n_elements(idx), $
-				;max(idx)/float(total(nplanets))
-                ;planet[idx] = tmp_planet
-                ;delvar, tmp_planet
-                idx0 = max(idx) + 1
-             endif
-           endif
+          thisrate = rate_dressing[i,j]
+          if err then begin
+            thisrand = randomn(seed);
+            if (thisrand gt 0) then thisrate = thisrate + psig_dressing[i,j]*thisrand $
+            else thisrate = thisrate + nsig_dressing[i,j]*thisrand
+          endif
+          binplanets = round(thisrate * ncoolstars)
+          ;print, 'binplanets in:', binplanets, ' per:', dressing_period[i], ' rad:', dressing_radius[j]
+          if (binplanets gt 0) then begin
+            bd_ind = where(planet_per ge dressing_period[i]/1.2)
+            bd_hid = where((cool_companion_p lt dressing_period[i+1]*5.0) and $ 
+                     (cool_companion_p gt dressing_period[i]/5.0))
+            if (bd_ind[0] ne -1) then gd_hid = setdifference(coolstars, planet_hid[bd_ind]) $
+            else gd_hid = coolstars
+            if (bd_hid[0] ne -1) then gd_hid = setdifference(gd_hid, bd_hid)
+            if (gd_hid[0] ne -1) then begin
+              ngdcool = n_elements(gd_hid)
+              if (binplanets lt ngdcool) then begin
+                rand_inds = sort(randomu(seed, ngdcool))
+                hostids = gd_hid[rand_inds[0:binplanets-1]]
+              endif else begin
+                print, 'needed ', binplanets, ' but got ', ngdcool, ' cool ones'
+                hostids = gd_hid
+                binplanets = ngdcool
+              endelse
+              ;endif else hostids = gd_hid[floor(double(ngdcool)*randomu(seed, binplanets))]
+              if(j lt 2) then radpow = 0.0 else if (j eq 2) then radpow = -1 else radpow = -1.7
+              randomp, periods, -1.0, binplanets, $
+                range_x = [dressing_period[i], dressing_period[i+1]], seed=seed
+              randomp, radii, radpow, binplanets, $
+                range_x = [dressing_radius[j], dressing_radius[j+1]], seed=seed
+              idx = lindgen(binplanets) + idx0
+              planet_per[idx] = periods
+              planet_rad[idx] = radii
+              planet_hid[idx] = hostids
+              idx0 = max(idx) + 1
+            endif
+          endif
         endfor
-     endfor
-   endif
-   planet_per = planet_per[0:idx0-1]
-   planet_rad = planet_rad[0:idx0-1]
-   planet_hid = planet_hid[0:idx0-1]
-   nplanets = idx0
-   ; Tally multi-planet systems
-   ; Work out orbital distance and impact parameter
-   allid = planet_hid
-   planet_a = (star[allid].m)^(1./3.) * (planet_per/365.25)^(2./3.); in AU
-   planet_s = (star[allid].r)^2.0 * $
-			  (star[allid].teff/5777.0)^4. / (planet_a)^2. ; incident flux wrt sun-earth value
-   ; Equilibrium Temp.
-   planet_teq = (star[allid].teff)*sqrt(star[allid].r/(2.*planet_a*AU_IN_RSUN))
-   ; Impact parameter
-   planet_b = (planet_a*AU_IN_RSUN / star[allid].r) * star[allid].cosi; assumes circular orbit
-   ; Stellar radius in AU
-   min_a = 2.*star[allid].r/AU_IN_RSUN
+      endfor
+    endif
+    planet_per = planet_per[0:idx0-1]
+    planet_rad = planet_rad[0:idx0-1]
+    planet_hid = planet_hid[0:idx0-1]
+    nplanets = idx0
+    ; Tally multi-planet systems
+    ; Work out orbital distance and impact parameter
+    allid = planet_hid
+    planet_a = (star[allid].m)^(1./3.) * (planet_per/365.25)^(2./3.); in AU
+    planet_s = (star[allid].r)^2.0 * $
+               (star[allid].teff/5777.0)^4. / (planet_a)^2. ; incident flux wrt sun-earth value
+    ; Equilibrium Temp.
+    planet_teq = (star[allid].teff)*sqrt(star[allid].r/(2.*planet_a*AU_IN_RSUN))
+    ; Impact parameter
+    planet_b = (planet_a*AU_IN_RSUN / star[allid].r) * star[allid].cosi; assumes circular orbit
+    ; Stellar radius in AU
+    min_a = 2.*star[allid].r/AU_IN_RSUN
   
-   ; Weiss & Marcy 2014:
-   planet_m = dblarr(nplanets)
-   lomass = where(planet_rad lt 1.5)
-   if (lomass[0] ne -1) then planet_m[lomass] = 0.440*(planet_rad[lomass])^3. + $
-	   											0.614*(planet_rad[lomass])^4.
-   himass = where(planet_rad ge 1.5)
-   if (himass[0] ne -1) then planet_m[himass] = 2.69*(planet_rad[himass])^0.93
-   ; RV amplitude
-   planet_k = RV_AMP*planet_per^(-1./3.) * planet_m * $ 
-	sqrt(1.0-star[allid].cosi^2.) * (star[allid].m)^(-2./3.) 
+    ; Weiss & Marcy 2014:
+    planet_m = dblarr(nplanets)
+    lomass = where(planet_rad lt 1.5)
+    if (lomass[0] ne -1) then planet_m[lomass] = 0.440*(planet_rad[lomass])^3. + $
+                              0.614*(planet_rad[lomass])^4.
+    himass = where(planet_rad ge 1.5)
+    if (himass[0] ne -1) then planet_m[himass] = 2.69*(planet_rad[himass])^0.93
+    ; RV amplitude
+    planet_k = RV_AMP*planet_per^(-1./3.) * planet_m * $ 
+               sqrt(1.0-star[allid].cosi^2.) * (star[allid].m)^(-2./3.) 
 
-   ; compPlaInd holds indices of nontransiting planets in systems w/ at least one transiting planet
-   ; transPlaInd holds indices of transiting planets
-   if burtCatalog eq 1 then begin 
-	   compPlaInd = LIST() 
-	   transPlaInd = LIST()
-   endif
+    ; compPlaInd holds indices of nontransiting planets in systems w/ at least one transiting planet
+    ; transPlaInd holds indices of transiting planets
+    assert, burtCatalog ne 1, 'so i can clean up this hacky mess'
 
-   ; Select transiting planets, and then work out transit properties
-   dep1 = (planet_rad*REARTH_IN_RSUN / star[allid].r )^2.0
-   tra = where((abs(planet_b) lt 1.0) and (planet_a gt min_a) and (dep1 gt min_depth))
-   if (tra[0] ne -1) then begin ; if you have at least one transiting planet
-     traid = planet_hid[tra] ; hostIDs of transiting planets
-     ntra = n_elements(tra)
-     planet_multi = intarr(ntra)
-     planet_tmulti = intarr(ntra)
-     planet_pr = fltarr(ntra)
-     for t=0,(ntra-1) do begin ; for each transiting system
-       pos = where(planet_hid eq traid[t]) ; index of planet_per where other planets live
-       tos = where(traid eq traid[t]) ; other trasiting planets live
-       if (burtCatalog eq 1) then begin
-			 compPlaInd.Add, pos ; each element in compPlaInd list gets array of plnt IDs in trans sysm
-			 transPlaInd.Add, tra[t]
-	   endif
-		 if (n_elements(pos) gt 1) then begin
-         planet_multi[t] = n_elements(pos) - 1  ; Number of other planets in the system
-         planet_tmulti[t] = n_elements(tos) - 1 ; Number of other transiting planets
-         pp = [tra[t]] ; index of transit indices
-         opos = setdifference(pos, pp) ; index of the periods other than this transiting one
-         if (opos[0] ne -1) then begin
-           planet_pr[t] = min(planet_per[opos]/planet_per[tra[t]] > $ 
-			   				  planet_per[opos]^(-1)*planet_per[tra[t]])
-         endif 
-	   endif
-     endfor
-	 
-	 planet_eclip = replicate({eclipstruct}, ntra)
-	 if burtCatalog eq 1 then begin ; clearly a bloated way to do this
-		 compPlaIndWithDupes = compPlaInd[*] ; copy all elements to new list (avoids reference dup)
-		 ; You only want unique compPlaInd entries, do this slow sort to get them.
-		 loopLen = N_ELEMENTS(compPlaIndWithDupes)
-		 if loopLen gt 1 then begin
-			 for i=0,(loopLen-1) do begin
-				 thisCompPl = compPlaIndWithDupes[i]
-				 duplicate = WHERE(thisCompPl eq compPlaInd)
-				 if N_ELEMENTS(duplicate) gt 1 then begin
-					 toRemove = duplicate[1:N_ELEMENTS(duplicate)-1]
-					 compPlaInd.REMOVE, toRemove
-				 endif
-			 endfor
-		 endif
-		 ; Now compPlaInd has unique indices of systems with at least 1 transiting planet. 
+    ; Select transiting planets, and then work out transit properties
+    dep1 = (planet_rad*REARTH_IN_RSUN / star[allid].r )^2.0
+    tra = where((abs(planet_b) lt 1.0) and (planet_a gt min_a) and (dep1 gt min_depth))
+    if (tra[0] ne -1) then begin ; if you have at least one transiting planet
+      traid = planet_hid[tra] ; hostIDs of transiting planets
+      ntra = n_elements(tra)
+      planet_multi = intarr(ntra)
+      planet_tmulti = intarr(ntra)
+      planet_pr = fltarr(ntra)
+      for t=0,(ntra-1) do begin ; for each transiting system
+        pos = where(planet_hid eq traid[t]) ; index of planet_per where other planets live
+        tos = where(traid eq traid[t]) ; other trasiting planets live
+        if (n_elements(pos) gt 1) then begin
+          planet_multi[t] = n_elements(pos) - 1  ; Number of other planets in the system
+          planet_tmulti[t] = n_elements(tos) - 1 ; Number of other transiting planets
+          pp = [tra[t]] ; index of transit indices
+          opos = setdifference(pos, pp) ; index of the periods other than this transiting one
+          if (opos[0] ne -1) then begin
+            planet_pr[t] = min(planet_per[opos]/planet_per[tra[t]] > $ 
+                           planet_per[opos]^(-1)*planet_per[tra[t]])
+          endif 
+        endif
+      endfor
 
-		 compPlaIndArr = []
-		 for q=0,(N_ELEMENTS(compPlaInd)-1) do begin
-			compPlaIndArr = [compPlaIndArr, compPlaInd[q]] ; for counting
-		 endfor
-		 burtNumber = N_ELEMENTS(compPlaIndArr) ; how many planets are in systems w/ >=1 transiter
-		 cArr = compPlaIndArr
-		 cArrID = planet_hid[cArr]
-
-		 eclOthers = REPLICATE({eclipcompstruct}, burtNumber) ; array of burt eclipCompStruct objects
-
-		 r2 = planet_rad[cArr]*REARTH_IN_RSUN
-		 dep2 = phot_ratio_planet(star[cArrID].teff, planet_teq[cArr], star[cArrID].mag.t, $ 
-								  star[cArrID].mag.dm, r2, ph_p, tband)
-		 eclOthers.class=1
-		 eclOthers.m1 = star[cArrID].m
-		 eclOthers.m2 = planet_m[cArr]/MSUN_IN_MEARTH
-		 eclOthers.k = planet_k[cArr]
-		 eclOthers.r1 = star[cArrID].r
-		 eclOthers.r2 = r2
-		 eclOthers.teff1 = star[cArrID].teff
-		 eclOthers.teff2 = planet_teq[cArr]
-		 eclOthers.a = planet_a[cArr]
-		 eclOthers.s = planet_s[cArr]
-		 eclOthers.p = planet_per[cArr]
-		 eclOthers.b = planet_b[cArr]
-		 eclOthers.tsys = star[cArrID].mag.tsys
-		 eclOthers.kpsys = star[cArrID].mag.kpsys
-		 eclOthers.icsys = star[cArrID].mag.icsys
-		 eclOthers.jsys = star[cArrID].mag.jsys
-		 eclOthers.hostid = planet_hid[cArr]
-		 eclOthers.cosi = star[cArrID].cosi ; LB 16/02/08
-		 eclOthers.dep1 = (eclOthers.r2 / eclOthers.r1 )^2.0
-		 toodeep = where(eclOthers.dep1 gt 1.0)
-		 if (toodeep[0] ne -1) then eclOthers[toodeep].dep1 = 1.0
-		 eclOthers.dep2 = dep2 
-		 eclOthers.compPlaInd = compPlaIndArr
-		 for q=0,burtNumber-1 do begin
-			 if WHERE(eclOthers[q].compPlaInd eq tra) eq -1 then eclOthers[q].isTransiting = 0
-			 if WHERE(eclOthers[q].compPlaInd eq tra) ne -1 then eclOthers[q].isTransiting = 1
-		 endfor
-		 t=0
-		 for r=0,N_ELEMENTS(compPlaInd)-1 do begin
-			 thisSystem = compPlaInd[r]
-			 nThisSystem = N_ELEMENTS(thisSystem)
-			 for s=0,nThisSystem-1 do begin
-				 eclOthers[t].mult = nThisSystem-1 ; number of other planets in this system
-				 t += 1
-			 endfor 
-		 endfor
-		 print, t
-		 eclOthers.dur1 = eclOthers.r1 * eclOthers.p * $ 
-							 sqrt(1.-(eclOthers.b)^2.) / (!PI*eclOthers.a*AU_IN_RSUN)
-		 eclOthers.dur2 = eclOthers.r1 * eclOthers.p * $ 
-							 sqrt(1.-(eclOthers.b)^2.) / (!PI*eclOthers.a*AU_IN_RSUN)
-		 eclOthers.gress1 = eclOthers.r2 * eclOthers.p / $
-							   (!PI*eclOthers.a*AU_IN_RSUN*sqrt(1.-(eclOthers.b)^2.))
-		 eclOthers.gress2 = eclOthers.r2 * eclOthers.p / $
-							   (!PI*eclOthers.a*AU_IN_RSUN*sqrt(1.-(eclOthers.b)^2.))
-	 endif
-	 
-     r2 = planet_rad[tra]*REARTH_IN_RSUN
-     dep2 = phot_ratio_planet(star[traid].teff, planet_teq[tra], star[traid].mag.t, $ 
-		 					  star[traid].mag.dm, r2, ph_p, tband)
-     planet_eclip.class=1
-     planet_eclip.m1 = star[traid].m
-     planet_eclip.m2 = planet_m[tra]/MSUN_IN_MEARTH
-     planet_eclip.k = planet_k[tra]
-     planet_eclip.r1 = star[traid].r
-     planet_eclip.r2 = r2
-     planet_eclip.teff1 = star[traid].teff
-     planet_eclip.teff2 = planet_teq[tra]
-     planet_eclip.a = planet_a[tra]
-     planet_eclip.s = planet_s[tra]
-     planet_eclip.p = planet_per[tra]
-     planet_eclip.b = planet_b[tra]
-     planet_eclip.tsys = star[traid].mag.tsys
-     planet_eclip.kpsys = star[traid].mag.kpsys
-     planet_eclip.icsys = star[traid].mag.icsys
-     planet_eclip.jsys = star[traid].mag.jsys
-     planet_eclip.hostid = planet_hid[tra]
-     planet_eclip.cosi = star[traid].cosi ; LB 16/02/08
-     planet_eclip.dep1 = (planet_eclip.r2 / planet_eclip.r1 )^2.0
-     toodeep = where(planet_eclip.dep1 gt 1.0)
-     if (toodeep[0] ne -1) then planet_eclip[toodeep].dep1 = 1.0
-     planet_eclip.dep2 = dep2 
-     planet_eclip.mult = planet_multi
-     planet_eclip.tmult = planet_tmulti
-     planet_eclip.pr   = planet_pr
-     planet_eclip.dur1 = planet_eclip.r1 * planet_eclip.p * $ 
-		 				 sqrt(1.-(planet_eclip.b)^2.) / (!PI*planet_eclip.a*AU_IN_RSUN)
-     planet_eclip.dur2 = planet_eclip.r1 * planet_eclip.p * $ 
-		 				 sqrt(1.-(planet_eclip.b)^2.) / (!PI*planet_eclip.a*AU_IN_RSUN)
-     planet_eclip.gress1 = planet_eclip.r2 * planet_eclip.p / $
-						   (!PI*planet_eclip.a*AU_IN_RSUN*sqrt(1.-(planet_eclip.b)^2.))
-     planet_eclip.gress2 = planet_eclip.r2 * planet_eclip.p / $
-	 					   (!PI*planet_eclip.a*AU_IN_RSUN*sqrt(1.-(planet_eclip.b)^2.))
-
-     pstruct=planet_eclip
-	 if burtCatalog eq 1 then noEclComp=eclOthers
-   endif
+      planet_eclip = replicate({eclipstruct}, ntra)
+	 	 
+      r2 = planet_rad[tra]*REARTH_IN_RSUN
+      dep2 = phot_ratio_planet(star[traid].teff, planet_teq[tra], star[traid].mag.t, $ 
+              star[traid].mag.dm, r2, ph_p, tband)
+      planet_eclip.class=1
+      planet_eclip.coord = star[traid].coord ; outStarStruct benefit
+      planet_eclip.npointings = star[traid].npntgs ; n.b. different from neclip_obs!
+      planet_eclip.m1 = star[traid].m
+      planet_eclip.m2 = planet_m[tra]/MSUN_IN_MEARTH
+      planet_eclip.k = planet_k[tra]
+      planet_eclip.r1 = star[traid].r
+      planet_eclip.r2 = r2
+      planet_eclip.teff1 = star[traid].teff
+      planet_eclip.teff2 = planet_teq[tra]
+      planet_eclip.a = planet_a[tra]
+      planet_eclip.s = planet_s[tra]
+      planet_eclip.p = planet_per[tra]
+      planet_eclip.b = planet_b[tra]
+      planet_eclip.tsys = star[traid].mag.tsys
+      planet_eclip.kpsys = star[traid].mag.kpsys
+      planet_eclip.icsys = star[traid].mag.icsys
+      planet_eclip.jsys = star[traid].mag.jsys
+      planet_eclip.hostid = planet_hid[tra]
+      planet_eclip.cosi = star[traid].cosi ; LB 16/02/08
+      planet_eclip.dep1 = (planet_eclip.r2 / planet_eclip.r1 )^2.0
+      toodeep = where(planet_eclip.dep1 gt 1.0)
+      if (toodeep[0] ne -1) then planet_eclip[toodeep].dep1 = 1.0
+      planet_eclip.dep2 = dep2 
+      planet_eclip.mult = planet_multi
+      planet_eclip.tmult = planet_tmulti
+      planet_eclip.pr   = planet_pr
+      planet_eclip.dur1 = planet_eclip.r1 * planet_eclip.p * $ 
+              sqrt(1.-(planet_eclip.b)^2.) / (!PI*planet_eclip.a*AU_IN_RSUN)
+      planet_eclip.dur2 = planet_eclip.r1 * planet_eclip.p * $ 
+              sqrt(1.-(planet_eclip.b)^2.) / (!PI*planet_eclip.a*AU_IN_RSUN)
+      planet_eclip.gress1 = planet_eclip.r2 * planet_eclip.p / $
+                (!PI*planet_eclip.a*AU_IN_RSUN*sqrt(1.-(planet_eclip.b)^2.))
+      planet_eclip.gress2 = planet_eclip.r2 * planet_eclip.p / $
+                (!PI*planet_eclip.a*AU_IN_RSUN*sqrt(1.-(planet_eclip.b)^2.))
+      pstruct=planet_eclip
+    endif
   endif
   print, 'Created ', ntra, ' transiting planets out of ', nplanets, ' around ', $
         nstars, ' stars.'

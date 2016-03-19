@@ -7,7 +7,7 @@ function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefft
 ; routines that assign planets and generate "eclip" objects (data struct with
 ; all eclipse information). Give these eclip objects back to tile_wrapper.
 ;INPUTS:
-; 1. sstruct. A starStruct object (targets), selected for postage stamps and FFIs.
+; 1. sstruct. An outStarStruct object (targets), selected for postage stamps and FFIs.
 ; 2. bkstruct. Passed "bkgnds" a starStruct object for K>15 stars (dimmer->diluting)
 ; 3. estruct. Passed "eclip_trial", undefined at the call in tile_wrapper (i.e., at
 ;		time of call, has no data).

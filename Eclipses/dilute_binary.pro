@@ -19,9 +19,14 @@ PRO dilute_binary, eclip, star, frac, ph_p, dx, dy, dilvec, $
   if (binsys[0] ne -1) then begin
     nbin = n_elements(binsys)
     print, 'Diluting ' , n_elements(binsys), ' binaries'
-    bintmag = star[star[hostid[binsys]].companion.ind].mag.tsys
-    binteff = star[star[hostid[binsys]].companion.ind].teff
-    binsep  = star[star[hostid[binsys]].companion.ind].companion.sep/aspix ; in pixels
+    companionInd = MAKE_ARRAY(nbin, /integer, value=0)
+    companionIndList = star[hostid[binsys]].companion.ind
+    for qq=0, nbin-1 do begin
+      companionInd[qq] = WHERE(star.companion.ind eq companionIndList[qq])
+    endfor
+    bintmag = star[companionInd].mag.tsys
+    binteff = star[companionInd].teff
+    binsep  = star[companionInd].companion.sep/aspix
     bindx = dx[binsys]
     bindy = dy[binsys]
     bintheta = 2.*!dpi*randomu(seed, nbin)

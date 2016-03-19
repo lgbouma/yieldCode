@@ -6,7 +6,7 @@ pro calc_noise_eclip, $
    ph_dil, $                        ; ph/s/cm^2 per pixel
    exptime, $                       ; total exposure time in seconds
    e_pix_ro, $                      ; read noise per subexposure in e-
-   sys_limit, $ 	            ; noise floor (ppm)
+   sys_limit, $ 	                  ; noise floor (ppm)
 ;
 ; mandatory outputs
 ;
