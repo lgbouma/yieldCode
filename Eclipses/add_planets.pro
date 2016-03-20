@@ -233,7 +233,7 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
     planet_per = planet_per[0:idx0-1]
     planet_rad = planet_rad[0:idx0-1]
     planet_hid = planet_hid[0:idx0-1]
-    nplanets = idx0
+    if idx0 gt 0 then nplanets = idx0 ;16/03/19 kind of surprising bug
     ; Tally multi-planet systems
     ; Work out orbital distance and impact parameter
     allid = planet_hid
