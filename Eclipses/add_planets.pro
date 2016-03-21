@@ -234,6 +234,10 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
     planet_rad = planet_rad[0:idx0-1]
     planet_hid = planet_hid[0:idx0-1]
     if idx0 gt 0 then nplanets = idx0 ;16/03/19 kind of surprising bug
+    if idx0 eq 0 then begin
+      allZeros = make_array(n_elements(planet_radi), value=0)
+      assert, array_equal(planet_rad, allZeros)
+    endif
     ; Tally multi-planet systems
     ; Work out orbital distance and impact parameter
     allid = planet_hid
