@@ -242,7 +242,7 @@ for ii=0, numfil-1 do begin
                 [bins], [targets[detid].companion.sep], [targets[companionInd].mag.t], $
                 [targets[detid].mag.dm], [targets[detid].age], [eclip[det].det], $
                 [eclip[det].det1], [eclip[det].det2], [eclip[det].hostid], $
-                [eclip[det].mag.micsys], [eclip[det].mag.mvsys]]
+                [targets[detid].mag.micsys], [targets[detid].mag.mvsys]]
       idx = lindgen(ndet) + totdet
       star_out[idx,*] = tmp_star
       totdet += ndet
