@@ -237,6 +237,8 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
     if idx0 eq 0 then begin
       allZeros = make_array(n_elements(planet_rad), value=0)
       assert, array_equal(planet_rad, allZeros)
+      ntra = 0
+      return, ntra
     endif
     ; Tally multi-planet systems
     ; Work out orbital distance and impact parameter
@@ -253,11 +255,33 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
   
     ; Weiss & Marcy 2014:
     planet_m = dblarr(nplanets)
-    lomass = where(planet_rad lt 1.5)
-    if (lomass[0] ne -1) then planet_m[lomass] = 0.440*(planet_rad[lomass])^3. + $
-                              0.614*(planet_rad[lomass])^4.
-    himass = where(planet_rad ge 1.5)
-    if (himass[0] ne -1) then planet_m[himass] = 2.69*(planet_rad[himass])^0.93
+    earthMass = where(planet_rad lt 1.5)
+    if (earthMass[0] ne -1) then planet_m[earthMass] = 0.440*(planet_rad[earthMass])^3. + $
+                              0.614*(planet_rad[earthMass])^4.
+    sbNeptMass = where((planet_rad gt 1.5) and (planet_rad lt 4.0))
+    if (sbNeptMass[0] ne -1) then planet_m[sbNeptMass] = 2.69*(planet_rad[sbNeptMass])^0.93
+
+    ; Weiss & Marcy (KOI94d) 2013, Eqs 8 & 9
+    planet_flux= 8.6d8 ; erg/s/cm^2, median flux from paper (their fit is _bad_ for jupiter a)
+    giantMass = where(planet_rad gt 4.0)
+    if (giantMass[0] ne -1) then begin
+      planet_m[giantMass] = ((1./1.78) * planet_rad[giantMass] * (planet_flux)^0.03)^(1./0.53)
+      heaviestGiants = where((planet_m gt 150.) and (planet_rad gt 4.0))
+      if heaviestGiants[0] ne -1 then planet_m[heaviestGiants] = $
+                                      300.*randomu(seed,n_elements(heaviestGiants))+150.
+    endif
+    assert, n_elements(planet_m) eq n_elements(planet_rad)
+    assert, where(planet_m eq 0.) eq -1
+
+    fname = 'Radius.dat'
+    OPENW, 1, fname, /APPEND
+    PRINTF, 1, transpose([planet_rad]), FORMAT='(1F0)'
+    CLOSE, 1
+    fname = 'Mass.dat'
+    OPENW, 2, fname, /APPEND
+    PRINTF, 2, transpose([planet_m]), FORMAT='(1F0)'
+    CLOSE, 2
+
     ; RV amplitude
     planet_k = RV_AMP*planet_per^(-1./3.) * planet_m * $ 
                sqrt(1.0-star[allid].cosi^2.) * (star[allid].m)^(-2./3.) 
