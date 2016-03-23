@@ -259,7 +259,12 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
     if (earthMass[0] ne -1) then planet_m[earthMass] = 0.440*(planet_rad[earthMass])^3. + $
                               0.614*(planet_rad[earthMass])^4.
     sbNeptMass = where((planet_rad gt 1.5) and (planet_rad lt 4.0))
-    if (sbNeptMass[0] ne -1) then planet_m[sbNeptMass] = 2.69*(planet_rad[sbNeptMass])^0.93
+    if (sbNeptMass[0] ne -1) then begin ; fit a line between 1.5 and 4 bounds (no longer S15 eq 29)
+      grad = 0.8400654869468276
+      c = -0.380143
+      log10M = (alog10(planet_rad[sbNeptMass]) - c)/grad
+      planet_m[sbNeptMass] = 10^log10M
+    endif
 
     ; Weiss & Marcy (KOI94d) 2013, Eqs 8 & 9
     planet_flux= 8.6d8 ; erg/s/cm^2, median flux from paper (their fit is _bad_ for jupiter a)
@@ -267,8 +272,12 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
     if (giantMass[0] ne -1) then begin
       planet_m[giantMass] = ((1./1.78) * planet_rad[giantMass] * (planet_flux)^0.03)^(1./0.53)
       heaviestGiants = where((planet_m gt 150.) and (planet_rad gt 4.0))
-      if heaviestGiants[0] ne -1 then planet_m[heaviestGiants] = $
-                                      300.*randomu(seed,n_elements(heaviestGiants))+150.
+      if heaviestGiants[0] ne -1 then begin
+        a = alog10(150)
+        b = alog10(450)
+        uniformVals = a + (b-a) * randomu(seed,n_elements(heaviestGiants))
+        planet_m[heaviestGiants] = 10^uniformVals ; log uniform
+      endif
     endif
     assert, n_elements(planet_m) eq n_elements(planet_rad)
     assert, where(planet_m eq 0.) eq -1
