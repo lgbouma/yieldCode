@@ -96,7 +96,8 @@ endif
 
 SPAWN, 'cat main.pro' ; Print input file to log so you know what you did
 
-totdet = 0L
+totPriDet = 0L
+totExtDet = 0L
 star_out = DBLARR(5E4*n_trial,nparam) ; 35 million
 ext_out = DBLARR(5e4*n_trial,nparam) ; *2
 
@@ -211,8 +212,7 @@ for ii=0, numfil-1 do begin
         print, 'Exiting eclip_observing with nelements eclipToObs:', N_ELEMENTS(eclipToObs)
         TOC, eclipObserveClock
 
-        det = where(eclipToObs.det1 or eclipToObs.det2 or eclipToObs.det) ; only saves detected transits/eclipses
-
+        det = where(eclipToObs.det1 or eclipToObs.det2 or eclipToObs.det)
         ASSERT, ecliplen_tot gt 0, 'ecliplen_tot should be gt 0.'
         endClock = TIC('endClock-' + STRTRIM(ii, 2))
 
@@ -251,10 +251,16 @@ for ii=0, numfil-1 do begin
                     [targets[detid].mag.dm], [targets[detid].age], [eclipToObs[det].det], $
                     [eclipToObs[det].det1], [eclipToObs[det].det2], [eclipToObs[det].hostid], $
                     [targets[detid].mag.micsys], [eclipToObs[det].ffiClass]]
-          idx = lindgen(ndet) + totdet
-          if run eq 0 then star_out[idx,*] = tmp_star
-          if run eq 1 then ext_out[idx,*] = tmp_star
-          totdet += ndet
+          if run eq 0 then begin
+            idx = lindgen(ndet) + totPriDet
+            star_out[idx,*] = tmp_star
+            totPriDet += ndet
+          endif
+          if run eq 1 then begin
+            idx = lindgen(ndet) + totExtDet
+            ext_out[idx,*] = tmp_star
+            totExtDet += ndet
+          endif
         endif
         TOC, endClock
         TOC, tileClock
@@ -263,13 +269,14 @@ for ii=0, numfil-1 do begin
   endif
 endfor ; end tile loop 
 TOC 
-print, 'Reached end at totdet = ', totdet
-if totdet gt 0 and ~extMission then mwrfits, star_out[0:(totdet-1),*], outname ; write
-if totdet gt 0 and extMission then begin
+print, 'Reached end at totPriDet = ', totPriDet
+if extMission then print, 'Reached end at totExtDet = ', totExtDet
+if totPriDet gt 0 and ~extMission then mwrfits, star_out[0:(totPriDet-1),*], outname ; write
+if totPriDet gt 0 and totExtDet gt 0 and extMission then begin
   periodLoc = strpos(outname, '.')
   outNameNoExt = strmid(outname, 0, periodLoc)
-  mwrfits, star_out[0:(totdet-1),*], outNameNoExt+'-pri.fits'
-  mwrfits, ext_out[0:(totdet-1),*], outNameNoExt+'-ext.fits'
+  mwrfits, star_out[0:(totPriDet-1),*], outNameNoExt+'-pri.fits'
+  mwrfits, ext_out[0:(totExtDet-1),*], outNameNoExt+'-ext.fits'
 endif
 print, total(numps), ' postage stamps assigned'
 END
