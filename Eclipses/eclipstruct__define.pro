@@ -64,6 +64,7 @@ PRO eclipstruct__define
 	    dil: 0.0, $        ; dilution ratio
 	    var: 0.0, $        ; host star variability
 	    hostid: 0L, $
-	    tileNum: 0 $ ; tile number of primary
+	    tileNum: 0, $ ; tile number of primary
+      ffiClass: 0 $; 0: none, 1: ffi, 2: PS only in primary, 3: PS only in extended, 4: PS in both
 	    }
 end

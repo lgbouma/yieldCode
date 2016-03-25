@@ -4,13 +4,12 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 	ps_len=ps_len, ffi_len=ffi_len, saturation=saturation, $
 	sys_limit=sys_limit, duty_cycle=duty_cycle, $
   dwell_time=dwell_time, downlink=downlink, $
-  subexptime=subexptime, burtCatalog=burtCatalog
+  subexptime=subexptime, extMission=extMission
 ;+
 ; NAME: eclip_observe
-; PURPOSE: take in an eclipStruct (or, if burtCatalog, an eclipCompStruct)
-;	and find out which are detected. I think there is also "dilution" due to
-;	binaries going on in here. It gets called if stars on this healpix tile
-; get eclipsing planets.
+; PURPOSE: take in an eclipStruct and find out which are detected. I think 
+; there is also "dilution" due to binaries going on in here. It gets called 
+; if stars on this healpix tile get eclipsing planets.
 ; IN:
 ;   1. eclipse: "eclip" object (eclipStruct) with transit parameters filled out
 ;   2. star: starStruct of targets
@@ -47,7 +46,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   if (keyword_set(saturation)) then saturation=saturation else saturation=150000.
   if (keyword_set(dwell_time)) then dwell_time=dwell_time else dwell_time=13.66d0 ; days per orbit
   if (keyword_set(downlink)) then downlink=downlink else downlink=16.0d/24.0d
-  assert, burtCatalog ne 1
   apo_blank = (dwell_time-downlink)*(1.0-duty_cycle/100.0)
 
   sz_frac = size(frac)  
@@ -115,7 +113,9 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       2.0*double(eclipse.npointings), dayoff2, periblank=downlink, apoblank=apo_blank)
 
   print, 'Diluting FFIs'
-  tra_ps = where(star[eclipse.hostid].ffi lt 1)
+  if ~extMission then tra_ps = where(star[eclipse.hostid].ffi lt 1)
+  if extMission then tra_ps = where(star[eclipse.hostid].ffi eq 0 or $
+                                    star[eclipse.hostid].nPntgs eq 1)
   if (tra_ps[0] ne -1) then begin
     dur1_min = eclipse[tra_ps].dur1*24.0*60.0
     dur2_min = eclipse[tra_ps].dur2*24.0*60.0
@@ -125,7 +125,9 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     eclipse[tra_ps].dur2_eff = (nps*ps_len)/(24.0*60.0)
   endif
 
-  tra_ffi = where(star[eclipse.hostid].ffi gt 0)
+  if ~extMission then tra_ffi = where(star[eclipse.hostid].ffi gt 0)
+  if extMission then tra_ffi = where(star[eclipse.hostid].ffi eq 0 and $
+                                     star[eclipse.hostid].nPntgs eq 0)
   if (tra_ffi[0] ne -1) then begin
     dur1_min = eclipse[tra_ffi].dur1*24.0*60.0
     dur2_min = eclipse[tra_ffi].dur2*24.0*60.0
@@ -141,7 +143,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     obsid = eclipse[obs].hostid
     nobs = n_elements(obs)
     print, 'Observing ', nobs, ' transits'
-    ;  obs = indgen(n_elements(star))
 
     print, 'Stacking and sorting PRFs'
     ; ph_star is npix x nstar
@@ -412,4 +413,4 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       endif
     end ;det if
   end ; obs if
-end ; PRO
+end

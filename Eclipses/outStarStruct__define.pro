@@ -17,10 +17,10 @@ PRO outStarStruct__define
                   pri: 0, $        ; Primary of binary?
                   sec: 0, $        ; Secondary of binary? 
                   spl: 0, $        ; Split (for triples and quadruples)
-                  ffi: 0, $         ; Full-frame only (default is postage stamp)
+                  ffi: 0, $         ; 0: PS (primary). 1: in ffi
                   gc: 0, $	 ; galactic component (1=thin, 2=thick, 3=halo, 4=bulge)
                   starID: 0., $ ; star ID for this tile (unique number is tile num + this id#)
                   coord: {coordstruct}, $ ; give the star unique coordinates
-                  nPntgs: 0 $ ; number of pointings the star gets (in some mission scenario)
+                  nPntgs: 0 $ ; misnamed variable. 0: nothing. 1: star is PS in extended.
                   }
 end

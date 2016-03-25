@@ -1,10 +1,10 @@
 function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 	aspix=aspix, fov=fov, dressing=dressing, min_depth=min_depth, ps_only=ps_only, $
-	burtCatalog=burtCatalog
+	extMission=extMission, burtCatalog=burtCatalog
 ;+
 ; NAME: add_planets
 ; PURPOSE: Over each trial (usually 1-10), over each tile (1-2908), populate
-;	the stars on this trial with ecipsing objects.
+;	the selected stars on this trial with ecipsing objects.
 ; INPUTS: 
 ; 1. star: an outStarStruct object (called from targets in tile_wrapper), selected for postage 
 ; 	stamps and FFIs.
@@ -47,10 +47,13 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
   ccd_pix = 4096.0
   if (keyword_set(aspix)) then aspix=aspix else aspix=21.1
   if (keyword_set(err)) then err=1 else err=0
-  if (KEYWORD_SET(burtCatalog)) then burtCatalog=burtCatalog else burtCatalog=0
 
   nstars = n_elements(star)
-  if (keyword_set(ps_only)) then ps = (star.ffi ne 1) else ps = intarr(nstars) + 1
+  if ~extMission then assert, where(star.ffi eq 1) eq -1, 'error assigning PS tags'
+  if extMission then assert, where(star.ffi eq 1 and star.nPntgs eq 0) eq -1, 'error assigning PS tags'
+  if ps_only and extMission then ps = (star.ffi eq 0 or star.nPntgs eq 1) 
+  if ps_only and ~extMission then ps = (star.ffi eq 0) 
+  if ~ps_only and ~extMission then ps = intarr(nstars) + 1
 
   if(keyword_set(dressing)) then begin
     hotstars = where(star.teff ge 4000. and ps)
@@ -265,7 +268,6 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
       log10M = (alog10(planet_rad[sbNeptMass]) - c)/grad
       planet_m[sbNeptMass] = 10^log10M
     endif
-
     ; Weiss & Marcy (KOI94d) 2013, Eqs 8 & 9
     planet_flux= 8.6d8 ; erg/s/cm^2, median flux from paper (their fit is _bad_ for jupiter a)
     giantMass = where(planet_rad gt 4.0)
@@ -281,23 +283,9 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
     endif
     assert, n_elements(planet_m) eq n_elements(planet_rad)
     assert, where(planet_m eq 0.) eq -1
-
-    fname = 'Radius.dat'
-    OPENW, 1, fname, /APPEND
-    PRINTF, 1, transpose([planet_rad]), FORMAT='(1F0)'
-    CLOSE, 1
-    fname = 'Mass.dat'
-    OPENW, 2, fname, /APPEND
-    PRINTF, 2, transpose([planet_m]), FORMAT='(1F0)'
-    CLOSE, 2
-
     ; RV amplitude
     planet_k = RV_AMP*planet_per^(-1./3.) * planet_m * $ 
                sqrt(1.0-star[allid].cosi^2.) * (star[allid].m)^(-2./3.) 
-
-    ; compPlaInd holds indices of nontransiting planets in systems w/ at least one transiting planet
-    ; transPlaInd holds indices of transiting planets
-    assert, burtCatalog ne 1, 'so i can clean up this hacky mess'
 
     ; Select transiting planets, and then work out transit properties
     dep1 = (planet_rad*REARTH_IN_RSUN / star[allid].r )^2.0
@@ -330,7 +318,16 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
               star[traid].mag.dm, r2, ph_p, tband)
       planet_eclip.class=1
       planet_eclip.coord = star[traid].coord ; outStarStruct benefit
-      planet_eclip.npointings = star[traid].npntgs ; n.b. different from neclip_obs!
+      planet_eclip.npointings = 0 ; computed later, in eclip_observe.
+      notPsInEither = where(star[traid].ffi eq 1 and star[traid].nPntgs eq 0, neitherCnt)
+      psOnlyInPrimary = where(star[traid].ffi eq 0 and star[traid].nPntgs eq 0, priCnt)
+      psOnlyInExt = where(star[traid].ffi eq 1 and star[traid].nPntgs eq 1, extCnt)
+      psInBoth = where(star[traid].ffi eq 0 and star[traid].nPntgs eq 1, bothCnt)
+      if neitherCnt gt 0 then planet_eclip[ffiInPrimary].ffiClass = 1
+      if priCnt gt 0 then planet_eclip[psOnlyInPrimary].ffiClass = 2
+      if extCnt gt 0 then planet_eclip[psOnlyInExt].ffiClass = 3
+      if bothCnt gt 0 then planet_eclip[psInBoth].ffiClass = 4
+      assert, where(planet_eclip.ffiClass eq 0) eq -1, 'error: ffi class assignment'
       planet_eclip.m1 = star[traid].m
       planet_eclip.m2 = planet_m[tra]/MSUN_IN_MEARTH
       planet_eclip.k = planet_k[tra]

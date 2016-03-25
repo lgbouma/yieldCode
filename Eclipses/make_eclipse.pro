@@ -1,6 +1,6 @@
 function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefftic, $
   eclass, tband, noEclComp, min_depth=min_depth, max_depth=max_depth, ps_only=ps_only, pla_err=pla_err, $
-  burtCatalog=burtCatalog
+  extMission=extMission, burtCatalog=burtCatalog
 ;+
 ;NAME: make_eclipse
 ;PURPOSE: wrap around add_hebs, add_planets, add_ebs, add_bebs, which are the
@@ -49,7 +49,7 @@ function make_eclipse, sstruct, bkstruct, estruct, frac, ph_p, dartstruct, tefft
   ; Add Planets to all target stars
   if (eclass[0]) then begin
     gd = add_planets(sstruct, p_eclip, frac, ph_p, tband, noEclComp, err=pla_err, $ 
-					 min_depth=min_depth, dressing=1, ps_only=ps_only, $
+					 min_depth=min_depth, dressing=1, ps_only=ps_only, extMission=extMission,$
 					 burtCatalog=burtCatalog)
     if (gd gt 0) then begin
       if (ecliplen gt 0) then estruct = struct_append(estruct, p_eclip) $ ; append eclipsing planets
