@@ -65,6 +65,7 @@ PRO eclipstruct__define
 	    var: 0.0, $        ; host star variability
 	    hostid: 0L, $
 	    tileNum: 0, $ ; tile number of primary
-      ffiClass: 0 $; 0: none, 1: ffi, 2: PS only in primary, 3: PS only in extended, 4: PS in both
+      ffiClass: 0, $; 0: none, 1: ffi, 2: PS only in primary, 3: PS only in extended, 4: PS in both
+      uniqEclipID: 0UL $; integer unique to this eclip. New trials get diff, but primary/ext keep same.
 	    }
 end

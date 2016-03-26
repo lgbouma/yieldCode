@@ -32,7 +32,7 @@ tband_file = 'tband.csv'
 
 ; User-adjustable settings (yes, that's you!)
 assert, ~burtCatalog, 'b/c this was a one-timer'
-nparam = 71 ; output table width
+nparam = 72 ; output table width
 fov = 24. ; degrees
 seg = 13  ; number of segments per hemisphere
 effarea = 69.1 ;43.9 ;54.9 ;100. ;54.9 ;69.1 ; in cm^2. 
@@ -98,6 +98,7 @@ SPAWN, 'cat main.pro' ; Print input file to log so you know what you did
 
 totPriDet = 0L
 totExtDet = 0L
+totEclCounter = 0UL
 star_out = DBLARR(5E4*n_trial,nparam) ; 35 million
 ext_out = DBLARR(5e4*n_trial,nparam) ; *2
 
@@ -164,10 +165,13 @@ for ii=0, numfil-1 do begin
     TOC, makeEclipseClock
 
     if (ecliplen gt 0) then begin
+      ecIdx = ulindgen(ecliplen) + totEclCounter ; max at 2^32 ~= 4e9. Should be fine.
       eclip_trial.trial = jj + 1
+      eclip_trial.uniqEclipID = ecIdx
       if (ecliplen_tot gt 0) then eclip = struct_append(eclip, eclip_trial) $
       else eclip = eclip_trial
       ecliplen_tot += ecliplen
+      totEclCounter += ulong(ecliplen) ; saved over tiles
     endif
   endfor
 
@@ -250,7 +254,8 @@ for ii=0, numfil-1 do begin
                     [bins], [targets[detid].companion.sep], [targets[companionInd].mag.t], $
                     [targets[detid].mag.dm], [targets[detid].age], [eclipToObs[det].det], $
                     [eclipToObs[det].det1], [eclipToObs[det].det2], [eclipToObs[det].hostid], $
-                    [targets[detid].mag.micsys], [eclipToObs[det].ffiClass]]
+                    [targets[detid].mag.micsys], [eclipToObs[det].ffiClass], $
+                    [eclipToObs[det].uniqEclipID]]
           if run eq 0 then begin
             idx = lindgen(ndet) + totPriDet
             star_out[idx,*] = tmp_star
