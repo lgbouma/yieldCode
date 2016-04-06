@@ -7,7 +7,7 @@ PRO main
                 0  ] ; BTPs
   tile_wrapper, '../../outStarLib/', fnums, $
   'tempOut.fits', $; output file name (w/ fits ext). Nb: fits files dont overwrite
-  n_trial=10, $	; number of trials (10 good for reasonable statistics)
+  n_trial=1, $	; number of trials (10 good for reasonable statistics)
   eclass=eclass, $ ; from above
   ps_only=1, $	; 1=only run postage stamps, 0=run ffis as well
   detmag=0, $	; If you want the sim to return a magnitude-limited catalog, set this to the limit

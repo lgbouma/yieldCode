@@ -101,9 +101,11 @@ totExtDet = 0L
 totEclCounter = 0UL
 star_out = DBLARR(5E4*n_trial,nparam) ; 35 million
 ext_out = DBLARR(5e4*n_trial,nparam) ; *2
+ephemPriOut = []
+ephemExtOut = []
 
-;for ii=848, 857 do begin
-for ii=0, numfil-1 do begin
+for ii=848, 857 do begin
+;for ii=0, numfil-1 do begin
   tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
   fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
 
@@ -260,11 +262,13 @@ for ii=0, numfil-1 do begin
             idx = lindgen(ndet) + totPriDet
             star_out[idx,*] = tmp_star
             totPriDet += ndet
+            ephemPriOut = [[ephemPriOut], [eclipToObs[det].isObsd]]
           endif
           if run eq 1 then begin
             idx = lindgen(ndet) + totExtDet
             ext_out[idx,*] = tmp_star
             totExtDet += ndet
+            ephemExtOut = [[ephemExtOut], [eclipToObs[det].isObsd]]
           endif
         endif
         TOC, endClock
@@ -282,6 +286,8 @@ if totPriDet gt 0 and totExtDet gt 0 and extMission then begin
   outNameNoExt = strmid(outname, 0, periodLoc)
   mwrfits, star_out[0:(totPriDet-1),*], outNameNoExt+'-pri.fits'
   mwrfits, ext_out[0:(totExtDet-1),*], outNameNoExt+'-ext.fits'
+  mwrfits, ephemPriOut, outNameNoExt+'-ephemPri.fits'
+  mwrfits, ephemExtOut, outNameNoExt+'-ephemExt.fits'
 endif
 print, total(numps), ' postage stamps assigned'
 END
