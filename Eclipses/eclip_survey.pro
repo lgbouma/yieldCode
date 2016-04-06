@@ -15,7 +15,7 @@ pro eclip_survey, fov, eclip, fCamCoord
 ;	for subsequent "observing")
 ; COMMENTS:
 ;   Nomenclature: "pointing" == one grouping of 4 cameras. There are 26 
-;   pointings. Let "camPointing" == one camera pointing, there are 26*4=104 (2yr).
+;   pointings. Let "camPointing" == one camera field, there are 26*4=104 (2yr).
 ;-
 
   nEcl = n_elements(eclip)
@@ -37,11 +37,11 @@ pro eclip_survey, fov, eclip, fCamCoord
   ccdCtr = [1.0,1.0]*float(ccdPix+gapPix)/2.0 ; center of CCD image in arcseconds
   delt = [1.0,1.0]*pixScaleDeg
 
-  old_onChip = intarr(n_elements(eclip))
-
   ; Below this, we determine whether eclipses/transits are observed, and npointings
   ; they receive if so. This is back to geometry, in the style of /camPointings/*, but
   ; fancier b/c we want CCD gaps and field angles.
+  eclip.isObsd = intarr(nCamPointings)
+  old_onChip = intarr(n_elements(eclip))
 
   for i=0, nCamPointings-1 do begin ; loop over camera pointings
     make_astr, astr, $       ; build astrometry structure from input params
@@ -87,6 +87,9 @@ pro eclip_survey, fov, eclip, fCamCoord
       eclip[chipInd].coord.fov_r = r/float(new_npointings[chipInd]) + $
       float(prev_npointings[chipInd])*eclip[chipInd].coord.fov_r/float(new_npointings[chipInd])
       old_onChip = onChip
+      for k=0, n_elements(eclip)-1 do begin
+        eclip[k].isObsd[i] += onChip[k]
+      endfor
     endif
   endfor
 
