@@ -153,7 +153,7 @@ for ii=0, numfil-1 do begin
   if ps_only eq 1 and extMission then $
     targets = targets[where(targets.ffi eq 0 or targets.nPntgs eq 1, targetCount)]
   if targetCount eq 0 then begin
-    print 'Skipping loop number', ii, 'hpNum ', fnums[ii], 'b/c gets no targets ever'
+    print, 'Skipping loop number', ii, 'hpNum ', fnums[ii], 'b/c gets no targets ever'
   endif
   assert, targetCount gt 0
   TOC, psSelClock
