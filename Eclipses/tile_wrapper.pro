@@ -70,7 +70,8 @@ AU_IN_RSUN = 215.093990942
 numtargets = lonarr(numfil) ; numfil is n_elements(fnums), or ~3000 for standard all-sky.
 numbkgnd = lonarr(numfil)
 numdeeps = lonarr(numfil)
-numps = lonarr(numfil)
+numPriPs = lonarr(numfil)
+numExtPs = lonarr(numfil)
 ; Open the fits files
 frac_fits = mrdfits(frac_file)
 ph_fits = mrdfits(ph_file)
@@ -130,12 +131,15 @@ for ii=0, numfil-1 do begin
   ; Selecting postage stamp / ffi stars
   psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
   targets.ffi = 1 ; by definition all "target" stars will be in FFIs
-  psInd = where(psHpNum eq fnums[ii])
-  targets[psStarID[psInd]].ffi = 0 ; these are postage stamps in primary
-  psSecInd = targets[psStarID[psInd]].companion.ind
-  targets[psSecInd].ffi = 0
-  assert, min(targets[psStarID[psInd]].starID eq psStarID[psInd]) eq 1, 'error: postage stamp matching'
-  assert, min(targets.nPntgs eq make_array(n_elements(targets))) eq 1, 'error: input target pntgs'
+  psInd = where(psHpNum eq fnums[ii], nPriPs)
+  if nPriPs gt 0 then begin
+    targets[psStarID[psInd]].ffi = 0 ; these are postage stamps in primary
+    psSecInd = targets[psStarID[psInd]].companion.ind
+    targets[psSecInd].ffi = 0
+    assert, min(targets[psStarID[psInd]].starID eq psStarID[psInd]) eq 1, 'error: postage stamp matching'
+    assert, min(targets.nPntgs eq make_array(n_elements(targets))) eq 1, 'error: input target pntgs'
+    numPriPs[ii] += nPriPs
+  endif
   if extMission then begin
     extPsInd = where(psExtHpNum eq fnums[ii], nExtPs)
     if nExtPs gt 0 then begin
@@ -143,11 +147,11 @@ for ii=0, numfil-1 do begin
       extPsSecInd = targets[psExtStarID[extPsInd]].companion.ind
       targets[extPsSecInd].nPntgs = 1
       assert, min(targets[psExtStarID[extPsInd]].starID eq psExtStarID[extPsInd]) eq 1, 'extPs must match'
+      numExtPs[ii] += nExtPs
     endif
   endif
   if ps_only eq 1 and extMission then $
     targets = targets[where(targets.ffi eq 0 or targets.nPntgs eq 1, targetCount)]
-  numps[ii] += n_elements(where(targets.ffi eq 0 or targets.nPntgs eq 1))
   assert, targetCount gt 0
   TOC, psSelClock
 
@@ -283,5 +287,6 @@ if totPriDet gt 0 and totExtDet gt 0 and extMission then begin
   mwrfits, star_out[0:(totPriDet-1),*], outNameNoExt+'-pri.fits'
   mwrfits, ext_out[0:(totExtDet-1),*], outNameNoExt+'-ext.fits'
 endif
-print, total(numps), ' postage stamps assigned'
+print, total(numPriPs), ' primary postage stamps assigned'
+if extMission then print, total(numExtPs), ' extended postage stamps assigned'
 END
