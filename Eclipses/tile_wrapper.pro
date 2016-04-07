@@ -292,5 +292,7 @@ if totPriDet gt 0 and totExtDet gt 0 and extMission then begin
   mwrfits, ext_out[0:(totExtDet-1),*], outNameNoExt+'-ext.fits'
 endif
 print, total(numPriPs), ' primary postage stamps assigned'
+assert, total(numPriPs) eq 200000
 if extMission then print, total(numExtPs), ' extended postage stamps assigned'
+assert, total(numExtPs) eq 200000
 END
