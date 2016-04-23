@@ -20,6 +20,7 @@ PRO dilute_binary, eclip, star, frac, ph_p, dx, dy, dilvec, $
 
   hostid = eclip.hostid
   binsys = where((star[hostid].pri or star[hostid].sec) and (star[hostid].companion.sep/aspix lt radmax))
+
   if (binsys[0] ne -1) then begin
     nbin = n_elements(binsys)
     print, 'Diluting ' , n_elements(binsys), ' binaries'
@@ -30,7 +31,7 @@ PRO dilute_binary, eclip, star, frac, ph_p, dx, dy, dilvec, $
     endfor
     bintmag = star[companionInd].mag.tsys
     binteff = star[companionInd].teff
-    binsep  = star[companionInd].companion.sep/aspix
+    binsep  = star[companionInd].companion.sep/aspix ; now in units of px
     bindx = dx[binsys]
     bindy = dy[binsys]
     bintheta = 2.*!dpi*randomu(randSeed, nbin)

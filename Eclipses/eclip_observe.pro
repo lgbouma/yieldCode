@@ -185,7 +185,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     dilution = dblarr(n_elements(obs), npix_max)
     ;shot_noises = dblarr(n_elements(obs), npix_max-npix_min+1)
     exptime = dblarr(n_elements(obs)) + 3600.
-    for ii=0,(npix_max-1) do begin
+    for ii=0,(npix_max-1) do begin ; see p13 S+15. This gets noises for all apertures; takes min below
       thiscr = cr[*,ii]
       calc_noise_eclip, star_ph, beb_ph, exptime, $
           readnoise, sys_limit, noise, $
@@ -292,7 +292,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       print, "Diluting with other target stars"
       dilute_eclipse_img, eclipse[det], star, frac, ph_p, $
           dx[det], dy[det], dilvec, aspix=aspix, sq_deg=13.4, radmax=6.0, randSeed=randSeed+9006
-      for jj=0,ndet-1 do dil_ph[*,jj] = dilvec[*,jj]
+      for jj=0,ndet-1 do dil_ph[*,jj] += dilvec[*,jj] ; 160423: uh.. not +=?
    
       ; Calculate centroid shift and uncertainty
       dep1 = eclipse[det].dep1_eff
