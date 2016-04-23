@@ -99,12 +99,18 @@ pro eclip_survey, fov, eclip, fCamCoord
   fov_ind = intarr(n_elements(field_angle))
   ; 10/25/2015 PS: new field angles: [0,7.14,14.26,20]
   ; old field angles were [0,6,12,17] deg
-  fov_ind[where((field_angle ge 0.14875*fov) and $ ; was 0.125 
-        (field_angle lt 0.44583*fov))] = 1 ; was 0.375
-  fov_ind[where((field_angle ge 0.44583*fov) and $
-        (field_angle lt 0.71375*fov))] = 2 ; was 0.604
-  fov_ind[where( field_angle ge 0.71375*fov)] = 3
+  ;fov_ind[where((field_angle ge 0.14875*fov) and $ ; was 0.125 
+  ;      (field_angle lt 0.44583*fov))] = 1 ; was 0.375
+  ;fov_ind[where((field_angle ge 0.44583*fov) and $
+  ;      (field_angle lt 0.71375*fov))] = 2 ; was 0.604
+  ;fov_ind[where( field_angle ge 0.71375*fov)] = 3
+  offCenterInd = where((field_angle ge 0.14875*fov) and (field_angle lt 0.44583*fov), nOffCenter)
+  if nOffCenter gt 0 then fov_ind[offCenterInd] = 1
+  midInd = where((field_angle ge 0.44583*fov) and (field_angle lt 0.71375*fov), nMid)
+  if nMid gt 0 then fov_ind[midInd] = 2
+  cornerInd = where(field_angle ge 0.71375*fov, nCorner)
+  if nCorner gt 0 then fov_ind[cornerInd] = 3
+
   eclip.coord.field_angle = field_angle
   eclip.coord.fov_ind=fov_ind
-
 end

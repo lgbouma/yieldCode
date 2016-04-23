@@ -159,8 +159,10 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 
     print, 'Stacking and sorting PRFs'
     ; ph_star is npix x nstar
+    assert, max(eclipse[*].coord.fov_ind) eq 0, 'error: fov_ind zeroing'
     stack_prf_eclip, star[obsid].mag.t, star[obsid].teff, ph_p, frac, star_ph, $
         dx=dx[obs], dy=dy[obs], fov_ind=eclipse[obs].coord.fov_ind, mask=mask1d, sind=sind
+
     ; BEBs and HEBs
     bebdil = where(eclipse[obs].class eq 3 or eclipse[obs].class eq 4 or eclipse[obs].class eq 5)
     beb_ph = dblarr(total(mask1d), nobs)
@@ -231,7 +233,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     det = WHERE(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
           (eclipse.snr ge SNR_MIN))
 
-    ; Dilute
+    ; Dilute if there are planets detected (preliminarily) with SNR > 5 (nb dilution makes SNR decrease)
     if (det[0] ne -1) then begin
       ;print, 'Calculating noise again'
       detid = eclipse[det].hostid
@@ -294,7 +296,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
           dx[det], dy[det], dilvec, aspix=aspix, sq_deg=13.4, radmax=6.0, randSeed=randSeed+9006
       for jj=0,ndet-1 do dil_ph[*,jj] += dilvec[*,jj] ; 160423: uh.. not +=?
    
-      ; Calculate centroid shift and uncertainty
+      ; Calculate centroid shift and uncertainty (section 8 of S15)
       dep1 = eclipse[det].dep1_eff
       dep2 = eclipse[det].dep2_eff
       dur1 = eclipse[det].dur1_eff * eclipse[det].neclip_obs1 
@@ -372,9 +374,9 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
             readnoise, sys_limit, noise, $
             npix_aper=(ii+1), $
             field_angle=eclipse[det].coord.field_angle, $
-            cr_noise = star[detid].ffi*0., $
+            cr_noise=star[detid].ffi*0., $
             subexptime=subexptime, $
-            geom_area = effarea, $
+            geom_area=effarea, $
             aspix=aspix, $
             zodi_ph=zodi_ph, $
             dilution=dil, $

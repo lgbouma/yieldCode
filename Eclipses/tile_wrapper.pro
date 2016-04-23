@@ -32,7 +32,7 @@ tband_file = 'tband.csv'
 
 ; User-adjustable settings (yes, that's you!)
 assert, ~burtCatalog, 'b/c this was a one-timer'
-nparam = 72 ; output table width
+nparam = 74 ; output table width
 fov = 24. ; degrees
 seg = 13  ; number of segments per hemisphere
 effarea = 69.1 ;43.9 ;54.9 ;100. ;54.9 ;69.1 ; in cm^2. 
@@ -103,8 +103,8 @@ totEclCounter = 0UL
 star_out = DBLARR(5E4*n_trial,nparam) ; 35 million
 ext_out = DBLARR(5e4*n_trial,nparam) ; *2
 
-;for ii=848, 858 do begin ;TODO switch back for testing
-for ii=0, numfil-1 do begin
+for ii=848, 858 do begin ;TODO switch back for testing
+;for ii=0, numfil-1 do begin
   tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
   fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
 
@@ -194,6 +194,7 @@ for ii=0, numfil-1 do begin
         ; Survey: add this run's npointings and calc field angle (with dead ccd pixels)
         eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
         eclip_survey, fov, eclip, fCamCoord ; eclip has eclipses from all trials (& runs)
+        assert, max(eclip[*].coord.fov_ind) eq 0, 'fov_ind is zeroed for snr consistency'
         if run eq 0 then eclipCopy = eclip ; has eclip.npointings and CCD angles. No observed params.
         if run eq 1 then begin
           new_npointings = eclip.npointings
@@ -279,7 +280,7 @@ for ii=0, numfil-1 do begin
                     [targets[detid].mag.dm], [targets[detid].age], [eclipToObs[det].det], $
                     [eclipToObs[det].det1], [eclipToObs[det].det2], [eclipToObs[det].hostid], $
                     [targets[detid].mag.micsys], [eclipToObs[det].ffiClass], $
-                    [eclipToObs[det].uniqEclipID]]
+                    [eclipToObs[det].uniqEclipID], [eclipToObs[det].dur1_eff], [eclipToObs[det].dur2_eff]]
           if run eq 0 then begin
             idx = lindgen(ndet) + totPriDet
             star_out[idx,*] = tmp_star
