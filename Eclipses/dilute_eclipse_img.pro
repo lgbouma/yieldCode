@@ -1,5 +1,5 @@
 PRO dilute_eclipse_img, eclip, bkgnds, frac, ph_p, dx, dy, dilvec, $
-	aspix=aspix, sq_deg=sq_deg, radmax=radmax
+	aspix=aspix, sq_deg=sq_deg, radmax=radmax, randSeed=randSeed
   ; 16/03/19 (LB): what's done here is correct and smart. It's a great way to avoid huge catalogs.
   ; Offset 0,0 maps to pixel 7.9,7.9
   ; Offset 9,9 maps to pixel 7,7 (exactl)
@@ -27,7 +27,7 @@ PRO dilute_eclipse_img, eclip, bkgnds, frac, ph_p, dx, dy, dilvec, $
 
   for ii=0, neclip-1 do begin
     ; Generate some random radii
-    randomp, r, 1., nbk, range_x=[0., radpix]
+    randomp, r, 1., nbk, range_x=[0., radpix], seed=randSeed
     ; How many of these are primaries and fall within radmax?
     gd = where((r lt radmax) and (bkgnds.sec ne 1)) ; note these bkgnds are deeps on first call
     if ((ii mod 1000.) eq 0) then print, "On eclipse ", ii, " of ", neclip, " with ", n_elements(gd), " stars"
@@ -36,7 +36,7 @@ PRO dilute_eclipse_img, eclip, bkgnds, frac, ph_p, dx, dy, dilvec, $
       bkteff = bkgnds[gd].teff
       bkmagt = bkgnds[gd].mag.tsys
       bkrad  = r[gd]
-      bktheta = 2.*!dpi*randomu(seed, n_elements(gd))
+      bktheta = 2.*!dpi*randomu(randSeed, n_elements(gd))
       bkx = bkrad*cos(bktheta)
       bky = bkrad*sin(bktheta)
 

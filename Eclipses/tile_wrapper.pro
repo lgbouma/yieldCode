@@ -5,7 +5,7 @@ psPriFile=psPriFile,psExtFile=psExtFile, burtCatalog=burtCatalog
 
 TIC ; Grab initial system time
 
-; Assign prototype & extMission mode
+; Assign prototype & extMission
 numfil = N_ELEMENTS(fnums)   
 randomNumbers = RANDOMU(seed, numfil)
 randomIndices = SORT(ROUND(randomNumbers * (numfil-1)))
@@ -103,7 +103,7 @@ totEclCounter = 0UL
 star_out = DBLARR(5E4*n_trial,nparam) ; 35 million
 ext_out = DBLARR(5e4*n_trial,nparam) ; *2
 
-;for ii=848, 857 do begin
+;for ii=848, 858 do begin ;TODO switch back for testing
 for ii=0, numfil-1 do begin
   tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
   fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
@@ -193,7 +193,19 @@ for ii=0, numfil-1 do begin
 
         ; Survey: add this run's npointings and calc field angle (with dead ccd pixels)
         eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
-        eclip_survey, fov, eclip, fCamCoord
+        eclip_survey, fov, eclip, fCamCoord ; eclip has eclipses from all trials (& runs)
+        if run eq 0 then eclipCopy = eclip ; has eclip.npointings and CCD angles. No observed params.
+        if run eq 1 then begin
+          new_npointings = eclip.npointings
+          new_field_angle = eclip.coord.field_angle
+          new_fov_ind = eclip.coord.fov_ind
+          new_fov_r = eclip.coord.fov_r
+          eclip = eclipCopy ; revert all transit parameters back.
+          eclip.npointings = new_npointings
+          eclip.coord.field_angle = new_field_angle
+          eclip.coord.fov_ind = new_fov_ind
+          eclip.coord.fov_r = new_fov_r
+        endif
         TOC, eclipSurveyClock
         if max(eclip.npointings) eq 0 then begin
           print, 'Skipping tileNum', fnums[ii], ' in run', run, ' because no stars pointings.'
@@ -202,27 +214,31 @@ for ii=0, numfil-1 do begin
 
         eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
         assert, ps_only, 'todo: add observations for FFI allowed ext missions'
-        if run eq 0 and extMission then begin
-          primaryEclips = where(eclip.ffiClass eq 2 or eclip.ffiClass eq 4, nPrimaryEclips)
-          if nPrimaryEclips gt 0 then eclipToObs = eclip[primaryEclips] else continue
-        endif 
-        if run eq 1 and extMission then begin
-          extEclips = where(eclip.ffiClass eq 3 or eclip.ffiClass eq 4, nExtEclips)
-          if nExtEclips gt 0 then eclipToObs = eclip[extEclips] else continue
-        endif 
         if run eq 1 and ~extMission then continue
         if run eq 0 and ~extMission then assert, 0, 'todo: add this case'
           
-        print, 'Entering eclip_observe with nelements eclip:', N_ELEMENTS(eclipToObs)
-        eclip_observe, eclipToObs, targets, bkgnds, deeps, $
+        print, 'Entering eclip_observe with nelements eclip:', N_ELEMENTS(eclip)
+        randSeed = ii ; seed randomized aspects of eclip_observe per-tile, not per-run
+        eclip_observe, eclip, targets, bkgnds, deeps, $
                 frac_fits, ph_fits, cr_fits, var_fits, $
                 aspix=aspix, effarea=effarea, sys_limit=sys_limit, $
                 readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
                 duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
                 subexptime=subexptime, dwell_time=orbit_period, downlink=downlink, $
-                extMission=extMission
-        print, 'Exiting eclip_observing with nelements eclipToObs:', N_ELEMENTS(eclipToObs)
+                extMission=extMission, randSeed=randSeed, ps_only=ps_only
+        print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
         TOC, eclipObserveClock
+
+        ; only save ffiClass 2 and 4 for the primary mission, and only save ffiClass 3 and
+        ; 4 for the extended. Needed for random number generation in eclip_observe
+        if run eq 0 and extMission then begin
+          primaryEclips = where(eclip.ffiClass eq 2 or eclip.ffiClass eq 4, nPrimaryEclips)
+          if nPrimaryEclips gt 0 then eclipToObs = eclip[primaryEclips] else continue
+        endif
+        if run eq 1 and extMission then begin
+          extEclips = where(eclip.ffiClass eq 3 or eclip.ffiClass eq 4, nExtEclips)
+          if nExtEclips gt 0 then eclipToObs = eclip[extEclips] else continue
+        endif
 
         det = where(eclipToObs.det1 or eclipToObs.det2 or eclipToObs.det)
         ASSERT, ecliplen_tot gt 0, 'ecliplen_tot should be gt 0.'
@@ -231,7 +247,7 @@ for ii=0, numfil-1 do begin
         if (det[0] ne -1) then begin
           detid = eclipToObs[det].hostid
           ndet = n_elements(det)
-          companionInd = MAKE_ARRAY(ndet, /integer, value=0) ; TODO clean up (e.g., a write function)
+          companionInd = MAKE_ARRAY(ndet, /integer, value=0)
           companionIndList = targets[detid].companion.ind
           for qq=0, ndet-1 do begin
             companionInd[qq] = WHERE(targets.starid eq companionIndList[qq])

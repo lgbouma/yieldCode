@@ -6,7 +6,7 @@ PRO main
                 0, $ ; HEBs
                 0  ] ; BTPs
   tile_wrapper, '../../outStarLib/', fnums, $
-  'tempOut.fits', $; output file name (w/ fits ext). Nb: fits files dont overwrite
+  '160422-eclipObsDebug07.fits', $; output file name (w/ fits ext). Nb: fits files dont overwrite
   n_trial=10, $	; number of trials (10 good for reasonable statistics)
   eclass=eclass, $ ; from above
   ps_only=1, $	; 1=only run postage stamps, 0=run ffis as well
@@ -18,8 +18,8 @@ PRO main
   prototypeMode=0, $	; 0=full simulations. 1= 1 tile, 2=10 tiles, 3=~290 tiles (1/10th of sky)
   fCamCoordPri='../cameraPointings/ns_nominal_camCoord.dat', $ ;where cams pnt for primary mission.
   fCamCoordExt='../cameraPointings/ns_ep_camCoord.dat', $ ;cam coords for ext mission. '' if no ext.
-  psPriFile='../../preProcessing/sTIC-selection/primary/sTIC-eq1allCuts-primary.sav', $ ; primary PSs
-  psExtFile='../../preProcessing/sTIC-selection/ext-poles/sTIC-eq1allCuts-ext-poles.sav', $ ;ext PSs
+  psPriFile='../../preProcessing/sTIC-selection/primary/eq1allCuts-pri.sav', $ ; primary PSs
+  psExtFile='../../preProcessing/sTIC-selection/ext-poles/eq1allCuts-extPoles.sav', $ ;ext PSs
             $ ; If primary only, leave as ''
   burtCatalog=0 ; are you making catalogs to send to Jenn Burt so she can plan APF RV followup?
 END

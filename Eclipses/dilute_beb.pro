@@ -1,5 +1,5 @@
 PRO dilute_beb, eclip, frac, ph_p, dx, dy, dilvec, $
-	aspix=aspix, radmax=radmax
+	aspix=aspix, radmax=radmax, randSeed=randSeed
   ; as a function of npix in the target star aperture, calculate the 
   ; diluting photon flux and the depth of eclipse
 
@@ -23,7 +23,7 @@ PRO dilute_beb, eclip, frac, ph_p, dx, dy, dilvec, $
   bintmag = eclip.tsys
   binteff = eclip.teff1
   binsep  = eclip.sep ; in pixels
-  bintheta = 2.*!dpi*randomu(seed, nbin)
+  bintheta = 2.*!dpi*randomu(randSeed, nbin)
   binx = binsep*cos(bintheta)
   biny = binsep*sin(bintheta)
 

@@ -4,7 +4,8 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 	ps_len=ps_len, ffi_len=ffi_len, saturation=saturation, $
 	sys_limit=sys_limit, duty_cycle=duty_cycle, $
   dwell_time=dwell_time, downlink=downlink, $
-  subexptime=subexptime, extMission=extMission
+  subexptime=subexptime, extMission=extMission, randSeed=randSeed, $
+  ps_only=ps_only
 ;+
 ; NAME: eclip_observe
 ; PURPOSE: take in an eclipStruct and find out which are detected. I think 
@@ -12,13 +13,16 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 ; if stars on this healpix tile get eclipsing planets.
 ; IN:
 ;   1. eclipse: "eclip" object (eclipStruct) with transit parameters filled out
-;   2. star: starStruct of targets
-;   3. bk: background stars
+;   2. star: outStarStruct of targets
+;   3. bk: background stars (to be uniformly sampled)
 ;   4. deep: deeper dilution
-;   5. frac: PRF file (for us, as-built from deb woods)
+;   5. frac: PRF file (for us, as-built from deb woods). [10, 20, 4, 144, 9]:
+;       4 field angles. 9 wavelengths. 12 Teffs (table 1). 144 total pixels in image.
 ;   6. ph_p: photon fluxes in TESS bandpass (vs t_eff) (array of n_pix * n_star)
 ;   7. cr: a 100*64 array of zeros, supposed to be cosmic rays (presumably was tried then dropped)
-;   8. var: 100*4 array of numbers, presumably accounting for stellar variability
+;   8. var: 100*4 array of numbers to account for stellar variability
+;       sigma_v is computed for Teff<4500K, 4500-5000K, 5000-6000K, and T_eff>6000K. Each star
+;       gets assigned the same varibility stat btwn runs
 ;   9. aspix: arcsec per pixel (21.1)
 ;   10. effarea: of CCDs (~69cm^2)
 ;   11. readnoise: 10 electrons per subexposure
@@ -48,17 +52,18 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   if (keyword_set(downlink)) then downlink=downlink else downlink=16.0d/24.0d
   apo_blank = (dwell_time-downlink)*(1.0-duty_cycle/100.0)
 
+  assert, min(cr eq make_array(100,64)) eq 1, 'Legacy cr holder should be zeros'
   sz_frac = size(frac)  
-  npix_img = sqrt(sz_frac[4])
+  npix_img = sqrt(sz_frac[4]) ;sz_frac[4] is total # of px in img. Sqrt is # px / img side = 12.
   npix_min = 3
-  npix_max = (npix_img/2)^2
+  npix_max = (npix_img/2)^2 ; 36, cf. Fig 14 S15, corresponds to I_c = 6 and brighter.
   mask2d = intarr(npix_img,npix_img)
   mid = indgen(npix_img/2)+npix_img/4
   mask1 = mask2d
   mask2 = mask2d
   mask1[*,mid] = 1
   mask2[mid,*] = 1
-  mask2d = mask1*mask2
+  mask2d = mask1*mask2 ; 12*12 array of 1's and 0's, presumably masking for stack
   mask1d = reform(mask2d, npix_img*npix_img)
 
   cind = findgen(npix_img)
@@ -69,8 +74,8 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   nstars = n_elements(star)
   neclipses = n_elements(eclipse)
   print, 'Observing ', neclipses, ' eclipses around ', nstars,' stars.'
-  dx = floor(10*randomu(seed, neclipses))
-  dy = floor(20*randomu(seed, neclipses))
+  dx = floor(10*randomu(randSeed, neclipses)) ; same tile gets same seed
+  dy = floor(20*randomu(randSeed, neclipses))
   crind = dy*5 + dx
 
   vtf = [1D7, 6000., 5000., 4500., 1D0]
@@ -105,6 +110,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   dayoff1 = (dr1 mod 1)*p 
   dayoff2 = (dr2 mod 1)*p
  
+  ; Get number of *observed* eclipses
   eclipse.neclip_obs1 = $
       n_eclip(eclipse.p, dwell_time, $
       2.0*double(eclipse.npointings), dayoff1, periblank=downlink, apoblank=apo_blank)
@@ -119,21 +125,28 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   if (tra_ps[0] ne -1) then begin
     dur1_min = eclipse[tra_ps].dur1*24.0*60.0
     dur2_min = eclipse[tra_ps].dur2*24.0*60.0
-    eclipse[tra_ps].dep1_eff = eclipse[tra_ps].dep1*dil_ffi_eclip(dur1_min, float(ps_len), ffis=nps)
+    eclipse[tra_ps].dep1_eff = eclipse[tra_ps].dep1*dil_ffi_eclip(dur1_min, float(ps_len), $
+                                ffis=nps, randSeed=randSeed)
     eclipse[tra_ps].dur1_eff = (nps*ps_len)/(24.0*60.0)
-    eclipse[tra_ps].dep2_eff = eclipse[tra_ps].dep2*dil_ffi_eclip(dur2_min, float(ps_len), ffis=nps)
+    eclipse[tra_ps].dep2_eff = eclipse[tra_ps].dep2*dil_ffi_eclip(dur2_min, float(ps_len), $
+                                ffis=nps, randSeed=randSeed+9001) ; diff seeds for each
     eclipse[tra_ps].dur2_eff = (nps*ps_len)/(24.0*60.0)
   endif
 
   if ~extMission then tra_ffi = where(star[eclipse.hostid].ffi gt 0)
-  if extMission then tra_ffi = where(star[eclipse.hostid].ffi eq 0 and $
+  if extMission and ~ps_only then tra_ffi = where(star[eclipse.hostid].ffi eq 1 or $
                                      star[eclipse.hostid].nPntgs eq 0)
+  if extMission and ps_only then tra_ffi = -1
+
   if (tra_ffi[0] ne -1) then begin
+    assert, 0, 'warning: should not be called until extended mission is adapted to ffis'
     dur1_min = eclipse[tra_ffi].dur1*24.0*60.0
     dur2_min = eclipse[tra_ffi].dur2*24.0*60.0
-    eclipse[tra_ffi].dep1_eff = eclipse[tra_ffi].dep1*dil_ffi_eclip(dur1_min, float(ffi_len), ffis=ffis)
+    eclipse[tra_ffi].dep1_eff = eclipse[tra_ffi].dep1*dil_ffi_eclip(dur1_min, float(ffi_len), $
+                                  ffis=ffis, randSeed=randSeed+9002)
     eclipse[tra_ffi].dur1_eff = (ffis*ffi_len)/(24.0*60.0)
-    eclipse[tra_ffi].dep2_eff = eclipse[tra_ffi].dep2*dil_ffi_eclip(dur2_min, float(ffi_len), ffis=ffis)
+    eclipse[tra_ffi].dep2_eff = eclipse[tra_ffi].dep2*dil_ffi_eclip(dur2_min, float(ffi_len), $
+                                  ffis=ffis, randSeed=randSeed+9003)
     eclipse[tra_ffi].dur2_eff = (ffis*ffi_len)/(24.0*60.0)
   endif
 
@@ -148,7 +161,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     ; ph_star is npix x nstar
     stack_prf_eclip, star[obsid].mag.t, star[obsid].teff, ph_p, frac, star_ph, $
         dx=dx[obs], dy=dy[obs], fov_ind=eclipse[obs].coord.fov_ind, mask=mask1d, sind=sind
-
     ; BEBs and HEBs
     bebdil = where(eclipse[obs].class eq 3 or eclipse[obs].class eq 4 or eclipse[obs].class eq 5)
     beb_ph = dblarr(total(mask1d), nobs)
@@ -156,7 +168,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       nbeb = n_elements(bebdil)
       ;beb_ph = dblarr(total(mask1d), nbeb)
       dilute_beb, eclipse[obs[bebdil]], frac, ph_p, $
-          dx[obs[bebdil]], dy[obs[bebdil]], bebvec, aspix=aspix, radmax=6.0
+          dx[obs[bebdil]], dy[obs[bebdil]], bebvec, aspix=aspix, radmax=6.0, randSeed=randSeed+9008
       for jj=0,nbeb-1 do beb_ph[*,bebdil[jj]] = bebvec[*,jj]
     end   
     for jj=0,nobs-1 do begin
@@ -178,7 +190,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       calc_noise_eclip, star_ph, beb_ph, exptime, $
           readnoise, sys_limit, noise, $
           npix_aper=(ii+1), field_angle=eclipse[obs].coord.field_angle, $
-          cr_noise = thiscr[crind[obs]]/sqrt(60.0/ffi_len)*star[obsid].ffi, $
+          cr_noise = star[obsid].ffi*0., $ ; wonky call for array size compatibility
           subexptime=subexptime, $
           geom_area = effarea, $
           aspix=aspix, $
@@ -198,6 +210,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     minnoise = min(noises, ind, dimension=2)
     eclipse[obs].npix = ind / n_elements(obs) + npix_min
     eclipse[obs].dil = dilution[ind]
+    ;stop
     for ss=0,nobs-1 do eclipse[obs[ss]].star_ph = star_ph[eclipse[obs[ss]].npix-1,ss]
     if (bebdil[0] ne -1) then begin
       beb_pixph = dblarr(nbeb)
@@ -244,14 +257,14 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       if (bindil[0] ne -1) then begin
         nbindil = n_elements(bindil)
         dilute_binary, eclipse[det[bindil]], star, frac, ph_p, $
-            dx[det[bindil]], dy[det[bindil]], dilvec, aspix=aspix, radmax=6.0
+            dx[det[bindil]], dy[det[bindil]], dilvec, aspix=aspix, radmax=6.0, randSeed=randSeed
         for jj=0,nbindil-1 do dil_ph[*,bindil[jj]] = dil_ph[*,bindil[jj]] + dilvec[*,jj]
       end
     
       ; Everything is diluted by deep stars
       print, "Diluting with deep stars"
       dilute_eclipse_img, eclipse[det], deep, frac, ph_p, $
-          dx[det], dy[det], dilvec, aspix=aspix, sq_deg=0.0134, radmax=2.0
+          dx[det], dy[det], dilvec, aspix=aspix, sq_deg=0.0134, radmax=2.0, randSeed=randSeed+9004
       for jj=0,ndet-1 do dil_ph[*,jj] = dil_ph[*,jj] + dilvec[*,jj]
       
       ; BEB and BTP hosts will be diluted by the background star. Don't add others
@@ -260,7 +273,8 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       if (bkdil[0] ne -1) then begin
         nbkdil = n_elements(bkdil)
         dilute_eclipse_img, eclipse[det[bkdil]], bk, frac, ph_p, $
-            dx[det[bkdil]], dy[det[bkdil]], dilvec, aspix=aspix, sq_deg=0.134, radmax=4.0
+            dx[det[bkdil]], dy[det[bkdil]], dilvec, aspix=aspix, sq_deg=0.134, $
+            radmax=4.0, randSeed=randSeed+9005
         for jj=0,nbkdil-1 do dil_ph[*,bkdil[jj]] = dil_ph[*,bkdil[jj]] + dilvec[*,jj]
       end
    
@@ -270,14 +284,14 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
         nbeb = n_elements(bebdil)
         ;beb_ph = dblarr(total(mask1d), nbeb)
         dilute_beb, eclipse[det[bebdil]], frac, ph_p, $
-            dx[det[bebdil]], dy[det[bebdil]], bebvec, aspix=aspix, radmax=6.0
+            dx[det[bebdil]], dy[det[bebdil]], bebvec, aspix=aspix, radmax=6.0, randSeed=randSeed+9007
         for jj=0,nbeb-1 do beb_ph[*,bebdil[jj]] = bebvec[*,jj]
       end   
       
       ; Everything
       print, "Diluting with other target stars"
       dilute_eclipse_img, eclipse[det], star, frac, ph_p, $
-          dx[det], dy[det], dilvec, aspix=aspix, sq_deg=13.4, radmax=6.0
+          dx[det], dy[det], dilvec, aspix=aspix, sq_deg=13.4, radmax=6.0, randSeed=randSeed+9006
       for jj=0,ndet-1 do dil_ph[*,jj] = dilvec[*,jj]
    
       ; Calculate centroid shift and uncertainty
@@ -309,7 +323,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
             ycennoise1, ycennoise2, $
             npix_aper=(ii+npix_min), $
             field_angle=eclipse[det].coord.field_angle, $
-            cr_noise = thiscr[crind[det]]/sqrt(60.0/ffi_len)*star[detid].ffi, $
+            cr_noise = star[detid].ffi*0., $
             subexptime=subexptime, $
             geom_area = effarea, $
             aspix=aspix, $
@@ -358,7 +372,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
             readnoise, sys_limit, noise, $
             npix_aper=(ii+1), $
             field_angle=eclipse[det].coord.field_angle, $
-            cr_noise = thiscr[crind[det]]/sqrt(60.0/ffi_len)*star[detid].ffi, $
+            cr_noise = star[detid].ffi*0., $
             subexptime=subexptime, $
             geom_area = effarea, $
             aspix=aspix, $
@@ -413,4 +427,5 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       endif
     end ;det if
   end ; obs if
+  assert, max(cr) eq 0, 'error: nonzero cosmic ray flux. means blowback to stack_prf'
 end

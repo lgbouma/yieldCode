@@ -1,5 +1,5 @@
-function dil_ffi_eclip, dur_min, ffi_len, ffi_os=ffi_os, ffis=ffis
-    ffi_os = randomu(seed, n_elements(dur_min)) ; time delay from start of first ffi to first contact
+function dil_ffi_eclip, dur_min, ffi_len, ffi_os=ffi_os, ffis=ffis, randSeed=randSeed
+    ffi_os = randomu(randSeed, n_elements(dur_min)) ; time delay from start of first ffi to first contact
     ;ffi_os = fltarr(n_elements(dur_min))
     nffi = float(floor((dur_min - ffi_len*ffi_os)/ffi_len)) ; these images are fully transited
     igrss = ffi_os ; this fraction of ingress image is transited

@@ -1,5 +1,9 @@
 PRO dilute_binary, eclip, star, frac, ph_p, dx, dy, dilvec, $
-	aspix=aspix, radmax=radmax
+	aspix=aspix, radmax=radmax, randSeed=randSeed
+; 16/04/20
+; PURPOSE: ostensibly to dilute stars with binary companions. Given how many planets
+;   we "detect" around close binaries, this routine may have a bug.
+
   ; How many filters in the prf?
   sz_ph_p = size(ph_p)
   nfilt = sz_ph_p[1]
@@ -29,7 +33,7 @@ PRO dilute_binary, eclip, star, frac, ph_p, dx, dy, dilvec, $
     binsep  = star[companionInd].companion.sep/aspix
     bindx = dx[binsys]
     bindy = dy[binsys]
-    bintheta = 2.*!dpi*randomu(seed, nbin)
+    bintheta = 2.*!dpi*randomu(randSeed, nbin)
     binx = binsep*cos(bintheta)
     biny = binsep*sin(bintheta)
 

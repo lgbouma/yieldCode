@@ -84,15 +84,18 @@ pro eclip_survey, fov, eclip, fCamCoord
       r = sqrt((x[chipInd]-ccdCtr[0])^2. + (y[chipInd]-ccdCtr[1])^2.)
       eclip[chipInd].npointings = new_npointings[chipInd]
       ; compute cumulative moving average of field angle for all obsns the star receives
-      eclip[chipInd].coord.fov_r = r/float(new_npointings[chipInd]) + $
-      float(prev_npointings[chipInd])*eclip[chipInd].coord.fov_r/float(new_npointings[chipInd])
+      eclip[chipInd].coord.fov_r = 0.; todo: revert back to actually computing field angles below
+      ;eclip[chipInd].coord.fov_r = r/float(new_npointings[chipInd]) + $
+      ;float(prev_npointings[chipInd])*eclip[chipInd].coord.fov_r/float(new_npointings[chipInd])
       old_onChip = onChip
     endif
   endfor
 
   ; Determine FOV index
   r = eclip.coord.fov_r
-  field_angle = r * fov / (ccdPix+gapPix)
+  ;field_angle = r * fov / (ccdPix+gapPix)
+  field_angle = make_array(n_elements(r))
+  field_angle[*] = 0. ; todo: revert back to above
   fov_ind = intarr(n_elements(field_angle))
   ; 10/25/2015 PS: new field angles: [0,7.14,14.26,20]
   ; old field angles were [0,6,12,17] deg
