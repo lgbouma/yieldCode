@@ -103,8 +103,8 @@ totEclCounter = 0UL
 star_out = DBLARR(5E4*n_trial,nparam) ; 35 million
 ext_out = DBLARR(5e4*n_trial,nparam) ; *2
 
-for ii=848, 858 do begin ;TODO switch back for testing
-;for ii=0, numfil-1 do begin
+;for ii=848, 858 do begin ;TODO switch back for testing
+for ii=0, numfil-1 do begin
   tileClock = TIC('tileNumber-' + STRTRIM(ii, 2) + '-' + STRING(fnums[ii]))
   fopenClock = TIC('fileOpen-' + STRTRIM(ii, 2))
 
