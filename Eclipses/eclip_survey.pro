@@ -25,9 +25,7 @@ pro eclip_survey, fov, eclip, fCamCoord
   READCOL, fCamCoord, F=FMT, pointingNumber, camNumber, camElat, camElong
   nPointings = MAX(pointingNumber)+1 ; 26 pntgs 2yr, 52 4yr
   nCams = 4
-  nCamPointings = nPointings * nCams
-  assert, nCamPointings eq N_ELEMENTS(pointingNumber), $
-    'Need as many camPointings as elements passed in camPointingFile'
+  nCamPointings = n_elements(pointingNumber) 
 
   ;CCD info
   ccdPix = 4096.
