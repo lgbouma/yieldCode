@@ -1,7 +1,7 @@
 PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
 prototypeMode=prototypeMode,fCamCoordPri=fCamCoordPri,fCamCoordExt=fCamCoordExt, $
-psPriFile=psPriFile,psExtFile=psExtFile, burtCatalog=burtCatalog
+psPriFile=psPriFile,psExtFile=psExtFile, burtCatalog=burtCatalog, batchJob=batchJob
 
 TIC ; Grab initial system time
 
@@ -95,7 +95,8 @@ if extMission then begin
   delvarx, outExt
 endif
 
-SPAWN, 'cat main.pro' ; Print input file to log so you know what you did
+SPAWN, 'cat input_files/run_extended_missions.sh' ; Print input file to log so you know what you did
+SPAWN, 'cat input_files/main_ext.pro' ; Print input file to log so you know what you did
 
 totPriDet = 0L
 totExtDet = 0L
@@ -303,13 +304,19 @@ print, 'Reached end at totPriDet = ', totPriDet
 if extMission then print, 'Reached end at totExtDet = ', totExtDet
 if totPriDet gt 0 and ~extMission then mwrfits, star_out[0:(totPriDet-1),*], outname ; write
 if totPriDet gt 0 and totExtDet gt 0 and extMission then begin
-  periodLoc = strpos(outname, '.')
-  outNameNoExt = strmid(outname, 0, periodLoc)
-  mwrfits, star_out[0:(totPriDet-1),*], outNameNoExt+'-pri.fits'
-  mwrfits, ext_out[0:(totExtDet-1),*], outNameNoExt+'-ext.fits'
+  if ~batchJob then begin
+    preStr = ''
+    periodLoc = strpos(outname, '.')
+    outNameNoExt = strmid(outname, 0, periodLoc)
+  endif
+  if batchJob then begin
+    preStr = 'output_files/' 
+    periodLoc = strpos(outname, '.')
+    outNameNoExt = strmid(outname, 0, periodLoc)
+  endif
+  mwrfits, star_out[0:(totPriDet-1),*], preStr+outNameNoExt+'-pri.fits'
+  mwrfits, ext_out[0:(totExtDet-1),*], preStr+outNameNoExt+'-ext.fits'
 endif
 print, total(numPriPs), ' primary postage stamps assigned'
-assert, total(numPriPs) eq 200000
 if extMission then print, total(numExtPs), ' extended postage stamps assigned'
-assert, total(numExtPs) eq 200000
 END
