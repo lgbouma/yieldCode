@@ -113,10 +113,10 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   ; Get number of *observed* eclipses
   eclipse.neclip_obs1 = $
       n_eclip(eclipse.p, dwell_time, $
-      2.0*double(eclipse.npointings), dayoff1, periblank=downlink, apoblank=apo_blank)
+      double(eclipse.npointings), dayoff1, periblank=downlink, apoblank=apo_blank)
   eclipse.neclip_obs2 = $
       n_eclip(eclipse.p, DWELL_TIME, $
-      2.0*double(eclipse.npointings), dayoff2, periblank=downlink, apoblank=apo_blank)
+      double(eclipse.npointings), dayoff2, periblank=downlink, apoblank=apo_blank)
 
   print, 'Diluting FFIs'
   if ~extMission then tra_ps = where(star[eclipse.hostid].ffi lt 1)
