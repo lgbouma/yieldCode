@@ -13,34 +13,26 @@ function n_eclip, $
   if (keyword_set(periblank)) then periblank=periblank else periblank=0.0
 
   n = 0.0*period
-;  if (keyword_set(ein)) then ein=ein else $
-;  ein = randomu(seed,n_elements(period))
-;  e = period*ein
 
   observed = where(offday lt duration, complement=missed)
 
   if (missed[0] ne -1) then n[missed] = 0.0
 
   if (observed[0] ne -1) then begin
-     n[observed] = 1.0 + floor( (duration[observed] - offday[observed])/period[observed] )
-     n0 = n
-     ;print, e, ni
-     ;print, "staring for loop", min(period), max(period)
-     for m=0,max(n)-1 do begin
-	trantime = (offday+m*period) mod obstime
-        ;print, 'trantime = ', trantime
-	; Does the mth transit fall into the blanking zone?
-	apoblanked =  where((trantime gt (obstime-periblank-apoblank)/2.0) and $
-			    (trantime lt (obstime-periblank+apoblank)/2.0) and $
-     		            (m lt n0))
-        ;print, 'apoblanked = ', apoblanked
-        periblanked = where((trantime gt (obstime-periblank)) and $
-			    (trantime lt obstime) and $
-			    (m lt n0))
-        ;print, 'periblanked = ', periblanked
-        if(apoblanked[0] ne -1)  then n[apoblanked] = n[apoblanked]-1
-        if(periblanked[0] ne -1) then n[periblanked] = n[periblanked]-1
-     endfor
+    n[observed] = 1.0 + floor( (duration[observed] - offday[observed])/period[observed] )
+    n0 = n
+    for m=0,max(n)-1 do begin
+      trantime = (offday+m*period) mod obstime
+      ; Does the mth transit fall into the blanking zone?
+      apoblanked =  where((trantime gt (obstime-periblank-apoblank)/2.0) and $
+                          (trantime lt (obstime-periblank+apoblank)/2.0) and $
+                          (m lt n0))
+      periblanked = where((trantime gt (obstime-periblank)) and $
+                          (trantime lt obstime) and $
+                          (m lt n0))
+      if(apoblanked[0] ne -1)  then n[apoblanked] = n[apoblanked]-1
+      if(periblanked[0] ne -1) then n[periblanked] = n[periblanked]-1
+    endfor
   endif
 
   return, n

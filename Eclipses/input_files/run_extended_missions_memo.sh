@@ -3,9 +3,9 @@
 export n_trial=20 # number of trials (20 good for reasonable statistics)
 export prototype_mode=0 # 0=full sim. 1= 1 tile, 2=10 tiles, 3=~290 tiles (1/10th of sky)
 
-export date_sub="160617_pm$prototype_mode" # substring to put before output files
+export date_sub="160618_200k_pm$prototype_mode" # substring to put before output files
 
-export ps_pri_file="../../preProcessing/sTIC-selection/shemi_nhemi_4Morb/shemi_nhemi.sav" # 200k over 2yr
+export ps_pri_file="../../preProcessing/sTIC-selection/shemi_nhemi_4Morb/shemi_nhemi_200k.sav" # 200k over 2yr
 export fcam_coord_pri="../cameraPointings/shemi_nhemi_orbits.dat"
 
 #here is where you write all your extended mission names, and their tails (since idk how to bash)
@@ -35,9 +35,9 @@ do
   echo "Running $i ..."
   export ext_mission_name="$i"
 
-  export fcam_coord_ext="../cameraPointings/"${tails[$ind]}"_coord.dat"
-  export ps_ext_file="../../preProcessing/sTIC-selection/"$i"/"$i".sav"
-  idl -e main_ext &> "../output_files/"$date_sub"_"$i"_t"$n_trial".raw" &
+  export fcam_coord_ext="../cameraPointings/"${tails[$ind]}"_orbits.dat"
+  export ps_ext_file="../../preProcessing/sTIC-selection/"$i"_4Morb/"$i"_200k.sav"
+  idl -e main_ext &> "../output_files/"$date_sub"_"$i"_t"$n_trial".out" &
   let "ind+=1"
 
 done
