@@ -7,7 +7,7 @@ function n_eclip, $
 ;  perigee (downlink).
 ; Must also input the phase offset of the transit (in days)
 
-  duration = npoint*obstime
+  duration = npoint*obstime ; total observing baseline for each star
  
   if (keyword_set(apoblank)) then apoblank=apoblank else apoblank=0.0
   if (keyword_set(periblank)) then periblank=periblank else periblank=0.0
@@ -34,21 +34,5 @@ function n_eclip, $
       if(periblanked[0] ne -1) then n[periblanked] = n[periblanked]-1
     endfor
   endif
-
   return, n
-
-end
-
-pro test_n_eclipses
-
-  m = 100
-  period = 1.0 + fltarr(m)
-  duration = 0.0 + 10.0*findgen(m)/float(m)
-
-  n = n_eclipses(period, duration)
-
-  !p.charsize=2
-  plotsym,0,/fill
-  plot, duration, n, psym=3, yra=[-1,11], xra=[-1,11], xsty=1, ysty=1
-
 end

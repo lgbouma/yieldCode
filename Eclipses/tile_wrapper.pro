@@ -1,11 +1,12 @@
 PRO tile_wrapper, fpath, fnums, outname, ps_only=ps_only, detmag=detmag, $
 eclip=eclip, n_trial=n_trial, eclass=eclass, pla_err=pla_err, prf_file=prf_file, $
 prototypeMode=prototypeMode,fCamCoordPri=fCamCoordPri,fCamCoordExt=fCamCoordExt, $
-psPriFile=psPriFile,psExtFile=psExtFile, burtCatalog=burtCatalog, batchJob=batchJob
+psPriFile=psPriFile,ffiPriFile=ffiPriFile,psExtFile=psExtFile,ffiExtFile=ffiExtFile,$
+burtCatalog=burtCatalog, batchJob=batchJob
 
 TIC ; Grab initial system time
 
-; Assign prototype & extMission
+;;; Assign prototype & extMission
 numfil = N_ELEMENTS(fnums)   
 randomNumbers = RANDOMU(seed, numfil)
 randomIndices = SORT(ROUND(randomNumbers * (numfil-1)))
@@ -22,7 +23,7 @@ endcase
 numfil = N_ELEMENTS(fnums)
 if fCamCoordExt ne '' then extMission = 1 else extMission = 0
 
-; Input files
+;;; Input files
 ph_file = 'ph_T_filt.fits' ; photon fluxes for T=10 vs Teff
 cr_file = 'crnoise.fits'   
 tic_file = 'tic_teff.fits'
@@ -30,9 +31,9 @@ dart_file = 'dartmouth_grid.sav'
 var_file = 'starvar.fits'
 tband_file = 'tband.csv'
 
-; User-adjustable settings (yes, that's you!)
+;;; User-adjustable settings (yes, that's you!)
 assert, ~burtCatalog, 'b/c this was a one-timer'
-nparam = 74 ; output table width
+nparam = 90 ; output table width
 fov = 24. ; degrees
 seg = 13  ; number of segments per hemisphere
 effarea = 69.1 ;43.9 ;54.9 ;100. ;54.9 ;69.1 ; in cm^2. 
@@ -70,9 +71,11 @@ AU_IN_RSUN = 215.093990942
 numtargets = lonarr(numfil) ; numfil is n_elements(fnums), or ~3000 for standard all-sky.
 numbkgnd = lonarr(numfil)
 numdeeps = lonarr(numfil)
-numPriPs = lonarr(numfil)
-numExtPs = lonarr(numfil)
-; Open the fits files
+numPriPS = lonarr(numfil)
+numExtPS = lonarr(numfil)
+if ~ps_only then numPriFFI = lonarr(numfil)
+if ~ps_only then numExtFFI = lonarr(numfil)
+;;; Open the fits files
 frac_fits = mrdfits(frac_file)
 ph_fits = mrdfits(ph_file)
 var_fits = mrdfits(var_file)
@@ -87,21 +90,42 @@ psPriStars = outPri
 psHpNum = psPriStars[*,1]
 psStarID = psPriStars[*,2]
 delvarx, outPri
+delvarx, psPriStars
+if ~ps_only then begin
+  restore, ffiPriFile ; Selected postage stamps: 0th column is stat, 1st healpix number, 2nd star ID
+  ffiPriStars = outPri
+  ffiHpNum = ffiPriStars[*,1]
+  ffiStarID = ffiPriStars[*,2]
+  delvarx, outPri
+  delvarx, ffiPriStars
+endif
 if extMission then begin
   restore, psExtFile
   psExtStars = outExt
   psExtHpNum = psExtStars[*,1]
   psExtStarID = psExtStars[*,2]
   delvarx, outExt
+  delvarx, psExtStars
+  if ~ps_only then begin
+    restore, ffiExtFile
+    ffiExtStars = outExt
+    ffiExtHpNum = ffiExtStars[*,1]
+    ffiExtStarID = ffiExtStars[*,2]
+    delvarx, outExt
+    delvarx, ffiExtStars
+  endif
 endif
 
-SPAWN, 'cat input_files/run_extended_missions.sh' ; Print input file to log so you know what you did
-SPAWN, 'cat input_files/main_ext.pro' ; Print input file to log so you know what you did
+if prototypeMode eq 1 or prototypeMode eq 2 then SPAWN, 'cat main.pro' ; single-mission testing calls
+if prototypeMode eq 0 then begin
+  SPAWN, 'cat input_files/run_extended_missions.sh' ; Print input file to log so you know what you did
+  SPAWN, 'cat input_files/main_ext.pro' ; Print input file to log so you know what you did
+endif
 
 totPriDet = 0L
 totExtDet = 0L
 totEclCounter = 0UL
-star_out = DBLARR(5E4*n_trial,nparam) ; 35 million
+star_out = DBLARR(5E4*n_trial,nparam) ; 35 million floats, 4 bytes per; ~100Mb
 ext_out = DBLARR(5e4*n_trial,nparam) ; *2
 
 ;for ii=848, 858 do begin ;TODO switch back for testing
@@ -127,41 +151,71 @@ for ii=0, numfil-1 do begin
   print, 'File #', ii, 'tile #', fnums[ii], ' numtargets', numtargets[ii], ' numbkgnd', $ 
           numbkgnd[ii], ' numdeeps', numdeeps[ii]
   TOC, fopenClock
-  ; previously had a first-cut for nPointings skip here. todo might be good for ffis.
 
-  ; Selecting postage stamp / ffi stars
+  ;;; Selecting postage stamp / pseudo-ffi stars (& stars from outStarLib that won't be obsd)
   psSelClock = TIC('psSel-' + STRTRIM(ii, 2))
-  targets.ffi = 1 ; by definition all "target" stars will be in FFIs
-  psInd = where(psHpNum eq fnums[ii], nPriPs)
-  if nPriPs gt 0 then begin
+
+  targets.ffi = -1 ; no star that gets selected should have this flag.
+  targets.nPntgs = -1 ; no star that gets selected should have this flag.
+  psInd = where(psHpNum eq fnums[ii], nPriPS)
+  if ~ps_only then ffiInd = where(ffiHpNum eq fnums[ii], nPriFFI)
+
+  ; Assign PS/pseudoFFI/notObsd for primary mission based on 160621 ext_sim_notes table.
+  if nPriPS gt 0 then begin
     targets[psStarID[psInd]].ffi = 0 ; these are postage stamps in primary
     psSecInd = targets[psStarID[psInd]].companion.ind
     targets[psSecInd].ffi = 0
     assert, min(targets[psStarID[psInd]].starID eq psStarID[psInd]) eq 1, 'error: postage stamp matching'
-    assert, min(targets.nPntgs eq make_array(n_elements(targets))) eq 1, 'error: input target pntgs'
-    numPriPs[ii] += nPriPs
+    numPriPS[ii] += nPriPS
   endif
+  if ~ps_only and nPriFFI gt 0 then begin
+    targets[ffiStarID[ffiInd]].ffi = 1 ; these are pseudo-ffis in primary
+    ffiSecInd = targets[ffiStarID[ffiInd]].companion.ind
+    targets[ffiSecInd].ffi = 1
+    assert, min(targets[ffiStarID[ffiInd]].starID eq ffiStarID[ffiInd]) eq 1, $
+            'error: pseudo-ffi matching'
+    numPriFFI[ii] += nPriFFI
+  endif
+
+  ; same, for extended mission.
   if extMission then begin
     extPsInd = where(psExtHpNum eq fnums[ii], nExtPs)
     if nExtPs gt 0 then begin
-      targets[psExtStarID[extPsInd]].nPntgs = 1 ; misnamed, but keep existing libs.
+      targets[psExtStarID[extPsInd]].nPntgs = 1 ; these are postage stamps in extended
       extPsSecInd = targets[psExtStarID[extPsInd]].companion.ind
       targets[extPsSecInd].nPntgs = 1
       assert, min(targets[psExtStarID[extPsInd]].starID eq psExtStarID[extPsInd]) eq 1, 'extPs must match'
       numExtPs[ii] += nExtPs
     endif
+    if ~ps_only then extFfiInd = where(ffiExtHpNum eq fnums[ii], nExtFfi)
+    if ~ps_only and nExtFfi gt 0 then begin
+      targets[ffiExtStarID[extFfiInd]].nPntgs = 0 ; pseudo-ffis in extended
+      extFfiSecInd = targets[ffiExtStarID[extFfiInd]].companion.ind
+      targets[extFfiSecInd].nPntgs = 0
+      assert, min(targets[ffiExtStarID[extFfiInd]].starID eq ffiExtStarID[extFfiInd]) eq 1, $
+              'error: pseudo-ffi matching in extended mission'
+      numExtFfi[ii] += nExtFfi
+    endif
   endif
-  if ps_only eq 1 and extMission then $
+
+  ; Make cut to choose stars that get observed
+  if ps_only and extMission then $
     targets = targets[where(targets.ffi eq 0 or targets.nPntgs eq 1, targetCount)]
+  if ~ps_only and extMission then $
+    never_obsd = where(targets.ffi eq -1 and targets.nPntgs eq -1, n_never_obsd, $
+                       COMPLEMENT=obsd_at_least_once, NCOMPLEMENT=targetCount)
+    targets = targets[obsd_at_least_once]
   if targetCount eq 0 then begin
     print, 'Skipping loop number', ii, 'hpNum ', fnums[ii], 'b/c gets no targets ever'
     continue
   endif
-  assert, targetCount gt 0
+  assert, targetCount gt 0, 'error: should have skipped tile'
+  assert, where(targets.ffi eq -1 and targets.nPntgs eq -1) eq -1, $
+          'error: all passed stars should be PS or pseudo-FFI in both primary or extended'
   TOC, psSelClock
 
-  ; Loop over each trial to generate eclipses. Each eclip (as long as not in multi system)
-  ; gets unique coordinates for same trial (from host star). Not true for diff trials.
+  ;;; Loop over each trial to generate eclipses. Each eclip (as long as not in multi system)
+  ;;; gets unique coordinates for same trial (from host star). Not true for diff trials.
   ecliplen_tot = 0L
   for jj=0,n_trial-1 do begin
     targets.cosi = -1 + 2.0*randomu(seed, n_elements(targets)) ; randomize inclination
@@ -183,10 +237,11 @@ for ii=0, numfil-1 do begin
       totEclCounter += ulong(ecliplen) ; saved over tiles
     endif
   endfor
+  print, 'Tile number: ', fnums[ii], ', total number of eclipses:', totEclCounter
 
   if (ecliplen_tot gt 0) then begin
     if (detmag eq 0) then begin
-      assert, where(eclip.npointings ne 0) eq -1, 'error: eclipse pointings should be zero'
+      assert, where(eclip.pri.npointings ne 0) eq -1, 'error: eclipse pointings should be zero'
       for run=0,1 do begin ; interior loop for ext missions
         if run eq 0 then fCamCoord = fCamCoordPri
         if run eq 1 and ~extMission then continue
@@ -194,30 +249,21 @@ for ii=0, numfil-1 do begin
 
         ; Survey: add this run's npointings and calc field angle (with dead ccd pixels)
         eclipSurveyClock = TIC('eclipSurvey-' + STRTRIM(ii, 2))
-        eclip_survey, fov, eclip, fCamCoord ; eclip has eclipses from all trials (& runs)
-        assert, max(eclip[*].coord.fov_ind) eq 0, 'fov_ind is zeroed for snr consistency'
-        if run eq 0 then eclipCopy = eclip ; has eclip.npointings and CCD angles. No observed params.
-        if run eq 1 then begin
-          new_npointings = eclip.npointings
-          new_field_angle = eclip.coord.field_angle
-          new_fov_ind = eclip.coord.fov_ind
-          new_fov_r = eclip.coord.fov_r
-          eclip = eclipCopy ; revert all transit parameters back.
-          eclip.npointings = new_npointings
-          eclip.coord.field_angle = new_field_angle
-          eclip.coord.fov_ind = new_fov_ind
-          eclip.coord.fov_r = new_fov_r
-        endif
+        eclip_survey, fov, eclip, fCamCoord, run ; eclip has eclipses from all trials (& runs)
+        assert, max(eclip[*].coord.fov_ind) eq 0, 'error: we zeroed fov_ind for snr consistency'
+        if run eq 0 then eclip.totpointings += eclip.pri.npointings
+        if run eq 1 then eclip.totpointings += eclip.ext.npointings
         TOC, eclipSurveyClock
-        if max(eclip.npointings) eq 0 then begin
+
+        if ((run eq 0) and (max(eclip.pri.npointings) eq 0)) or $
+        ((run eq 1) and (max(eclip.ext.npointings) eq 0)) then begin
           print, 'Skipping tileNum', fnums[ii], ' in run', run, ' because no stars pointings.'
           continue
         endif
 
         eclipObserveClock = TIC('eclipObserve-' + STRTRIM(ii, 2))
-        assert, ps_only, 'todo: add observations for FFI allowed ext missions'
         if run eq 1 and ~extMission then continue
-        if run eq 0 and ~extMission then assert, 0, 'todo: add this case'
+        if run eq 0 and ~extMission then assert, 0, 'error: I never wrote this case'
           
         print, 'Entering eclip_observe with nelements eclip:', N_ELEMENTS(eclip)
         randSeed = ii ; seed randomized aspects of eclip_observe per-tile, not per-run
@@ -227,22 +273,39 @@ for ii=0, numfil-1 do begin
                 readnoise=readnoise, thresh=thresh, tranmin=tranmin, ps_len=ps_len, $
                 duty_cycle=duty_cycle[ii], ffi_len=ffi_len, saturation=saturation, $
                 subexptime=subexptime, dwell_time=orbit_period, downlink=downlink, $
-                extMission=extMission, randSeed=randSeed, ps_only=ps_only
+                extMission=extMission, randSeed=randSeed, ps_only=ps_only, run=run
         print, 'Exiting eclip_observing with nelements eclip:', N_ELEMENTS(eclip)
         TOC, eclipObserveClock
 
-        ; only save ffiClass 2 and 4 for the primary mission, and only save ffiClass 3 and
-        ; 4 for the extended. Needed for random number generation in eclip_observe
-        if run eq 0 and extMission then begin
-          primaryEclips = where(eclip.ffiClass eq 2 or eclip.ffiClass eq 4, nPrimaryEclips)
-          if nPrimaryEclips gt 0 then eclipToObs = eclip[primaryEclips] else continue
+        ;;; Select eclipses that will be saved
+        if ps_only then begin
+        ; ffiInPrimary: 1. psOnlyInPrimary: 2. psOnlyInExt: 3. psInBoth: 4.
+          if run eq 0 and extMission then begin
+            primaryEclips = where(eclip.ffiClass eq 2 or eclip.ffiClass eq 4, nPrimaryEclips)
+            if nPrimaryEclips gt 0 then eclipToObs = eclip[primaryEclips] else continue
+          endif
+          if run eq 1 and extMission then begin
+            extEclips = where(eclip.ffiClass eq 3 or eclip.ffiClass eq 4, nExtEclips)
+            if nExtEclips gt 0 then eclipToObs = eclip[extEclips] else continue
+          endif
         endif
-        if run eq 1 and extMission then begin
-          extEclips = where(eclip.ffiClass eq 3 or eclip.ffiClass eq 4, nExtEclips)
-          if nExtEclips gt 0 then eclipToObs = eclip[extEclips] else continue
+        if ~ps_only then begin
+          if run eq 0 and extMission then begin
+            primaryEclips = where(eclip.ffiClass eq 2 or eclip.ffiClass eq 3 $
+                            or eclip.ffiClass eq 5 or eclip.ffiClass eq 6 $
+                            or eclip.ffiClass eq 8 or eclip.ffiClass eq 9, nPrimaryEclips)
+            if nPrimaryEclips gt 0 then eclipToObs = eclip[primaryEclips] else continue
+          endif
+          if run eq 1 and extMission then begin
+            extEclips = where(eclip.ffiClass eq 4 or eclip.ffiClass eq 5 $
+                            or eclip.ffiClass eq 6 or eclip.ffiClass eq 7 $
+                            or eclip.ffiClass eq 8 or eclip.ffiClass eq 9, nExtEclips)
+            if nExtEclips gt 0 then eclipToObs = eclip[extEclips] else continue
+          endif
         endif
 
-        det = where(eclipToObs.det1 or eclipToObs.det2 or eclipToObs.det)
+        if run eq 0 then det = where(eclipToObs.pri.det1 or eclipToObs.pri.det2 or eclipToObs.pri.det)
+        if run eq 1 then det = where(eclipToObs.ext.det1 or eclipToObs.ext.det2 or eclipToObs.ext.det)
         ASSERT, ecliplen_tot gt 0, 'ecliplen_tot should be gt 0.'
         endClock = TIC('endClock-' + STRTRIM(ii, 2))
 
@@ -256,32 +319,98 @@ for ii=0, numfil-1 do begin
           endfor
 
           bins = targets[detid].pri + 2*targets[detid].sec
-          tmp_star = [[eclipToObs[det].trial], [targets[detid].mag.v], [targets[detid].mag.ic], $
-                    [targets[detid].mag.t], [targets[detid].mag.j], [targets[detid].mag.h], $
-                    [targets[detid].mag.k], [targets[detid].teff], [eclipToObs[det].coord.elon], $
-                    [eclipToObs[det].coord.elat], [eclipToObs[det].coord.glon], $
+
+          tmp_star = [[eclipToObs[det].trial], $
+                    [targets[detid].mag.v], $
+                    [targets[detid].mag.ic], $
+                    [targets[detid].mag.t], $
+                    [targets[detid].mag.j], $
+                    [targets[detid].mag.h], $
+                    [targets[detid].mag.k], $
+                    [targets[detid].teff], $
+                    [eclipToObs[det].coord.elon], $
+                    [eclipToObs[det].coord.elat], $
+                    [eclipToObs[det].coord.glon], $
                     [eclipToObs[det].coord.glat], $
-                    [eclipToObs[det].coord.ra], [eclipToObs[det].coord.dec], [eclipToObs[det].p], $
-                    [eclipToObs[det].a], [eclipToObs[det].s], [eclipToObs[det].cosi], $
-                    [eclipToObs[det].teff2], [eclipToObs[det].m2], [eclipToObs[det].r2], $
-                    [eclipToObs[det].dep1_eff], [eclipToObs[det].dur1], [eclipToObs[det].neclip_obs1], $
-                    [eclipToObs[det].teff1], [eclipToObs[det].m1], [eclipToObs[det].r1], $
-                    [eclipToObs[det].dep2_eff], [eclipToObs[det].dur2], [eclipToObs[det].neclip_obs2], $
-                    [eclipToObs[det].snreclp1], [eclipToObs[det].gress1], [eclipToObs[det].snreclp2], $
-                    [eclipToObs[det].gress2], [eclipToObs[det].k], [eclipToObs[det].snrhr], $
-                    [eclipToObs[det].star_ph], [eclipToObs[det].bk_ph], [eclipToObs[det].zodi_ph], $
-                    [eclipToObs[det].npix], [eclipToObs[det].dil], [targets[detid].ffi], $
-                    [eclipToObs[det].npointings], [eclipToObs[det].sat], [eclipToObs[det].coord.fov_r], $
-                    [eclipToObs[det].class], [eclipToObs[det].sep], [eclipToObs[det].icsys], $
-                    [eclipToObs[det].tsys],  [eclipToObs[det].jsys], [eclipToObs[det].kpsys], $
-                    [eclipToObs[det].censhift1], [eclipToObs[det].censhift2], [eclipToObs[det].cenerr1], $
-                    [eclipToObs[det].cenerr2], [eclipToObs[det].var], [eclipToObs[det].coord.healpix_n], $
-                    [eclipToObs[det].mult], [eclipToObs[det].tmult], [eclipToObs[det].pr], $
-                    [bins], [targets[detid].companion.sep], [targets[companionInd].mag.t], $
-                    [targets[detid].mag.dm], [targets[detid].age], [eclipToObs[det].det], $
-                    [eclipToObs[det].det1], [eclipToObs[det].det2], [eclipToObs[det].hostid], $
-                    [targets[detid].mag.micsys], [eclipToObs[det].ffiClass], $
-                    [eclipToObs[det].uniqEclipID], [eclipToObs[det].dur1_eff], [eclipToObs[det].dur2_eff]]
+                    [eclipToObs[det].coord.ra], $
+                    [eclipToObs[det].coord.dec], $
+                    [eclipToObs[det].p], $
+                    [eclipToObs[det].a], $
+                    [eclipToObs[det].s], $
+                    [eclipToObs[det].cosi], $
+                    [eclipToObs[det].teff2], $
+                    [eclipToObs[det].m2], $
+                    [eclipToObs[det].r2], $
+                    [eclipToObs[det].pri.dep1_eff], $
+                    [eclipToObs[det].dur1], $
+                    [eclipToObs[det].pri.neclip_obs1], $
+                    [eclipToObs[det].teff1], $
+                    [eclipToObs[det].m1], $
+                    [eclipToObs[det].r1], $
+                    [eclipToObs[det].pri.dep2_eff], $
+                    [eclipToObs[det].dur2], $
+                    [eclipToObs[det].pri.neclip_obs2], $
+                    [eclipToObs[det].pri.snreclp1], $
+                    [eclipToObs[det].gress1], $
+                    [eclipToObs[det].pri.snreclp2], $
+                    [eclipToObs[det].gress2], $
+                    [eclipToObs[det].k], $
+                    [eclipToObs[det].pri.snrhr], $
+                    [eclipToObs[det].star_ph], $
+                    [eclipToObs[det].bk_ph], $
+                    [eclipToObs[det].zodi_ph], $
+                    [eclipToObs[det].npix], $
+                    [eclipToObs[det].dil], $
+                    [targets[detid].ffi], $
+                    [eclipToObs[det].totpointings], $
+                    [eclipToObs[det].sat], $
+                    [eclipToObs[det].coord.fov_r], $
+                    [eclipToObs[det].class], $
+                    [eclipToObs[det].sep], $
+                    [eclipToObs[det].icsys], $
+                    [eclipToObs[det].tsys], $
+                    [eclipToObs[det].jsys], $
+                    [eclipToObs[det].kpsys], $
+                    [eclipToObs[det].censhift1], $
+                    [eclipToObs[det].censhift2], $
+                    [eclipToObs[det].cenerr1], $
+                    [eclipToObs[det].cenerr2], $
+                    [eclipToObs[det].var], $
+                    [eclipToObs[det].coord.healpix_n], $
+                    [eclipToObs[det].mult], $
+                    [eclipToObs[det].tmult], $
+                    [eclipToObs[det].pr], $
+                    [bins], $
+                    [targets[detid].companion.sep], $
+                    [targets[companionInd].mag.t], $
+                    [targets[detid].mag.dm], $
+                    [targets[detid].age], $
+                    [eclipToObs[det].pri.det], $
+                    [eclipToObs[det].pri.det1], $
+                    [eclipToObs[det].pri.det2], $
+                    [eclipToObs[det].hostid], $
+                    [targets[detid].mag.micsys], $
+                    [eclipToObs[det].ffiClass], $
+                    [eclipToObs[det].uniqEclipID], $
+                    [eclipToObs[det].pri.dur1_eff], $
+                    [eclipToObs[det].pri.dur2_eff], $
+                    [eclipToObs[det].ext.dep1_eff], $
+                    [eclipToObs[det].ext.dep2_eff], $
+                    [eclipToObs[det].ext.dur1_eff], $
+                    [eclipToObs[det].ext.dur2_eff], $
+                    [eclipToObs[det].ext.neclip_obs1], $
+                    [eclipToObs[det].ext.neclip_obs2], $
+                    [eclipToObs[det].pri.snr], $
+                    [eclipToObs[det].ext.snr], $
+                    [eclipToObs[det].ext.snrhr], $
+                    [eclipToObs[det].ext.snreclp1], $
+                    [eclipToObs[det].ext.snreclp2], $
+                    [eclipToObs[det].ext.det], $
+                    [eclipToObs[det].ext.det1], $
+                    [eclipToObs[det].ext.det2], $
+                    [eclipToObs[det].snrf], $
+                    [eclipToObs[det].detf]]
+
           if run eq 0 then begin
             idx = lindgen(ndet) + totPriDet
             star_out[idx,*] = tmp_star

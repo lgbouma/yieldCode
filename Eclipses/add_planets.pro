@@ -7,7 +7,7 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 ;	the selected stars on this trial with ecipsing objects.
 ; INPUTS: 
 ; 1. star: an outStarStruct object (called from targets in tile_wrapper), selected for postage 
-; 	stamps and FFIs.
+; 	stamps and pseudoFFIs.
 ; 2. pstruct: passed a dummy name, will be populated with an eclipStruct of eclipsing planet
 ;	data.
 ; 3. frac: PRF data from Deb Woods.
@@ -17,14 +17,14 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
 ; 7. aspix: arcsecond per pixel. Defaults to 21.1
 ; 8. fov: field of view in degrees. Defaults to 24.
 ; 9. dressing: called with Dressing = True. This means split out the bins as in Fig 8,
-;		Sullivan+ 2015. Otherwise, no temperature dependent occurrences.
+;     Sullivan+ 2015. Otherwise, no temperature dependent occurrences.
 ; 10. min_depth: minimum transit depth. Called with 0.
 ; 11. ps_only: option from main for only giving planets about PS stars, or all stars.
 ; 12. burtCatalog: do you want an output eclip_trial with some objects that do NOT
-;		eclipse? (specifically: if at least one planet in system is transiting, as-written
-;		we return all other planets in that system + that planet. Detection fine-tuning later)
+;     eclipse? (specifically: if at least one planet in system is transiting, as-written
+;     we return all other planets in that system + that planet. Detection fine-tuning later)
 ; 13. noEclComp: companions of transiting planets that do not transit (burt catalog). Is
-;		eclipCompStruct type (to keep it straight)
+;     eclipCompStruct type (to keep it straight)
 ; OUTPUTS:
 ; 1. ntra: number of transiting planets
 ; 2. pstruct: an _eclip_Struct that gets passed back to `make_eclipse` with all added 
@@ -49,11 +49,13 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
   if (keyword_set(err)) then err=1 else err=0
 
   nstars = n_elements(star)
-  if ~extMission then assert, where(star.ffi eq 1) eq -1, 'error assigning PS tags'
-  if extMission then assert, where(star.ffi eq 1 and star.nPntgs eq 0) eq -1, 'error assigning PS tags'
+  if ps_only and ~extMission then assert, where(star.ffi eq 1) eq -1, $
+    'error assigning PS tags'
+  if ps_only and extMission then assert, where(star.ffi eq 1 and star.nPntgs eq 0) eq -1, $
+    'error assigning PS tags'
   if ps_only and extMission then ps = (star.ffi eq 0 or star.nPntgs eq 1) 
   if ps_only and ~extMission then ps = (star.ffi eq 0) 
-  if ~ps_only and ~extMission then ps = intarr(nstars) + 1
+  if ~ps_only then ps = intarr(nstars) + 1 ; poor variable naming, assumes "star" passed is PSs&pseudoFFIs
 
   if(keyword_set(dressing)) then begin
     hotstars = where(star.teff ge 4000. and ps)
@@ -318,16 +320,40 @@ function add_planets, star, pstruct, frac, ph_p, tband, noEclComp, err=err, $
               star[traid].mag.dm, r2, ph_p, tband)
       planet_eclip.class=1
       planet_eclip.coord = star[traid].coord ; outStarStruct benefit
-      planet_eclip.npointings = 0 ; computed later, in eclip_observe.
-      notPsInEither = where(star[traid].ffi eq 1 and star[traid].nPntgs eq 0, neitherCnt)
-      psOnlyInPrimary = where(star[traid].ffi eq 0 and star[traid].nPntgs eq 0, priCnt)
-      psOnlyInExt = where(star[traid].ffi eq 1 and star[traid].nPntgs eq 1, extCnt)
-      psInBoth = where(star[traid].ffi eq 0 and star[traid].nPntgs eq 1, bothCnt)
-      if neitherCnt gt 0 then planet_eclip[ffiInPrimary].ffiClass = 1
-      if priCnt gt 0 then planet_eclip[psOnlyInPrimary].ffiClass = 2
-      if extCnt gt 0 then planet_eclip[psOnlyInExt].ffiClass = 3
-      if bothCnt gt 0 then planet_eclip[psInBoth].ffiClass = 4
+      if ps_only then begin
+        notPsInEither = where(star[traid].ffi eq 1 and star[traid].nPntgs eq 0, neitherCnt)
+        psOnlyInPrimary = where(star[traid].ffi eq 0 and star[traid].nPntgs eq 0, priCnt)
+        psOnlyInExt = where(star[traid].ffi eq 1 and star[traid].nPntgs eq 1, extCnt)
+        psInBoth = where(star[traid].ffi eq 0 and star[traid].nPntgs eq 1, bothCnt)
+        if neitherCnt gt 0 then planet_eclip[ffiInPrimary].ffiClass = 1
+        if priCnt gt 0 then planet_eclip[psOnlyInPrimary].ffiClass = 2
+        if extCnt gt 0 then planet_eclip[psOnlyInExt].ffiClass = 3
+        if bothCnt gt 0 then planet_eclip[psInBoth].ffiClass = 4
+      endif
+      if ~ps_only then begin ; let "pffi" := pseudoffi
+        notInEither = where(star[traid].ffi eq -1 and star[traid].nPntgs eq -1, notInEitherCnt)
+        psPriNotExt = where(star[traid].ffi eq 0 and star[traid].nPntgs eq -1, psPriNotExtCnt)
+        pffiPriNotExt = where(star[traid].ffi eq 1 and star[traid].nPntgs eq -1, pffiPriNotExtCnt)
+        notPriPffiExt = where(star[traid].ffi eq -1 and star[traid].nPntgs eq 0, notPriPffiExtCnt)
+        psPriPffiExt = where(star[traid].ffi eq 0 and star[traid].nPntgs eq 0, psPriPffiExtCnt)
+        pffiPriPffiExt = where(star[traid].ffi eq 1 and star[traid].nPntgs eq 0, pffiPriPffiExtCnt)
+        notPriPsExt = where(star[traid].ffi eq -1 and star[traid].nPntgs eq 1, notPriPsExtCnt)
+        psPriPsExt = where(star[traid].ffi eq 0 and star[traid].nPntgs eq 1, psPriPsExtCnt)
+        pffiPriPsExt = where(star[traid].ffi eq 1 and star[traid].nPntgs eq 1, pffiPriPsExtCnt)
+        if notInEitherCnt gt 0 then planet_eclip[notInEither].ffiClass = 1
+        if psPriNotExtCnt gt 0 then planet_eclip[psPriNotExt].ffiClass = 2
+        if pffiPriNotExtCnt gt 0 then planet_eclip[pffiPriNotExt].ffiClass = 3
+        if notPriPffiExtCnt gt 0 then planet_eclip[notPriPffiExt].ffiClass = 4
+        if psPriPffiExtCnt gt 0 then planet_eclip[psPriPffiExt].ffiClass = 5
+        if pffiPriPffiExtCnt gt 0 then planet_eclip[pffiPriPffiExt].ffiClass = 6
+        if notPriPsExtCnt gt 0 then planet_eclip[notPriPsExt].ffiClass = 7
+        if psPriPsExtCnt gt 0 then planet_eclip[psPriPsExt].ffiClass = 8
+        if pffiPriPsExtCnt gt 0 then planet_eclip[pffiPriPsExt].ffiClass = 9
+        assert, where(planet_eclip.ffiClass eq 1) eq -1, $
+          'Error: targets passed to add_planets must have PSs and pseudoFFIs already selected'
+      endif
       assert, where(planet_eclip.ffiClass eq 0) eq -1, 'error: ffi class assignment'
+
       planet_eclip.m1 = star[traid].m
       planet_eclip.m2 = planet_m[tra]/MSUN_IN_MEARTH
       planet_eclip.k = planet_k[tra]

@@ -5,11 +5,11 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 	sys_limit=sys_limit, duty_cycle=duty_cycle, $
   dwell_time=dwell_time, downlink=downlink, $
   subexptime=subexptime, extMission=extMission, randSeed=randSeed, $
-  ps_only=ps_only
+  ps_only=ps_only, run=run
 ;+
 ; NAME: eclip_observe
-; PURPOSE: take in an eclipStruct and find out which are detected. I think 
-; there is also "dilution" due to binaries going on in here. It gets called 
+; PURPOSE: take in an eclipStruct and find out which are detected.
+; Dilution due to background stars and binary companions happens here. It gets called
 ; if stars on this healpix tile get eclipsing planets.
 ; IN:
 ;   1. eclipse: "eclip" object (eclipStruct) with transit parameters filled out
@@ -27,7 +27,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 ;   10. effarea: of CCDs (~69cm^2)
 ;   11. readnoise: 10 electrons per subexposure
 ;   12. tranmin: 1 (minimum # eclipses for a detection)
-;   13. thresh: 5 (detection threshold in phase-folded light curve)
+;   13. thresh: 5 (detection threshold in phase-folded light curve; can be refined in postProcessing)
 ;   14. ps_len: 2 (minutes)
 ;   15. ffi_len: 30 (minutes)
 ;   16. saturation: 150,000 (electrons)
@@ -35,7 +35,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 ;   18. duty_cycle: array number hp tiles long (2908) of 100 (time blanked at perigee in minutes)
 ;   19. dwell_time: set to orbit period (13.66days)
 ;   20. downlink: 16./24. (downlink time in days)
-;   21. seconds per subexposure (2 seconds)
+;   21. subexptime: seconds per subexposure (2 seconds)
 ; OUT:
 ;-
   REARTH_IN_RSUN = 0.0091705248
@@ -111,52 +111,90 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   dayoff2 = (dr2 mod 1)*p
  
   ; Get number of *observed* eclipses
-  eclipse.neclip_obs1 = $
-      n_eclip(eclipse.p, dwell_time, $
-      double(eclipse.npointings), dayoff1, periblank=downlink, apoblank=apo_blank)
-  eclipse.neclip_obs2 = $
-      n_eclip(eclipse.p, DWELL_TIME, $
-      double(eclipse.npointings), dayoff2, periblank=downlink, apoblank=apo_blank)
+  if run eq 0 then begin
+    eclipse.pri.neclip_obs1 = $
+        n_eclip(eclipse.p, dwell_time, $
+        double(eclipse.pri.npointings), dayoff1, periblank=downlink, apoblank=apo_blank)
+    eclipse.pri.neclip_obs2 = $
+        n_eclip(eclipse.p, DWELL_TIME, $
+        double(eclipse.pri.npointings), dayoff2, periblank=downlink, apoblank=apo_blank)
+  endif
+  if run eq 1 then begin
+    eclipse.ext.neclip_obs1 = $
+        n_eclip(eclipse.p, dwell_time, $
+        double(eclipse.ext.npointings), dayoff1, periblank=downlink, apoblank=apo_blank)
+    eclipse.ext.neclip_obs2 = $
+        n_eclip(eclipse.p, DWELL_TIME, $
+        double(eclipse.ext.npointings), dayoff2, periblank=downlink, apoblank=apo_blank)
+  endif
 
-  print, 'Diluting FFIs'
-  if ~extMission then tra_ps = where(star[eclipse.hostid].ffi lt 1)
-  if extMission then tra_ps = where(star[eclipse.hostid].ffi eq 0 or $
-                                    star[eclipse.hostid].nPntgs eq 1)
+  ; Get eclipse durations and depths given whether they're obsd as PSs or pseudo-FFIs
+  assert, extMission, 'Have not written otherwise'
+  if extMission and ps_only then begin
+    tra_ps = where(star[eclipse.hostid].ffi eq 0 or star[eclipse.hostid].nPntgs eq 1)
+    tra_ffi = -1
+  endif
+
+  if extMission and ~ps_only then begin
+    if run eq 0 then begin
+      tra_ps = where(eclipse.ffiClass eq 8 or eclipse.ffiClass eq 5 or eclipse.ffiClass eq 2)
+      tra_ffi = where(eclipse.ffiClass eq 3 or eclipse.ffiClass eq 6 or eclipse.ffiClass eq 9)
+    endif
+    if run eq 1 then begin
+      tra_ps = where(eclipse.ffiClass eq 7 or eclipse.ffiClass eq 8 or eclipse.ffiClass eq 9)
+      tra_ffi = where(eclipse.ffiClass eq 4 or eclipse.ffiClass eq 5 or eclipse.ffiClass eq 6)
+    endif
+  endif
+
   if (tra_ps[0] ne -1) then begin
     dur1_min = eclipse[tra_ps].dur1*24.0*60.0
     dur2_min = eclipse[tra_ps].dur2*24.0*60.0
-    eclipse[tra_ps].dep1_eff = eclipse[tra_ps].dep1*dil_ffi_eclip(dur1_min, float(ps_len), $
-                                ffis=nps, randSeed=randSeed)
-    eclipse[tra_ps].dur1_eff = (nps*ps_len)/(24.0*60.0)
-    eclipse[tra_ps].dep2_eff = eclipse[tra_ps].dep2*dil_ffi_eclip(dur2_min, float(ps_len), $
-                                ffis=nps, randSeed=randSeed+9001) ; diff seeds for each
-    eclipse[tra_ps].dur2_eff = (nps*ps_len)/(24.0*60.0)
+    if run eq 0 then begin
+      eclipse[tra_ps].pri.dep1_eff = eclipse[tra_ps].dep1*dil_ffi_eclip(dur1_min, float(ps_len), $
+                                  ffis=nps, randSeed=randSeed)
+      eclipse[tra_ps].pri.dur1_eff = (nps*ps_len)/(24.0*60.0)
+      eclipse[tra_ps].pri.dep2_eff = eclipse[tra_ps].dep2*dil_ffi_eclip(dur2_min, float(ps_len), $
+                                  ffis=nps, randSeed=randSeed+9001) ; diff seeds for each
+      eclipse[tra_ps].pri.dur2_eff = (nps*ps_len)/(24.0*60.0)
+    endif
+    if run eq 1 then begin
+      eclipse[tra_ps].ext.dep1_eff = eclipse[tra_ps].dep1*dil_ffi_eclip(dur1_min, float(ps_len), $
+                                  ffis=nps, randSeed=randSeed)
+      eclipse[tra_ps].ext.dur1_eff = (nps*ps_len)/(24.0*60.0)
+      eclipse[tra_ps].ext.dep2_eff = eclipse[tra_ps].dep2*dil_ffi_eclip(dur2_min, float(ps_len), $
+                                  ffis=nps, randSeed=randSeed+9001) ; diff seeds for each
+      eclipse[tra_ps].ext.dur2_eff = (nps*ps_len)/(24.0*60.0)
+    endif
   endif
-
-  if ~extMission then tra_ffi = where(star[eclipse.hostid].ffi gt 0)
-  if extMission and ~ps_only then tra_ffi = where(star[eclipse.hostid].ffi eq 1 or $
-                                     star[eclipse.hostid].nPntgs eq 0)
-  if extMission and ps_only then tra_ffi = -1
 
   if (tra_ffi[0] ne -1) then begin
-    assert, 0, 'warning: should not be called until extended mission is adapted to ffis'
     dur1_min = eclipse[tra_ffi].dur1*24.0*60.0
     dur2_min = eclipse[tra_ffi].dur2*24.0*60.0
-    eclipse[tra_ffi].dep1_eff = eclipse[tra_ffi].dep1*dil_ffi_eclip(dur1_min, float(ffi_len), $
-                                  ffis=ffis, randSeed=randSeed+9002)
-    eclipse[tra_ffi].dur1_eff = (ffis*ffi_len)/(24.0*60.0)
-    eclipse[tra_ffi].dep2_eff = eclipse[tra_ffi].dep2*dil_ffi_eclip(dur2_min, float(ffi_len), $
-                                  ffis=ffis, randSeed=randSeed+9003)
-    eclipse[tra_ffi].dur2_eff = (ffis*ffi_len)/(24.0*60.0)
+    if run eq 0 then begin
+      eclipse[tra_ffi].pri.dep1_eff = eclipse[tra_ffi].dep1*dil_ffi_eclip(dur1_min, float(ffi_len), $
+                                    ffis=ffis, randSeed=randSeed+9002)
+      eclipse[tra_ffi].pri.dur1_eff = (ffis*ffi_len)/(24.0*60.0)
+      eclipse[tra_ffi].pri.dep2_eff = eclipse[tra_ffi].dep2*dil_ffi_eclip(dur2_min, float(ffi_len), $
+                                    ffis=ffis, randSeed=randSeed+9003)
+      eclipse[tra_ffi].pri.dur2_eff = (ffis*ffi_len)/(24.0*60.0)
+    endif
+    if run eq 1 then begin
+      eclipse[tra_ffi].ext.dep1_eff = eclipse[tra_ffi].dep1*dil_ffi_eclip(dur1_min, float(ffi_len), $
+                                    ffis=ffis, randSeed=randSeed+9002)
+      eclipse[tra_ffi].ext.dur1_eff = (ffis*ffi_len)/(24.0*60.0)
+      eclipse[tra_ffi].ext.dep2_eff = eclipse[tra_ffi].dep2*dil_ffi_eclip(dur2_min, float(ffi_len), $
+                                    ffis=ffis, randSeed=randSeed+9003)
+      eclipse[tra_ffi].ext.dur2_eff = (ffis*ffi_len)/(24.0*60.0)
+    endif
   endif
 
-  ; for each observed transiting eclipse, calculate preliminary snr
-  obs = where((eclipse.neclip_obs1 + eclipse.neclip_obs2) gt NTRA_OBS_MIN)
+  ; For each observed transiting eclipse, calculate preliminary snr (pre-dilution)
+  if run eq 0 then obs = where((eclipse.pri.neclip_obs1 + eclipse.pri.neclip_obs2) gt NTRA_OBS_MIN)
+  if run eq 1 then obs = where((eclipse.ext.neclip_obs1 + eclipse.ext.neclip_obs2) gt NTRA_OBS_MIN)
   if (obs[0] ne -1) then begin
     obsid = eclipse[obs].hostid
     nobs = n_elements(obs)
     print, 'Observing ', nobs, ' transits'
-
     print, 'Stacking and sorting PRFs'
     ; ph_star is npix x nstar
     assert, max(eclipse[*].coord.fov_ind) eq 0, 'error: fov_ind zeroing'
@@ -165,19 +203,13 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 
     ; BEBs and HEBs
     bebdil = where(eclipse[obs].class eq 3 or eclipse[obs].class eq 4 or eclipse[obs].class eq 5)
+    assert, bebdil eq -1
     beb_ph = dblarr(total(mask1d), nobs)
-    if (bebdil[0] ne -1) then begin
-      nbeb = n_elements(bebdil)
-      ;beb_ph = dblarr(total(mask1d), nbeb)
-      dilute_beb, eclipse[obs[bebdil]], frac, ph_p, $
-          dx[obs[bebdil]], dy[obs[bebdil]], bebvec, aspix=aspix, radmax=6.0, randSeed=randSeed+9008
-      for jj=0,nbeb-1 do beb_ph[*,bebdil[jj]] = bebvec[*,jj]
-    end   
     for jj=0,nobs-1 do begin
       star_ph[*,jj] = total(star_ph[sind[*,jj],jj], /cumulative)
       beb_ph[*,jj] = total(beb_ph[sind[*,jj],jj], /cumulative)
     end      
-    ;dil_ph = dblarr(total(mask1d), nobs)
+    assert, max(beb_ph) eq 0, 'What are background eclipsing binaries doing in eclip_observe?'
 
     zodi_flux, eclipse[obs].coord.elat, aspix, zodi_ph
     eclipse[obs].zodi_ph = zodi_ph
@@ -189,7 +221,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     exptime = dblarr(n_elements(obs)) + 3600.
     for ii=0,(npix_max-1) do begin ; see p13 S+15. This gets noises for all apertures; takes min below
       thiscr = cr[*,ii]
-      calc_noise_eclip, star_ph, beb_ph, exptime, $
+      calc_noise_eclip, star_ph, beb_ph, exptime, $ ; computes sigma-1hr (then sqrt(t_int) below)
           readnoise, sys_limit, noise, $
           npix_aper=(ii+1), field_angle=eclipse[obs].coord.field_angle, $
           cr_noise = star[obsid].ffi*0., $ ; wonky call for array size compatibility
@@ -203,8 +235,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       dilution[*,ii] = dil
       if (keyword_set(nodil)) then noises[*,ii] = noise $
       else noises[*,ii] = dil*noise
-      ;shot_noises[*,ii] = shot_noise*1d6
-      ;print, median(shot_noise*1d6)
       if (ii eq 0) then eclipse[obs].sat = (estar gt SATURATION)
     end
     noises = noises[*,(npix_min-1):(npix_max-1)]
@@ -212,30 +242,41 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     minnoise = min(noises, ind, dimension=2)
     eclipse[obs].npix = ind / n_elements(obs) + npix_min
     eclipse[obs].dil = dilution[ind]
-    ;stop
+
     for ss=0,nobs-1 do eclipse[obs[ss]].star_ph = star_ph[eclipse[obs[ss]].npix-1,ss]
-    if (bebdil[0] ne -1) then begin
-      beb_pixph = dblarr(nbeb)
-      for tt=0,nbeb-1 do beb_pixph[tt] = beb_ph[eclipse[obs[bebdil[tt]]].npix-1,bebdil[tt]]
-      beb_starph = eclipse[obs[bebdil]].star_ph
-      minnoise[bebdil] = minnoise[bebdil]*beb_starph/beb_pixph
-    end  
-    ; Calculate SNR in phase-folded lightcurve
-    et1_eclp = eclipse[obs].dur1_eff * 24.0
-    et2_eclp = eclipse[obs].dur2_eff * 24.0
-    eclipse[obs].snreclp1 = eclipse[obs].dep1_eff / sqrt(minnoise^2./et1_eclp + eclipse[obs].var^2.)
-    eclipse[obs].snreclp2 = eclipse[obs].dep2_eff / sqrt(minnoise^2./et2_eclp + eclipse[obs].var^2.)
-    eclipse[obs].snr1 = eclipse[obs].snreclp1 * sqrt(double(eclipse[obs].neclip_obs1))
-    eclipse[obs].snr2 = eclipse[obs].snreclp2 * sqrt(double(eclipse[obs].neclip_obs2))
-    eclipse[obs].snr  = sqrt(eclipse[obs].snr1^2. + eclipse[obs].snr2^2.)
+    ; Calculate SNR (pre-dilution) in "phase-folded" (in this idealized way) lightcurve
+    if run eq 0 then begin
+      et1_eclp = eclipse[obs].pri.dur1_eff * 24.0
+      et2_eclp = eclipse[obs].pri.dur2_eff * 24.0
+      eclipse[obs].pri.snreclp1 = eclipse[obs].pri.dep1_eff $
+                                  / sqrt(minnoise^2./et1_eclp + eclipse[obs].var^2.)
+      eclipse[obs].pri.snreclp2 = eclipse[obs].pri.dep2_eff $
+                                  / sqrt(minnoise^2./et2_eclp + eclipse[obs].var^2.)
+      eclipse[obs].pri.snr1 = sqrt(eclipse[obs].pri.snreclp1^2. * double(eclipse[obs].pri.neclip_obs1))
+      eclipse[obs].pri.snr2 = sqrt(eclipse[obs].pri.snreclp2^2. * double(eclipse[obs].pri.neclip_obs2))
+      eclipse[obs].pri.snr  = sqrt(eclipse[obs].pri.snr1^2. + eclipse[obs].pri.snr2^2.)
+    endif
+    if run eq 1 then begin
+      et1_eclp = eclipse[obs].ext.dur1_eff * 24.0
+      et2_eclp = eclipse[obs].ext.dur2_eff * 24.0
+      eclipse[obs].ext.snreclp1 = eclipse[obs].ext.dep1_eff $
+                                  / sqrt(minnoise^2./et1_eclp + eclipse[obs].var^2.)
+      eclipse[obs].ext.snreclp2 = eclipse[obs].ext.dep2_eff $
+                                  / sqrt(minnoise^2./et2_eclp + eclipse[obs].var^2.)
+      eclipse[obs].ext.snr1 = sqrt(eclipse[obs].ext.snreclp1^2. * double(eclipse[obs].ext.neclip_obs1))
+      eclipse[obs].ext.snr2 = sqrt(eclipse[obs].ext.snreclp2^2. * double(eclipse[obs].ext.neclip_obs2))
+      eclipse[obs].ext.snr  = sqrt(eclipse[obs].ext.snr1^2. + eclipse[obs].ext.snr2^2.)
+    endif
 
-    ; decide if it is 'detected'.
-    det = WHERE(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
-          (eclipse.snr ge SNR_MIN))
+    ; decide if it is 'detected' before dilution.
+    if run eq 0 then det = where(((eclipse.pri.neclip_obs1 + eclipse.pri.neclip_obs2) ge NTRA_OBS_MIN) $
+                           and (eclipse.pri.snr ge SNR_MIN))
+    if run eq 1 then det = where(((eclipse.ext.neclip_obs1 + eclipse.ext.neclip_obs2) ge NTRA_OBS_MIN) $
+                           and (eclipse.ext.snr ge SNR_MIN))
 
-    ; Dilute if there are planets detected (preliminarily) with SNR > 5 (nb dilution makes SNR decrease)
+    ;;; Dilute if there are planets detected (preliminarily) with SNR > 5 (nb dilution makes SNR decrease)
+    ;;; This is "second half" towards most precise SNR we derive
     if (det[0] ne -1) then begin
-      ;print, 'Calculating noise again'
       detid = eclipse[det].hostid
       ndet = n_elements(det)
       print, 'Re-observing ', ndet, ' transits'
@@ -254,8 +295,8 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       ;tgt_ph = dblarr(total(mask1d), ndet)
       
       ; print, "Diluting with binary companions"
-      ; Binaries dilute planets, BEB targets. Not EBs or HEBs
-      bindil = where(eclipse[det].class eq 1 or eclipse[det].class eq 3 or eclipse[det].class eq 5)
+      ; Binary companions dilute planet detections. Not EBs or HEBs
+      bindil = where(eclipse[det].class eq 1)
       if (bindil[0] ne -1) then begin
         nbindil = n_elements(bindil)
         dilute_binary, eclipse[det[bindil]], star, frac, ph_p, $
@@ -280,82 +321,12 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
         for jj=0,nbkdil-1 do dil_ph[*,bkdil[jj]] = dil_ph[*,bkdil[jj]] + dilvec[*,jj]
       end
    
-      ; BEBs, HEBs, and BTPs
-      bebdil = where(eclipse[det].class eq 3 or eclipse[det].class eq 4 or eclipse[det].class eq 5)
-      if (bebdil[0] ne -1) then begin
-        nbeb = n_elements(bebdil)
-        ;beb_ph = dblarr(total(mask1d), nbeb)
-        dilute_beb, eclipse[det[bebdil]], frac, ph_p, $
-            dx[det[bebdil]], dy[det[bebdil]], bebvec, aspix=aspix, radmax=6.0, randSeed=randSeed+9007
-        for jj=0,nbeb-1 do beb_ph[*,bebdil[jj]] = bebvec[*,jj]
-      end   
-      
       ; Everything
       print, "Diluting with other target stars"
       dilute_eclipse_img, eclipse[det], star, frac, ph_p, $
           dx[det], dy[det], dilvec, aspix=aspix, sq_deg=13.4, radmax=6.0, randSeed=randSeed+9006
       for jj=0,ndet-1 do dil_ph[*,jj] += dilvec[*,jj] ; 160423: uh.. not +=?
    
-      ; Calculate centroid shift and uncertainty (section 8 of S15)
-      dep1 = eclipse[det].dep1_eff
-      dep2 = eclipse[det].dep2_eff
-      dur1 = eclipse[det].dur1_eff * eclipse[det].neclip_obs1 
-      dur2 = eclipse[det].dur2_eff * eclipse[det].neclip_obs2 
- 
-      cennoises   = fltarr(ndet, npix_max-npix_min+1)
-      xcennoise1s = fltarr(ndet, npix_max-npix_min+1)
-      xcennoise2s = fltarr(ndet, npix_max-npix_min+1)
-      ycennoise1s = fltarr(ndet, npix_max-npix_min+1)
-      ycennoise2s = fltarr(ndet, npix_max-npix_min+1)
-      xcenshift1s = fltarr(ndet, npix_max-npix_min+1)
-      xcenshift2s = fltarr(ndet, npix_max-npix_min+1)
-      ycenshift1s = fltarr(ndet, npix_max-npix_min+1)
-      ycenshift2s = fltarr(ndet, npix_max-npix_min+1)
-      for ii=0,(npix_max-npix_min) do begin
-        thiscr = cr[*,ii]
-        calc_noise_cen, star_ph, dil_ph, beb_ph, bebdil, $
-            dur1, dur2, $
-	          dep1, dep2, $
-            xx, yy, sind, $
-            readnoise, sys_limit, $
-            xcen, ycen, $
-            xcenshift1, xcenshift2, $
-            ycenshift1, ycenshift2, $
-            xcennoise1, xcennoise2, $
-            ycennoise1, ycennoise2, $
-            npix_aper=(ii+npix_min), $
-            field_angle=eclipse[det].coord.field_angle, $
-            cr_noise = star[detid].ffi*0., $
-            subexptime=subexptime, $
-            geom_area = effarea, $
-            aspix=aspix, $
-            zodi_ph=zodi_ph
-        cennoises[*,ii] = sqrt(xcennoise1^2.+ycennoise1^2.)
-        xcennoise1s[*,ii] = xcennoise1
-        xcennoise2s[*,ii] = xcennoise2
-        ycennoise1s[*,ii] = ycennoise1
-        ycennoise2s[*,ii] = ycennoise2
-        xcenshift1s[*,ii] = xcenshift1
-        xcenshift2s[*,ii] = xcenshift2
-        ycenshift1s[*,ii] = ycenshift1
-        ycenshift2s[*,ii] = ycenshift2
-      endfor
-      mincennoise = min(cennoises, ind, dimension=2)
-      ;ind = indgen(ndet)
-      mincennoise = cennoises[ind]
-      cenind = ind / ndet
-      cenpix = cenind + npix_min
-      censhift1 = sqrt(xcenshift1s[ind]^2. + ycenshift1s[ind]^2.)
-      censhift2 = sqrt(xcenshift2s[ind]^2. + ycenshift2s[ind]^2.)
-      eclipse[det].censhift1 = censhift1
-      eclipse[det].censhift2 = censhift2
-      eclipse[det].cenerr1 = sqrt((xcennoise1s[ind]*xcenshift1s[ind]/censhift1)^2. + $
-          (ycennoise1s[ind]*ycenshift1s[ind]/censhift1)^2.)
-      ; eclipse[det].cenerr1 = xcennoise1s[ind]*ycennoise1s[ind]/den1
-      eclipse[det].cenerr2 = sqrt((xcennoise2s[ind]*xcenshift2s[ind]/censhift2)^2. + $
-          (ycennoise2s[ind]*ycenshift2s[ind]/censhift2)^2.)
-      ;eclipse[det].cenerr2 = xcennoise2s[ind]*ycennoise2s[ind]/den2
-      
       ; Sort into the same pixel order as target star flux
       for jj=0,ndet-1 do begin
         star_ph[*,jj] = total(star_ph[sind[*,jj],jj], /cumulative)
@@ -366,7 +337,6 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
 
       noises = dblarr(n_elements(det), npix_max)
       dilution = dblarr(n_elements(det), npix_max)
-      ;shot_noises = dblarr(n_elements(obs), npix_max-npix_min+1)
       exptime = dblarr(n_elements(det)) + 3600.
       for ii=0,(npix_max-1) do begin
         thiscr = cr[*,ii]
@@ -392,42 +362,70 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       minnoise = min(noises, ind, dimension=2)
       eclipse[det].npix = ind / n_elements(det) + npix_min
       eclipse[det].dil = dilution[ind]
-      eclipse[det].snrhr = 1. / minnoise
+      if run eq 0 then eclipse[det].pri.snrhr = 1. / minnoise
+      if run eq 1 then eclipse[det].ext.snrhr = 1. / minnoise
       for ss=0,ndet-1 do eclipse[det[ss]].star_ph = star_ph[eclipse[det[ss]].npix-1,ss]
       
-      ; Dilute the BEBs (and HEBs) now that we tricked aperture into excluding the bebs
-      if (bebdil[0] ne -1) then begin
-        beb_pixph = dblarr(nbeb)
-        for tt=0,nbeb-1 do beb_pixph[tt] = beb_ph[eclipse[det[bebdil[tt]]].npix-1,bebdil[tt]]
-        beb_starph = eclipse[det[bebdil]].star_ph
-        minnoise[bebdil] = minnoise[bebdil]*beb_starph/beb_pixph
-        eclipse[det[bebdil]].snrhr = 1. / minnoise[bebdil]
-        eclipse[det[bebdil]].dil = eclipse[det[bebdil]].dil*beb_starph/beb_pixph
-        ;eclipse[det[bebdil]].dep1_eff =  eclipse[det[bebdil]].dep1_eff*beb_pixph/beb_starph
-        ;eclipse[det[bebdil]].dep2_eff =  eclipse[det[bebdil]].dep2_eff*beb_pixph/beb_starph
-      end  
       ; Calculate SNR in phase-folded lightcurve
-      et1_eclp = eclipse[det].dur1_eff * 24.0
-      et2_eclp = eclipse[det].dur2_eff * 24.0 
-      eclipse[det].snreclp1 = eclipse[det].dep1_eff / sqrt(minnoise^2./et1_eclp + eclipse[det].var^2.)
-      eclipse[det].snreclp2 = eclipse[det].dep2_eff / sqrt(minnoise^2./et2_eclp + eclipse[det].var^2.)
-      eclipse[det].snr1 = eclipse[det].snreclp1 * sqrt(double(eclipse[det].neclip_obs1))
-      eclipse[det].snr2 = eclipse[det].snreclp2 * sqrt(double(eclipse[det].neclip_obs2))
-      eclipse[det].snr  = sqrt(eclipse[det].snr1^2. + eclipse[det].snr2^2.)
-   
-      det1 = where((eclipse.neclip_obs1 ge NTRA_OBS_MIN) and $
-             (eclipse.snr1 ge SNR_MIN))
-      det2 = where((eclipse.neclip_obs2 ge NTRA_OBS_MIN) and $
-             (eclipse.snr2 ge SNR_MIN))
-      det = WHERE(((eclipse.neclip_obs1 + eclipse.neclip_obs2) ge NTRA_OBS_MIN) and $
-            (eclipse.snr ge SNR_MIN))
-      if (det1[0] ne -1) then eclipse[det1].det1 = 1
-      if (det2[0] ne -1) then eclipse[det2].det2 = 1
-      if (det[0] ne -1)  then begin
-        eclipse[det].det = 1
-        print, 'Detected ', n_elements(det), ' eclipses.'
+      if run eq 0 then begin
+        et1_eclp = eclipse[det].pri.dur1_eff * 24.0
+        et2_eclp = eclipse[det].pri.dur2_eff * 24.0
+        eclipse[det].pri.snreclp1 = eclipse[det].pri.dep1_eff $
+                                    / sqrt(minnoise^2./et1_eclp + eclipse[det].var^2.)
+        eclipse[det].pri.snreclp2 = eclipse[det].pri.dep2_eff $
+                                    / sqrt(minnoise^2./et2_eclp + eclipse[det].var^2.)
+        eclipse[det].pri.snr1 = sqrt(eclipse[det].pri.snreclp1^2 * double(eclipse[det].pri.neclip_obs1))
+        eclipse[det].pri.snr2 = sqrt(eclipse[det].pri.snreclp2^2 * double(eclipse[det].pri.neclip_obs2))
+        eclipse[det].pri.snr  = sqrt(eclipse[det].pri.snr1^2. + eclipse[det].pri.snr2^2.)
       endif
-    end ;det if
-  end ; obs if
+      if run eq 1 then begin
+        et1_eclp = eclipse[det].ext.dur1_eff * 24.0
+        et2_eclp = eclipse[det].ext.dur2_eff * 24.0
+        eclipse[det].ext.snreclp1 = eclipse[det].ext.dep1_eff $
+                                    / sqrt(minnoise^2./et1_eclp + eclipse[det].var^2.)
+        eclipse[det].ext.snreclp2 = eclipse[det].ext.dep2_eff $
+                                    / sqrt(minnoise^2./et2_eclp + eclipse[det].var^2.)
+        eclipse[det].ext.snr1 = sqrt(eclipse[det].ext.snreclp1^2 * double(eclipse[det].ext.neclip_obs1))
+        eclipse[det].ext.snr2 = sqrt(eclipse[det].ext.snreclp2^2 * double(eclipse[det].ext.neclip_obs2))
+        eclipse[det].ext.snr  = sqrt(eclipse[det].ext.snr1^2. + eclipse[det].ext.snr2^2.)
+        eclipse.snrf  = sqrt(eclipse.pri.snr1^2. + eclipse.pri.snr2^2. + $
+                             eclipse.ext.snr1^2. + eclipse.ext.snr2^2.)
+      endif
+
+      if run eq 0 then begin
+        det1 = where((eclipse.pri.neclip_obs1 ge NTRA_OBS_MIN) and $
+             (eclipse.pri.snr1 ge SNR_MIN))
+        det2 = where((eclipse.pri.neclip_obs2 ge NTRA_OBS_MIN) and $
+             (eclipse.pri.snr2 ge SNR_MIN))
+        det = where(((eclipse.pri.neclip_obs1 + eclipse.pri.neclip_obs2) ge NTRA_OBS_MIN) and $
+            (eclipse.pri.snr ge SNR_MIN))
+        if (det1[0] ne -1) then eclipse[det1].pri.det1 = 1
+        if (det2[0] ne -1) then eclipse[det2].pri.det2 = 1
+        if (det[0] ne -1) then begin
+          eclipse[det].pri.det = 1
+          print, 'Detected ', n_elements(det), ' eclipses in primary.'
+        endif
+      endif
+      if run eq 1 then begin
+        det1 = where((eclipse.ext.neclip_obs1 ge NTRA_OBS_MIN) and $
+             (eclipse.ext.snr1 ge SNR_MIN))
+        det2 = where((eclipse.ext.neclip_obs2 ge NTRA_OBS_MIN) and $
+             (eclipse.ext.snr2 ge SNR_MIN))
+        det = where(((eclipse.ext.neclip_obs1 + eclipse.ext.neclip_obs2) ge NTRA_OBS_MIN) and $
+            (eclipse.ext.snr ge SNR_MIN))
+        detf = where(eclipse.snrf ge SNR_MIN)
+        if (det1[0] ne -1) then eclipse[det1].ext.det1 = 1
+        if (det2[0] ne -1) then eclipse[det2].ext.det2 = 1
+        if (det[0] ne -1) then begin
+          eclipse[det].ext.det = 1
+          print, 'Detected ', n_elements(det), ' eclipses in extended.'
+        endif
+        if (detf[0] ne -1) then begin
+          eclipse[detf].detf = 1
+          print, 'Detected ', n_elements(det), ' eclipses over combined missions.'
+        endif
+      endif ; run (extended mission) if
+    endif ;det if
+  endif ; obs if
   assert, max(cr) eq 0, 'error: nonzero cosmic ray flux. means blowback to stack_prf'
 end

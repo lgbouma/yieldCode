@@ -1,4 +1,4 @@
-pro eclip_survey, fov, eclip, fCamCoord
+pro eclip_survey, fov, eclip, fCamCoord, run
 ;+
 ; NAME: eclip_survey
 ; PURPOSE: figure out the number of pointings and field angles each ECLIPSE (not star)
@@ -10,6 +10,7 @@ pro eclip_survey, fov, eclip, fCamCoord
 ;	eclip: ECLIPSE object with planets and eclipses assigned. 
 ;	fCamCoord: string pointing to file name of data file with camera
 ;		pointing info (pointing #, cam #, elat, elong for cameras)
+; run: mission number: 0 for primary, 1 for extended.
 ; OUTPUTS: 
 ;	eclip object, with npointings and field angles added (needed
 ;	for subsequent "observing")
@@ -23,8 +24,6 @@ pro eclip_survey, fov, eclip, fCamCoord
 
   MT = 'I,I,F,F' ; get camera pointing info for observing specification
   READCOL, fCamCoord, F=FMT, pointingNumber, camNumber, camElat, camElong
-  nPointings = MAX(pointingNumber)+1 ; 26 pntgs 2yr, 52 4yr
-  nCams = 4
   nCamPointings = n_elements(pointingNumber) 
 
   ;CCD info
@@ -74,22 +73,30 @@ pro eclip_survey, fov, eclip, fCamCoord
              (y lt (ccdPix+gapPix)-1.)))
 
     if total(onChip) gt 0 then begin
-      prev_npointings = eclip.npointings
-      ;incr = onChip and ((not prev_npointings) or old_onChip) ; S+15 logic: new obsn OR prev sector got
-      incr = onChip ; new logic: any pntg gets counted (ext mission important)
-      new_npointings = prev_npointings + incr
-      chipInd = where(incr gt 0)
-      r = sqrt((x[chipInd]-ccdCtr[0])^2. + (y[chipInd]-ccdCtr[1])^2.)
-      eclip[chipInd].npointings = new_npointings[chipInd]
-      ; compute cumulative moving average of field angle for all obsns the star receives
-      eclip[chipInd].coord.fov_r = 0.; todo: revert back to actually computing field angles below
-      ;eclip[chipInd].coord.fov_r = r/float(new_npointings[chipInd]) + $
-      ;float(prev_npointings[chipInd])*eclip[chipInd].coord.fov_r/float(new_npointings[chipInd])
-      old_onChip = onChip
+      if run eq 0 then begin
+        prev_npointings = eclip.pri.npointings
+        incr = onChip ; logic: any pntg gets counted (ext mission important)
+        new_npointings = prev_npointings + incr
+        chipInd = where(incr gt 0)
+        r = sqrt((x[chipInd]-ccdCtr[0])^2. + (y[chipInd]-ccdCtr[1])^2.)
+        eclip[chipInd].pri.npointings = new_npointings[chipInd]
+        eclip[chipInd].coord.fov_r = 0.
+        old_onChip = onChip
+      endif
+      if run eq 1 then begin
+        prev_npointings = eclip.ext.npointings
+        incr = onChip ; logic: any pntg gets counted (ext mission important)
+        new_npointings = prev_npointings + incr
+        chipInd = where(incr gt 0)
+        r = sqrt((x[chipInd]-ccdCtr[0])^2. + (y[chipInd]-ccdCtr[1])^2.)
+        eclip[chipInd].ext.npointings = new_npointings[chipInd]
+        eclip[chipInd].coord.fov_r = 0.
+        old_onChip = onChip
+      endif
     endif
   endfor
 
-  ; Determine FOV index
+  ; Determine FOV index (formerly mattered)
   r = eclip.coord.fov_r
   ;field_angle = r * fov / (ccdPix+gapPix)
   field_angle = make_array(n_elements(r))
