@@ -279,7 +279,7 @@ for ii=0, numfil-1 do begin
 
         ;;; Select eclipses that will be saved
         if ps_only then begin
-        ; ffiInPrimary: 1. psOnlyInPrimary: 2. psOnlyInExt: 3. psInBoth: 4.
+          ; ffiInPrimary: 1. psOnlyInPrimary: 2. psOnlyInExt: 3. psInBoth: 4.
           if run eq 0 and extMission then begin
             primaryEclips = where(eclip.ffiClass eq 2 or eclip.ffiClass eq 4, nPrimaryEclips)
             if nPrimaryEclips gt 0 then eclipToObs = eclip[primaryEclips] else continue
@@ -290,6 +290,8 @@ for ii=0, numfil-1 do begin
           endif
         endif
         if ~ps_only then begin
+          ; notInEither: 1, psPriNotExt: 2, pffiPriNotExt: 3, notPriPffiExt: 4, psPriPffiExt: 5
+          ; pffiPriPffiExt: 6, notPriPsExt: 7, pffiPriPsExt: 8, pffiPriPsExt: 9
           if run eq 0 and extMission then begin
             primaryEclips = where(eclip.ffiClass eq 2 or eclip.ffiClass eq 3 $
                             or eclip.ffiClass eq 5 or eclip.ffiClass eq 6 $
@@ -305,7 +307,8 @@ for ii=0, numfil-1 do begin
         endif
 
         if run eq 0 then det = where(eclipToObs.pri.det1 or eclipToObs.pri.det2 or eclipToObs.pri.det)
-        if run eq 1 then det = where(eclipToObs.ext.det1 or eclipToObs.ext.det2 or eclipToObs.ext.det)
+        if run eq 1 then det = where(eclipToObs.ext.det1 or eclipToObs.ext.det2 or eclipToObs.ext.det $
+                                     or eclipToObs.detf) ; want everything detd over whole mission
         ASSERT, ecliplen_tot gt 0, 'ecliplen_tot should be gt 0.'
         endClock = TIC('endClock-' + STRTRIM(ii, 2))
 

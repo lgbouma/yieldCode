@@ -266,13 +266,15 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       eclipse[obs].ext.snr1 = sqrt(eclipse[obs].ext.snreclp1^2. * double(eclipse[obs].ext.neclip_obs1))
       eclipse[obs].ext.snr2 = sqrt(eclipse[obs].ext.snreclp2^2. * double(eclipse[obs].ext.neclip_obs2))
       eclipse[obs].ext.snr  = sqrt(eclipse[obs].ext.snr1^2. + eclipse[obs].ext.snr2^2.)
+      eclipse[obs].snrf  = sqrt(eclipse[obs].pri.snr1^2. + eclipse[obs].pri.snr2^2. + $
+                           eclipse[obs].ext.snr1^2. + eclipse[obs].ext.snr2^2.)
     endif
 
     ; decide if it is 'detected' before dilution.
     if run eq 0 then det = where(((eclipse.pri.neclip_obs1 + eclipse.pri.neclip_obs2) ge NTRA_OBS_MIN) $
                            and (eclipse.pri.snr ge SNR_MIN))
     if run eq 1 then det = where(((eclipse.ext.neclip_obs1 + eclipse.ext.neclip_obs2) ge NTRA_OBS_MIN) $
-                           and (eclipse.ext.snr ge SNR_MIN))
+                           and (eclipse.snrf ge SNR_MIN))
 
     ;;; Dilute if there are planets detected (preliminarily) with SNR > 5 (nb dilution makes SNR decrease)
     ;;; This is "second half" towards most precise SNR we derive
@@ -422,7 +424,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
         endif
         if (detf[0] ne -1) then begin
           eclipse[detf].detf = 1
-          print, 'Detected ', n_elements(det), ' eclipses over combined missions.'
+          print, 'Detected ', n_elements(detf), ' eclipses over combined missions.'
         endif
       endif ; run (extended mission) if
     endif ;det if
