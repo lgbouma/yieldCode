@@ -40,7 +40,7 @@ effarea = 69.1 ;43.9 ;54.9 ;100. ;54.9 ;69.1 ; in cm^2.
 readnoise = 10. ;10. ;10.0 ; in e- per subexposure
 subexptime = 2.0 ; sec in subexposure
 thresh = 5.0 ; detection threshold in phase-folded lightcurve
-tranmin = 1.0 ; minimum number of eclipses for detection
+tranmin = 2.0 ; minimum number of eclipses for detection
 sys_limit=60. ;60. in ppm/hr
 ffi_len=30. ; in minutes
 ps_len=2. ; in minutes
@@ -412,6 +412,8 @@ for ii=0, numfil-1 do begin
                     [eclipToObs[det].ext.det1], $
                     [eclipToObs[det].ext.det2], $
                     [eclipToObs[det].snrf], $
+                    [eclipToObs[det].pri.npointings], $
+                    [eclipToObs[det].ext.npointings], $
                     [eclipToObs[det].detf]]
 
           if run eq 0 then begin

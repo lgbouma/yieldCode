@@ -189,8 +189,8 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
   endif
 
   ; For each observed transiting eclipse, calculate preliminary snr (pre-dilution)
-  if run eq 0 then obs = where((eclipse.pri.neclip_obs1 + eclipse.pri.neclip_obs2) gt NTRA_OBS_MIN)
-  if run eq 1 then obs = where((eclipse.ext.neclip_obs1 + eclipse.ext.neclip_obs2) gt NTRA_OBS_MIN)
+  if run eq 0 then obs = where(eclipse.pri.neclip_obs1 ge NTRA_OBS_MIN)
+  if run eq 1 then obs = where(eclipse.ext.neclip_obs1 ge 1)
   if (obs[0] ne -1) then begin
     obsid = eclipse[obs].hostid
     nobs = n_elements(obs)
@@ -271,13 +271,14 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
     endif
 
     ; decide if it is 'detected' before dilution.
-    if run eq 0 then det = where(((eclipse.pri.neclip_obs1 + eclipse.pri.neclip_obs2) ge NTRA_OBS_MIN) $
+    if run eq 0 then det = where((eclipse.pri.neclip_obs1 ge NTRA_OBS_MIN) $
                            and (eclipse.pri.snr ge SNR_MIN))
-    if run eq 1 then det = where(((eclipse.ext.neclip_obs1 + eclipse.ext.neclip_obs2) ge NTRA_OBS_MIN) $
+    if run eq 1 then det = where((eclipse.ext.neclip_obs1 + eclipse.pri.neclip_obs1 ge NTRA_OBS_MIN) $
+                           and (eclipse.ext.neclip_obs1 ge 1) $
                            and (eclipse.snrf ge SNR_MIN))
 
     ;;; Dilute if there are planets detected (preliminarily) with SNR > 5 (nb dilution makes SNR decrease)
-    ;;; This is "second half" towards most precise SNR we derive
+    ;;; This is "second half" towards more precise SNR we derive
     if (det[0] ne -1) then begin
       detid = eclipse[det].hostid
       ndet = n_elements(det)
@@ -287,14 +288,12 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
       ; ph_star is npix x nstar
       stack_prf_eclip, star[detid].mag.t, star[detid].teff, ph_p, frac, star_ph, $
           dx=dx[det], dy=dy[det], fov_ind=eclipse[det].coord.fov_ind, mask=mask1d, sind=sind
-      ;bk_ph = eclipse[det].bk_ph
 
       zodi_flux, eclipse[det].coord.elat, aspix, zodi_ph
       eclipse[det].zodi_ph = zodi_ph
 
       dil_ph = dblarr(total(mask1d), ndet)
       beb_ph = dblarr(total(mask1d), ndet)
-      ;tgt_ph = dblarr(total(mask1d), ndet)
       
       ; print, "Diluting with binary companions"
       ; Binary companions dilute planet detections. Not EBs or HEBs
@@ -399,7 +398,7 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
              (eclipse.pri.snr1 ge SNR_MIN))
         det2 = where((eclipse.pri.neclip_obs2 ge NTRA_OBS_MIN) and $
              (eclipse.pri.snr2 ge SNR_MIN))
-        det = where(((eclipse.pri.neclip_obs1 + eclipse.pri.neclip_obs2) ge NTRA_OBS_MIN) and $
+        det = where((eclipse.pri.neclip_obs1 ge NTRA_OBS_MIN) and $
             (eclipse.pri.snr ge SNR_MIN))
         if (det1[0] ne -1) then eclipse[det1].pri.det1 = 1
         if (det2[0] ne -1) then eclipse[det2].pri.det2 = 1
@@ -413,9 +412,10 @@ pro eclip_observe, eclipse, star, bk, deep, frac, ph_p, cr, var, $
              (eclipse.ext.snr1 ge SNR_MIN))
         det2 = where((eclipse.ext.neclip_obs2 ge NTRA_OBS_MIN) and $
              (eclipse.ext.snr2 ge SNR_MIN))
-        det = where(((eclipse.ext.neclip_obs1 + eclipse.ext.neclip_obs2) ge NTRA_OBS_MIN) and $
+        det = where((eclipse.ext.neclip_obs1 ge NTRA_OBS_MIN) and $
             (eclipse.ext.snr ge SNR_MIN))
-        detf = where(eclipse.snrf ge SNR_MIN)
+        detf = where(eclipse.snrf ge SNR_MIN and $
+          (eclipse.ext.neclip_obs1 + eclipse.pri.neclip_obs1 ge NTRA_OBS_MIN))
         if (det1[0] ne -1) then eclipse[det1].ext.det1 = 1
         if (det2[0] ne -1) then eclipse[det2].ext.det2 = 1
         if (det[0] ne -1) then begin
