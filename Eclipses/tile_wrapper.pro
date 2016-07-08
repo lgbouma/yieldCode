@@ -33,7 +33,7 @@ tband_file = 'tband.csv'
 
 ;;; User-adjustable settings (yes, that's you!)
 assert, ~burtCatalog, 'b/c this was a one-timer'
-nparam = 90 ; output table width
+nparam = 92 ; output table width
 fov = 24. ; degrees
 seg = 13  ; number of segments per hemisphere
 effarea = 69.1 ;43.9 ;54.9 ;100. ;54.9 ;69.1 ; in cm^2. 
