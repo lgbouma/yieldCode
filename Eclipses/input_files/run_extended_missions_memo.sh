@@ -1,11 +1,12 @@
 #!/bin/bash
 
-export n_trial=20 # number of trials (20 good for reasonable statistics)
+export n_trial=50 # number of trials (20 good for reasonable statistics)
 export prototype_mode=0 # 0=full sim. 1= 1 tile, 2=10 tiles, 3=~290 tiles (1/10th of sky)
 
-export date_sub="160618_200k_pm$prototype_mode" # substring to put before output files
+export date_sub="160708_pm$prototype_mode" # substring to put before output files
 
-export ps_pri_file="../../preProcessing/sTIC-selection/shemi_nhemi_4Morb/shemi_nhemi_200k.sav" # 200k over 2yr
+export ps_pri_file="../../preProcessing/sTIC-selection/shemi_nhemi_nhemi_4Morb/shemi_nhemi_200k.sav" 
+export ffi_pri_file="../../preProcessing/sTIC-selection/shemi_nhemi_nhemi_4Morb/shemi_nhemi_38M.sav" 
 export fcam_coord_pri="../cameraPointings/shemi_nhemi_orbits.dat"
 
 #here is where you write all your extended mission names, and their tails (since idk how to bash)
@@ -27,6 +28,8 @@ t5="hemis14d"
 # declare array variables
 declare -a arr=("$e0" "$e1" "$e2" "$e3" "$e4" "$e5")
 declare -a tails=("$t0" "$t1" "$t2" "$t3" "$t4" "$t5")
+#declare -a arr=("$e0" "$e1")
+#declare -a tails=("$t0" "$t1")
 
 # loop thru above array
 ind=0
@@ -37,6 +40,7 @@ do
 
   export fcam_coord_ext="../cameraPointings/"${tails[$ind]}"_orbits.dat"
   export ps_ext_file="../../preProcessing/sTIC-selection/"$i"_4Morb/"$i"_200k.sav"
+  export ffi_ext_file="../../preProcessing/sTIC-selection/"$i"_4Morb/"$i"_38M.sav"
   idl -e main_ext &> "../output_files/"$date_sub"_"$i"_t"$n_trial".out" &
   let "ind+=1"
 
