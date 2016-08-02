@@ -3,7 +3,7 @@
 export n_trial=50 # number of trials (20 good for reasonable statistics)
 export prototype_mode=0 # 0=full sim. 1= 1 tile, 2=10 tiles, 3=~290 tiles (1/10th of sky)
 
-export date_sub="160729_pm$prototype_mode" # substring to put before output files
+export date_sub="160802_pm$prototype_mode" # substring to put before output files
 
 export ps_pri_file="../../preProcessing/sTIC-selection/shemi_nhemi_nhemi_4Mout/shemi_nhemi_200k.sav" 
 export ffi_pri_file="../../preProcessing/sTIC-selection/shemi_nhemi_nhemi_4Mout/shemi_nhemi_38M.sav" 
