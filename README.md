@@ -1,4 +1,4 @@
-# Simulating Tess' Exoplanet DetectIoNs: STEIN
+# Simulating Tess' Exoplanet detectIoNs: STEIN
 (everyone gets an anocronym, right?)
 
 This code simulates the population of planets that we expect to detect with TESS.
@@ -32,14 +32,17 @@ For anything to work, you need to obtain `preProcessing` as well as two other se
   which are the _output_ of those scripts:
   selected stars for which we simulate transits & their observations at 2
   & 30 minutes in `yieldCode`.
-  These are saved in `sTIC-selection` and have names like `shemi_nhemi_*_4M*/*.sav`
+  These are saved in `preProcessing/sTIC-selection` and have names like `shemi_nhemi_*_4M*/*.sav`
   where the different words label different spacecraft pointings.
 3. Inside your new folder, type:
+
   ```
   git clone https://github.com/lgbouma/yieldCode
   git clone https://github.com/lgbouma/postProcessing
   ```
+
   So your directory structure is now:
+
   ```
   ├── idlutils
   ├── outStarLib
@@ -47,26 +50,35 @@ For anything to work, you need to obtain `preProcessing` as well as two other se
   ├── preProcessing
   ├── yieldCode
   ```
+
   Then, do:
+
   ```
   cd yieldCode
   git checkout ps_ffi_joint
   cd ../postProcessing
   git checkout ps_ffi_joint
   ```
+
   The `ps_ffi_joint` branch can do both PSs and FFIs in a timely manner (which is
-  probably what you want. If you only want PSs, you can stay on master branch).
+  probably what you want. If you only want PSs, you can stay on master branch, but
+  it's a bit dated [see versioning logs]).
+
 4. You now have all the files. Let's make them work.
   To do so, add the `idlutils` directory to your IDL path.
   For instance, use [these instructions](http://slugidl.pbworks.com/w/page/28913708/Adding%20Programs%20to%20Your%20IDL%20Path).
   As a check, you want to be able to run idl from the command line, and then type:
+
   ```
   IDL> assert, 1
   ```
+
   and get
+
   ```
   % Compiled module: ASSERT.
   ```
+
   returned, instead of an error about not knowing what `assert` means.
 5. You should now be able to run the yieldCode!
   Do it by calling `Eclipses/main.pro`, which is a wrapper to `tile_wrapper.pro`, which
@@ -80,7 +92,7 @@ For anything to work, you need to obtain `preProcessing` as well as two other se
   which copies your input file to a log file then executes the main `yieldCode` loop
   in a background process while appending the text output to the same log file.
 
-  Your desired input parameters for a first pass might be:
+  Your desired input parameters (i.e. the `main.pro` file) for a first check might be:
   ```
   PRO main
   fnums = mrdfits('fnums.fits') ; File containing healpix numbers (skips galactic plane healpix tiles)
@@ -114,9 +126,11 @@ END
   ```
   which should run a baby-version of the simulation in less than a minute.
   If this works, congratulations! You've simulated looking at 0.3% of the sky with TESS, for
-  a `shemi_nhemi_nhemi` mission.
+  a `shemi_nhemi_nhemi` mission (2 year primary, one year staying in the northern hemisphere).
   You should have two output files, `temp_test-pri.fits` and `temp_list-ext.fits`.
-  These are the output files from the primary and extended missions.
+  These are the output files from the primary and extended missions (note that the way this
+  works, if you just want primary missions without any kind of extended mission junk,
+  you only need to pay attention to `temp_test-pri.fits`).
 
   If you want to look at the entire sky, change `prototypeMode`.
   If you want something statistical, up `n_trials`, say to around 20.
