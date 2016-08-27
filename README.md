@@ -84,7 +84,7 @@ For anything to work, you need to obtain `preProcessing` as well as two other se
   Do it by calling `Eclipses/main.pro`, which is a wrapper to `tile_wrapper.pro`, which
   is a loop over all the healpix tiles for all the stars in the sky for which you'll be simulating
   transits and observations.
-  (If you want to speed things up, `split_for` would parallelize this, but I haven't implemented it)
+  (If you want to speed things up, `split_for` would parallelize this, but I haven't implemented it).
   After editing `main.pro` to your desired input parameters (see below), do something like:
   ```
   cat main.pro > my_log_name.out && idl -e main &>> my_log_name.out & 
@@ -128,7 +128,8 @@ END
   If this works, congratulations! You've simulated looking at 0.3% of the sky with TESS, for
   a `shemi_nhemi_nhemi` mission (2 year primary, one year staying in the northern hemisphere).
   You should have two output files, `temp_test-pri.fits` and `temp_list-ext.fits`.
-  These are the output files from the primary and extended missions (note that the way this
+  These are the output files from the primary and extended missions with all the information
+  about the simulated planets you detected (note that the way this
   works, if you just want primary missions without any kind of extended mission junk,
   you only need to pay attention to `temp_test-pri.fits`).
 
